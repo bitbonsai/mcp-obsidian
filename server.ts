@@ -82,6 +82,24 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
             }
           }
         }
+      },
+      {
+        name: "delete_note",
+        description: "Delete a note from the Obsidian vault (requires confirmation)",
+        inputSchema: {
+          type: "object",
+          properties: {
+            path: {
+              type: "string",
+              description: "Path to the note relative to vault root"
+            },
+            confirmPath: {
+              type: "string",
+              description: "Confirmation: must exactly match the path parameter to proceed with deletion"
+            }
+          },
+          required: ["path", "confirmPath"]
+        }
       }
     ]
   };
@@ -137,6 +155,22 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
               }, null, 2)
             }
           ]
+        };
+      }
+
+      case "delete_note": {
+        const result = await fileSystem.deleteNote({
+          path: args.path,
+          confirmPath: args.confirmPath
+        });
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify(result, null, 2)
+            }
+          ],
+          isError: !result.success
         };
       }
 

@@ -10,6 +10,17 @@ export interface NoteWriteParams {
   frontmatter?: Record<string, any>;
 }
 
+export interface DeleteNoteParams {
+  path: string;
+  confirmPath: string;
+}
+
+export interface DeleteResult {
+  success: boolean;
+  path: string;
+  message: string;
+}
+
 export interface DirectoryListing {
   files: string[];
   directories: string[];

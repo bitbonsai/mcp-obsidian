@@ -1,8 +1,8 @@
-import { readdir, readFile, writeFile, stat, mkdir } from 'fs/promises';
+import { readdir, readFile, writeFile, stat, mkdir, unlink } from 'fs/promises';
 import { join, resolve, relative, dirname } from 'path';
 import { FrontmatterHandler } from './frontmatter.js';
 import { PathFilter } from './pathfilter.js';
-import type { ParsedNote, DirectoryListing, NoteWriteParams } from './types.js';
+import type { ParsedNote, DirectoryListing, NoteWriteParams, DeleteNoteParams, DeleteResult } from './types.js';
 
 export class FileSystemService {
   private frontmatterHandler: FrontmatterHandler;
@@ -167,6 +167,73 @@ export class FileSystemService {
       return stats.isDirectory();
     } catch {
       return false;
+    }
+  }
+
+  async deleteNote(params: DeleteNoteParams): Promise<DeleteResult> {
+    const { path, confirmPath } = params;
+
+    // Confirmation check - paths must match exactly
+    if (path !== confirmPath) {
+      return {
+        success: false,
+        path: path,
+        message: "Deletion cancelled: confirmation path does not match. For safety, both 'path' and 'confirmPath' must be identical."
+      };
+    }
+
+    const fullPath = this.resolvePath(path);
+
+    if (!this.pathFilter.isAllowed(path)) {
+      return {
+        success: false,
+        path: path,
+        message: `Access denied: ${path}`
+      };
+    }
+
+    try {
+      // Check if file exists first
+      const stats = await stat(fullPath);
+      if (!stats.isFile()) {
+        return {
+          success: false,
+          path: path,
+          message: `Cannot delete: ${path} is not a file`
+        };
+      }
+
+      // Perform the deletion
+      await unlink(fullPath);
+
+      return {
+        success: true,
+        path: path,
+        message: `Successfully deleted note: ${path}. This action cannot be undone.`
+      };
+
+    } catch (error) {
+      if (error instanceof Error && 'code' in error) {
+        if (error.code === 'ENOENT') {
+          return {
+            success: false,
+            path: path,
+            message: `File not found: ${path}`
+          };
+        }
+        if (error.code === 'EACCES') {
+          return {
+            success: false,
+            path: path,
+            message: `Permission denied: ${path}`
+          };
+        }
+      }
+      return {
+        success: false,
+        path: path,
+        message: `Failed to delete file: ${path} - ${error instanceof Error ? error.message : 'Unknown error'}`
+      };
     }
   }
 

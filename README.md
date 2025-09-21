@@ -6,7 +6,8 @@ A lightweight Model Context Protocol (MCP) server for safe Obsidian vault access
 
 - ✅ Safe frontmatter parsing and validation using gray-matter
 - ✅ Path filtering to exclude `.obsidian` directory and other system files
-- ✅ Basic MCP methods: `read_note`, `write_note`, `list_directory`
+- ✅ Core MCP methods: `read_note`, `write_note`, `list_directory`, `delete_note`
+- ✅ Safe deletion with confirmation requirement to prevent accidents
 - ✅ TypeScript support with Bun runtime (no compilation needed)
 - ✅ Comprehensive error handling and validation
 
@@ -104,6 +105,7 @@ You can configure multiple vaults by creating separate MCP server entries:
 - "Create a new note called 'meeting-notes.md' with today's date in the frontmatter"
 - "Update the tags in my 'research.md' note to include 'machine-learning'"
 - "List all markdown files in my 'Projects' folder"
+- "Delete the old draft note 'draft-ideas.md' (with confirmation)"
 
 ## Troubleshooting
 
@@ -236,6 +238,40 @@ List files and directories in the vault.
   ]
 }
 ```
+
+### `delete_note`
+Delete a note from the vault (requires confirmation for safety).
+
+**Request:**
+```json
+{
+  "name": "delete_note",
+  "arguments": {
+    "path": "old-draft.md",
+    "confirmPath": "old-draft.md"
+  }
+}
+```
+
+**Response (Success):**
+```json
+{
+  "success": true,
+  "path": "old-draft.md",
+  "message": "Successfully deleted note: old-draft.md. This action cannot be undone."
+}
+```
+
+**Response (Confirmation Failed):**
+```json
+{
+  "success": false,
+  "path": "old-draft.md",
+  "message": "Deletion cancelled: confirmation path does not match. For safety, both 'path' and 'confirmPath' must be identical."
+}
+```
+
+**⚠️ Safety Note:** The `confirmPath` parameter must exactly match the `path` parameter to proceed with deletion. This prevents accidental deletions.
 
 ## Security Considerations
 
