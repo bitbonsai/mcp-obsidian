@@ -12,6 +12,16 @@ A lightweight Model Context Protocol (MCP) server for safe Obsidian vault access
 
 ## Installation
 
+### For End Users (Recommended)
+
+No installation needed! Use `bunx` to run directly:
+
+```bash
+bunx mcp-fs-obsidian /path/to/your/obsidian/vault
+```
+
+### For Developers
+
 1. Clone this repository
 2. Install dependencies with Bun:
 ```bash
@@ -22,6 +32,12 @@ bun install
 
 ### Running the Server
 
+**End users:**
+```bash
+bunx mcp-fs-obsidian /path/to/your/obsidian/vault
+```
+
+**Developers:**
 ```bash
 bun server.ts /path/to/your/obsidian/vault
 ```
@@ -34,8 +50,8 @@ Add to your Claude Desktop configuration:
 {
   "mcpServers": {
     "obsidian": {
-      "command": "bun",
-      "args": ["/absolute/path/to/server.ts", "/path/to/vault"]
+      "command": "bunx",
+      "args": ["mcp-fs-obsidian", "/path/to/vault"]
     }
   }
 }
