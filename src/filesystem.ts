@@ -1,5 +1,4 @@
 import { join, resolve, relative, dirname } from 'path';
-import { unlinkSync, statSync, readdirSync } from 'fs';
 import { FrontmatterHandler } from './frontmatter.js';
 import { PathFilter } from './pathfilter.js';
 import type { ParsedNote, DirectoryListing, NoteWriteParams, DeleteNoteParams, DeleteResult } from './types.js';
@@ -106,11 +105,11 @@ export class FileSystemService {
     const fullPath = this.resolvePath(path);
 
     try {
-      const entries = readdirSync(fullPath);
+      const glob = new Bun.Glob("*");
       const files: string[] = [];
       const directories: string[] = [];
 
-      for (const entry of entries) {
+      for await (const entry of glob.scan(fullPath)) {
         const entryPath = path ? `${path}/${entry}` : entry;
 
         if (!this.pathFilter.isAllowed(entryPath)) {
@@ -119,16 +118,25 @@ export class FileSystemService {
 
         const entryFullPath = join(fullPath, entry);
 
-        try {
-          const stats = statSync(entryFullPath);
-          if (stats.isDirectory()) {
+        // Use Bun to determine if it's a file or directory
+        const file = Bun.file(entryFullPath);
+        const exists = await file.exists();
+
+        if (exists) {
+          // If it's a file that exists according to Bun.file, it's a regular file
+          files.push(entry);
+        } else {
+          // Check if it might be a directory by trying to scan it
+          try {
+            const testGlob = new Bun.Glob("*");
+            const testScan = testGlob.scan(entryFullPath);
+            // If we can start scanning, it's a directory
+            await testScan.next();
             directories.push(entry);
-          } else if (stats.isFile()) {
-            files.push(entry);
+          } catch {
+            // If we can't scan it, skip it (might be a special file or no permissions)
+            continue;
           }
-        } catch {
-          // Skip entries we can't stat (probably permission issues)
-          continue;
         }
       }
 
@@ -175,9 +183,11 @@ export class FileSystemService {
     }
 
     try {
-      // Use synchronous stat for better reliability
-      const stats = statSync(fullPath);
-      return stats.isDirectory();
+      // Try to scan as directory using Bun's glob
+      const glob = new Bun.Glob("*");
+      const iter = glob.scan(fullPath);
+      await iter.next();
+      return true;
     } catch {
       return false;
     }
@@ -228,8 +238,8 @@ export class FileSystemService {
         };
       }
 
-      // Perform the deletion
-      unlinkSync(fullPath);
+      // Perform the deletion using Bun's native API
+      await Bun.file(fullPath).delete();
 
       return {
         success: true,
