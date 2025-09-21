@@ -36,3 +36,68 @@ export interface PathFilterConfig {
   ignoredPatterns: string[];
   allowedExtensions: string[];
 }
+
+// Search types
+export interface SearchParams {
+  query: string;
+  limit?: number;
+  searchContent?: boolean;
+  searchFrontmatter?: boolean;
+  caseSensitive?: boolean;
+}
+
+export interface SearchResult {
+  path: string;
+  title: string;
+  excerpt: string;
+  matchCount: number;
+  lineNumber?: number;
+}
+
+// Move types
+export interface MoveNoteParams {
+  oldPath: string;
+  newPath: string;
+  overwrite?: boolean;
+}
+
+export interface MoveResult {
+  success: boolean;
+  oldPath: string;
+  newPath: string;
+  message: string;
+}
+
+// Batch read types
+export interface BatchReadParams {
+  paths: string[];
+  includeContent?: boolean;
+  includeFrontmatter?: boolean;
+}
+
+export interface BatchReadResult {
+  successful: Array<{
+    path: string;
+    frontmatter?: Record<string, any>;
+    content?: string;
+  }>;
+  failed: Array<{
+    path: string;
+    error: string;
+  }>;
+}
+
+// Update frontmatter types
+export interface UpdateFrontmatterParams {
+  path: string;
+  frontmatter: Record<string, any>;
+  merge?: boolean;
+}
+
+// Note info types
+export interface NoteInfo {
+  path: string;
+  size: number;
+  modified: number; // timestamp
+  hasFrontmatter: boolean;
+}

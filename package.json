@@ -1,5 +1,5 @@
 {
-  "name": "mcp-fs-obsidian",
+  "name": "mcp-obsidian",
   "version": "0.1.0",
   "description": "Lightweight MCP server for safe Obsidian vault access",
   "author": "bitbonsai",
@@ -7,7 +7,7 @@
   "type": "module",
   "main": "server.ts",
   "bin": {
-    "mcp-fs-obsidian": "./server.ts"
+    "mcp-obsidian": "./server.ts"
   },
   "files": [
     "server.ts",
@@ -32,7 +32,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/bitbonsai/mcp-fs-obsidian.git"
+    "url": "https://github.com/bitbonsai/mcp-obsidian.git"
   },
   "keywords": [
     "mcp",

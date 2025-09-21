@@ -1,4 +1,4 @@
-# MCP-FS-Obsidian
+# MCP-Obsidian
 
 A lightweight Model Context Protocol (MCP) server for safe Obsidian vault access. This server provides Claude with the ability to read and write notes in an Obsidian vault while preventing YAML frontmatter corruption.
 
@@ -24,7 +24,7 @@ A lightweight Model Context Protocol (MCP) server for safe Obsidian vault access
 No installation needed! Use `bunx` to run directly:
 
 ```bash
-bunx mcp-fs-obsidian /path/to/your/obsidian/vault
+bunx mcp-obsidian /path/to/your/obsidian/vault
 ```
 
 ### For Developers
@@ -41,7 +41,7 @@ bun install
 
 **End users:**
 ```bash
-bunx mcp-fs-obsidian /path/to/your/obsidian/vault
+bunx mcp-obsidian /path/to/your/obsidian/vault
 ```
 
 **Developers:**
@@ -60,7 +60,7 @@ Add to your Claude Desktop configuration file:
   "mcpServers": {
     "obsidian": {
       "command": "bunx",
-      "args": ["mcp-fs-obsidian", "/Users/yourname/Documents/MyVault"]
+      "args": ["mcp-obsidian", "/Users/yourname/Documents/MyVault"]
     }
   }
 }
@@ -75,15 +75,15 @@ You can configure multiple vaults by creating separate MCP server entries:
   "mcpServers": {
     "obsidian-personal": {
       "command": "bunx",
-      "args": ["mcp-fs-obsidian", "/Users/yourname/Documents/PersonalVault"]
+      "args": ["mcp-obsidian", "/Users/yourname/Documents/PersonalVault"]
     },
     "obsidian-work": {
       "command": "bunx",
-      "args": ["mcp-fs-obsidian", "/Users/yourname/Documents/WorkVault"]
+      "args": ["mcp-obsidian", "/Users/yourname/Documents/WorkVault"]
     },
     "obsidian-research": {
       "command": "bunx",
-      "args": ["mcp-fs-obsidian", "/Users/yourname/Documents/ResearchVault"]
+      "args": ["mcp-obsidian", "/Users/yourname/Documents/ResearchVault"]
     }
   }
 }
@@ -113,7 +113,7 @@ You can configure multiple vaults by creating separate MCP server entries:
 
 #### "command not found: bunx"
 - **Solution:** Install Bun runtime from [bun.sh](https://bun.sh)
-- **Alternative:** Use npm: `npx mcp-fs-obsidian /path/to/vault`
+- **Alternative:** Use npm: `npx mcp-obsidian /path/to/vault`
 
 #### "Usage: bun server.ts /path/to/vault"
 - **Cause:** No vault path provided
@@ -141,12 +141,12 @@ You can configure multiple vaults by creating separate MCP server entries:
 
 Run with error logging:
 ```bash
-bunx mcp-fs-obsidian /path/to/vault 2>debug.log
+bunx mcp-obsidian /path/to/vault 2>debug.log
 ```
 
 ### Getting Help
 
-- [Open an issue](https://github.com/bitbonsai/mcp-fs-obsidian/issues) on GitHub
+- [Open an issue](https://github.com/bitbonsai/mcp-obsidian/issues) on GitHub
 - Include your OS, Bun version, and error messages
 - Provide the vault directory structure (without sensitive content)
 

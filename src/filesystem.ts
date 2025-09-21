@@ -1,7 +1,7 @@
 import { join, resolve, relative, dirname } from 'path';
 import { FrontmatterHandler } from './frontmatter.js';
 import { PathFilter } from './pathfilter.js';
-import type { ParsedNote, DirectoryListing, NoteWriteParams, DeleteNoteParams, DeleteResult } from './types.js';
+import type { ParsedNote, DirectoryListing, NoteWriteParams, DeleteNoteParams, DeleteResult, MoveNoteParams, MoveResult, BatchReadParams, BatchReadResult, UpdateFrontmatterParams, NoteInfo } from './types.js';
 
 export class FileSystemService {
   private frontmatterHandler: FrontmatterHandler;
@@ -270,6 +270,207 @@ export class FileSystemService {
         message: `Failed to delete file: ${path} - ${error instanceof Error ? error.message : 'Unknown error'}`
       };
     }
+  }
+
+  async moveNote(params: MoveNoteParams): Promise<MoveResult> {
+    const { oldPath, newPath, overwrite = false } = params;
+
+    if (!this.pathFilter.isAllowed(oldPath)) {
+      return {
+        success: false,
+        oldPath,
+        newPath,
+        message: `Access denied: ${oldPath}`
+      };
+    }
+
+    if (!this.pathFilter.isAllowed(newPath)) {
+      return {
+        success: false,
+        oldPath,
+        newPath,
+        message: `Access denied: ${newPath}`
+      };
+    }
+
+    const oldFullPath = this.resolvePath(oldPath);
+    const newFullPath = this.resolvePath(newPath);
+
+    try {
+      // Check if source file exists
+      const sourceFile = Bun.file(oldFullPath);
+      const sourceExists = await sourceFile.exists();
+
+      if (!sourceExists) {
+        return {
+          success: false,
+          oldPath,
+          newPath,
+          message: `Source file not found: ${oldPath}`
+        };
+      }
+
+      // Check if target already exists
+      const targetFile = Bun.file(newFullPath);
+      const targetExists = await targetFile.exists();
+
+      if (targetExists && !overwrite) {
+        return {
+          success: false,
+          oldPath,
+          newPath,
+          message: `Target file already exists: ${newPath}. Use overwrite=true to replace it.`
+        };
+      }
+
+      // Read source content
+      const content = await sourceFile.text();
+
+      // Write to new location (auto-creates directories)
+      await Bun.write(newFullPath, content);
+
+      // Verify the write was successful
+      const newFile = Bun.file(newFullPath);
+      const newExists = await newFile.exists();
+
+      if (!newExists) {
+        return {
+          success: false,
+          oldPath,
+          newPath,
+          message: `Failed to create target file: ${newPath}`
+        };
+      }
+
+      // Delete the source file
+      await sourceFile.delete();
+
+      return {
+        success: true,
+        oldPath,
+        newPath,
+        message: `Successfully moved note from ${oldPath} to ${newPath}`
+      };
+
+    } catch (error) {
+      return {
+        success: false,
+        oldPath,
+        newPath,
+        message: `Failed to move note: ${error instanceof Error ? error.message : 'Unknown error'}`
+      };
+    }
+  }
+
+  async readMultipleNotes(params: BatchReadParams): Promise<BatchReadResult> {
+    const { paths, includeContent = true, includeFrontmatter = true } = params;
+
+    if (paths.length > 10) {
+      throw new Error('Maximum 10 files per batch read request');
+    }
+
+    const results = await Promise.allSettled(
+      paths.map(async (path) => {
+        if (!this.pathFilter.isAllowed(path)) {
+          throw new Error(`Access denied: ${path}`);
+        }
+
+        const note = await this.readNote(path);
+        const result: any = { path };
+
+        if (includeFrontmatter) {
+          result.frontmatter = note.frontmatter;
+        }
+
+        if (includeContent) {
+          result.content = note.content;
+        }
+
+        return result;
+      })
+    );
+
+    const successful: Array<{ path: string; frontmatter?: Record<string, any>; content?: string; }> = [];
+    const failed: Array<{ path: string; error: string; }> = [];
+
+    results.forEach((result, index) => {
+      if (result.status === 'fulfilled') {
+        successful.push(result.value);
+      } else {
+        failed.push({
+          path: paths[index],
+          error: result.reason instanceof Error ? result.reason.message : 'Unknown error'
+        });
+      }
+    });
+
+    return { successful, failed };
+  }
+
+  async updateFrontmatter(params: UpdateFrontmatterParams): Promise<void> {
+    const { path, frontmatter, merge = true } = params;
+
+    if (!this.pathFilter.isAllowed(path)) {
+      throw new Error(`Access denied: ${path}`);
+    }
+
+    // Read the existing note
+    const note = await this.readNote(path);
+
+    // Prepare new frontmatter
+    const newFrontmatter = merge
+      ? { ...note.frontmatter, ...frontmatter }
+      : frontmatter;
+
+    // Validate the new frontmatter
+    const validation = this.frontmatterHandler.validate(newFrontmatter);
+    if (!validation.isValid) {
+      throw new Error(`Invalid frontmatter: ${validation.errors.join(', ')}`);
+    }
+
+    // Update the note with new frontmatter, preserving content
+    await this.writeNote({
+      path,
+      content: note.content,
+      frontmatter: newFrontmatter
+    });
+  }
+
+  async getNotesInfo(paths: string[]): Promise<NoteInfo[]> {
+    const results = await Promise.allSettled(
+      paths.map(async (path): Promise<NoteInfo> => {
+        if (!this.pathFilter.isAllowed(path)) {
+          throw new Error(`Access denied: ${path}`);
+        }
+
+        const fullPath = this.resolvePath(path);
+        const file = Bun.file(fullPath);
+
+        const exists = await file.exists();
+        if (!exists) {
+          throw new Error(`File not found: ${path}`);
+        }
+
+        const size = file.size;
+        const lastModified = file.lastModified;
+
+        // Quick check for frontmatter without reading full content
+        const firstChunk = await file.slice(0, 100).text();
+        const hasFrontmatter = firstChunk.startsWith('---\n');
+
+        return {
+          path,
+          size,
+          modified: lastModified,
+          hasFrontmatter
+        };
+      })
+    );
+
+    // Return only successful results, filter out failed ones
+    return results
+      .filter((result): result is PromiseFulfilledResult<NoteInfo> => result.status === 'fulfilled')
+      .map(result => result.value);
   }
 
   getVaultPath(): string {
