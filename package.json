@@ -22,13 +22,10 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
-    "gray-matter": "^4.0.3",
-    "js-yaml": "^4.1.0",
-    "minimatch": "^9.0.0"
+    "gray-matter": "^4.0.3"
   },
   "devDependencies": {
-    "@types/bun": "latest",
-    "@types/js-yaml": "^4.0.5"
+    "@types/bun": "latest"
   },
   "engines": {
     "bun": ">=1.0.0"

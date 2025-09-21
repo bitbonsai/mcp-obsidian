@@ -1,5 +1,5 @@
-import { readdir, readFile, writeFile, stat, mkdir, unlink } from 'fs/promises';
 import { join, resolve, relative, dirname } from 'path';
+import { unlinkSync, statSync, readdirSync } from 'fs';
 import { FrontmatterHandler } from './frontmatter.js';
 import { PathFilter } from './pathfilter.js';
 import type { ParsedNote, DirectoryListing, NoteWriteParams, DeleteNoteParams, DeleteResult } from './types.js';
@@ -43,14 +43,21 @@ export class FileSystemService {
     }
 
     try {
-      const content = await readFile(fullPath, 'utf-8');
+      const file = Bun.file(fullPath);
+      const exists = await file.exists();
+
+      if (!exists) {
+        throw new Error(`File not found: ${path}`);
+      }
+
+      const content = await file.text();
       return this.frontmatterHandler.parse(content);
     } catch (error) {
-      if (error instanceof Error && 'code' in error) {
-        if (error.code === 'ENOENT') {
-          throw new Error(`File not found: ${path}`);
+      if (error instanceof Error) {
+        if (error.message.includes('File not found')) {
+          throw error;
         }
-        if (error.code === 'EACCES') {
+        if (error.message.includes('permission') || error.message.includes('access')) {
           throw new Error(`Permission denied: ${path}`);
         }
       }
@@ -75,22 +82,19 @@ export class FileSystemService {
     }
 
     try {
-      // Ensure directory exists
-      const dir = dirname(fullPath);
-      await mkdir(dir, { recursive: true });
-
       // Prepare content with frontmatter
       const finalContent = frontmatter
         ? this.frontmatterHandler.stringify(frontmatter, content)
         : content;
 
-      await writeFile(fullPath, finalContent, 'utf-8');
+      // Bun.write automatically creates directories if they don't exist
+      await Bun.write(fullPath, finalContent);
     } catch (error) {
-      if (error instanceof Error && 'code' in error) {
-        if (error.code === 'EACCES') {
+      if (error instanceof Error) {
+        if (error.message.includes('permission') || error.message.includes('access')) {
           throw new Error(`Permission denied: ${path}`);
         }
-        if (error.code === 'ENOSPC') {
+        if (error.message.includes('space') || error.message.includes('ENOSPC')) {
           throw new Error(`No space left on device: ${path}`);
         }
       }
@@ -102,21 +106,29 @@ export class FileSystemService {
     const fullPath = this.resolvePath(path);
 
     try {
-      const entries = await readdir(fullPath, { withFileTypes: true });
+      const entries = readdirSync(fullPath);
       const files: string[] = [];
       const directories: string[] = [];
 
       for (const entry of entries) {
-        const entryPath = path ? `${path}/${entry.name}` : entry.name;
+        const entryPath = path ? `${path}/${entry}` : entry;
 
         if (!this.pathFilter.isAllowed(entryPath)) {
           continue;
         }
 
-        if (entry.isDirectory()) {
-          directories.push(entry.name);
-        } else if (entry.isFile()) {
-          files.push(entry.name);
+        const entryFullPath = join(fullPath, entry);
+
+        try {
+          const stats = statSync(entryFullPath);
+          if (stats.isDirectory()) {
+            directories.push(entry);
+          } else if (stats.isFile()) {
+            files.push(entry);
+          }
+        } catch {
+          // Skip entries we can't stat (probably permission issues)
+          continue;
         }
       }
 
@@ -125,14 +137,14 @@ export class FileSystemService {
         directories: directories.sort()
       };
     } catch (error) {
-      if (error instanceof Error && 'code' in error) {
-        if (error.code === 'ENOENT') {
+      if (error instanceof Error) {
+        if (error.message.includes('not found') || error.message.includes('ENOENT')) {
           throw new Error(`Directory not found: ${path}`);
         }
-        if (error.code === 'EACCES') {
+        if (error.message.includes('permission') || error.message.includes('access')) {
           throw new Error(`Permission denied: ${path}`);
         }
-        if (error.code === 'ENOTDIR') {
+        if (error.message.includes('not a directory') || error.message.includes('ENOTDIR')) {
           throw new Error(`Not a directory: ${path}`);
         }
       }
@@ -148,8 +160,8 @@ export class FileSystemService {
     }
 
     try {
-      await stat(fullPath);
-      return true;
+      const file = Bun.file(fullPath);
+      return await file.exists();
     } catch {
       return false;
     }
@@ -163,7 +175,8 @@ export class FileSystemService {
     }
 
     try {
-      const stats = await stat(fullPath);
+      // Use synchronous stat for better reliability
+      const stats = statSync(fullPath);
       return stats.isDirectory();
     } catch {
       return false;
@@ -193,9 +206,9 @@ export class FileSystemService {
     }
 
     try {
-      // Check if file exists first
-      const stats = await stat(fullPath);
-      if (!stats.isFile()) {
+      // Check if it's a directory first (can't delete directories with this method)
+      const isDir = await this.isDirectory(path);
+      if (isDir) {
         return {
           success: false,
           path: path,
@@ -203,8 +216,20 @@ export class FileSystemService {
         };
       }
 
+      // Check if file exists
+      const file = Bun.file(fullPath);
+      const exists = await file.exists();
+
+      if (!exists) {
+        return {
+          success: false,
+          path: path,
+          message: `File not found: ${path}`
+        };
+      }
+
       // Perform the deletion
-      await unlink(fullPath);
+      unlinkSync(fullPath);
 
       return {
         success: true,

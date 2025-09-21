@@ -81,7 +81,8 @@ test("validate invalid frontmatter with function", () => {
 
   expect(result.isValid).toBe(false);
   expect(result.errors.length).toBeGreaterThan(0);
-  expect(result.errors[0]).toContain("Invalid YAML structure");
+  // The specific error message may vary between YAML libraries
+  expect(result.errors[0]).toMatch(/Functions are not allowed|Invalid YAML structure/);
 });
 
 test("update frontmatter in existing content", () => {

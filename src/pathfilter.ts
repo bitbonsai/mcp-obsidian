@@ -1,4 +1,3 @@
-import { minimatch } from "minimatch";
 import type { PathFilterConfig } from "./types.js";
 
 export class PathFilter {
@@ -23,13 +22,29 @@ export class PathFilter {
     ];
   }
 
+  private simpleGlobMatch(pattern: string, path: string): boolean {
+    // Convert glob pattern to regex
+    // Handle ** (any number of directories)
+    let regexPattern = pattern
+      .replace(/\*\*/g, '.*')  // ** matches any number of directories
+      .replace(/\*/g, '[^/]*') // * matches anything except /
+      .replace(/\?/g, '[^/]')  // ? matches single character except /
+      .replace(/\./g, '\\.');   // Escape dots
+
+    // Ensure we match the full path
+    regexPattern = '^' + regexPattern + '$';
+
+    const regex = new RegExp(regexPattern);
+    return regex.test(path);
+  }
+
   isAllowed(path: string): boolean {
     // Normalize path separators
     const normalizedPath = path.replace(/\\/g, '/');
 
     // Check if path matches any ignored pattern
     for (const pattern of this.ignoredPatterns) {
-      if (minimatch(normalizedPath, pattern, { dot: true })) {
+      if (this.simpleGlobMatch(pattern, normalizedPath)) {
         return false;
       }
     }
