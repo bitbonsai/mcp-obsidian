@@ -25,7 +25,7 @@ const searchService = new SearchService(vaultPath, pathFilter);
 
 const server = new Server({
   name: "mcp-obsidian",
-  version: "0.5.1"
+  version: "0.5.2"
 }, {
   capabilities: {
     tools: {},
