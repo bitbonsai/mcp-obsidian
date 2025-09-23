@@ -130,13 +130,15 @@ export class FileSystemService {
         }
     }
     async listDirectory(path = '') {
-        const fullPath = this.resolvePath(path);
+        // Normalize path: treat '.' as root directory
+        const normalizedPath = path === '.' ? '' : path;
+        const fullPath = this.resolvePath(normalizedPath);
         try {
             const entries = await readdir(fullPath, { withFileTypes: true });
             const files = [];
             const directories = [];
             for (const entry of entries) {
-                const entryPath = path ? `${path}/${entry.name}` : entry.name;
+                const entryPath = normalizedPath ? `${normalizedPath}/${entry.name}` : entry.name;
                 if (!this.pathFilter.isAllowed(entryPath)) {
                     continue;
                 }

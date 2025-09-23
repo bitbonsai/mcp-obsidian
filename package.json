@@ -1,6 +1,6 @@
 {
   "name": "@mauricio.wolff/mcp-obsidian",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "Lightweight MCP server for safe Obsidian vault access",
   "author": "bitbonsai",
   "license": "MIT",

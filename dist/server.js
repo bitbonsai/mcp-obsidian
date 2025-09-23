@@ -18,7 +18,7 @@ const fileSystem = new FileSystemService(vaultPath, pathFilter, frontmatterHandl
 const searchService = new SearchService(vaultPath, pathFilter);
 const server = new Server({
     name: "mcp-obsidian",
-    version: "0.5.2"
+    version: "0.5.3"
 }, {
     capabilities: {
         tools: {},
