@@ -1,7 +1,8 @@
 import { join, resolve, relative, dirname } from 'path';
+import { readdir, stat } from 'node:fs/promises';
 import { FrontmatterHandler } from './frontmatter.js';
 import { PathFilter } from './pathfilter.js';
-import type { ParsedNote, DirectoryListing, NoteWriteParams, DeleteNoteParams, DeleteResult, MoveNoteParams, MoveResult, BatchReadParams, BatchReadResult, UpdateFrontmatterParams, NoteInfo } from './types.js';
+import type { ParsedNote, DirectoryListing, NoteWriteParams, DeleteNoteParams, DeleteResult, MoveNoteParams, MoveResult, BatchReadParams, BatchReadResult, UpdateFrontmatterParams, NoteInfo, TagManagementParams, TagManagementResult } from './types.js';
 
 export class FileSystemService {
   private frontmatterHandler: FrontmatterHandler;
@@ -18,6 +19,14 @@ export class FileSystemService {
   }
 
   private resolvePath(relativePath: string): string {
+    // Handle undefined or null path
+    if (!relativePath) {
+      relativePath = '';
+    }
+
+    // Trim whitespace from path
+    relativePath = relativePath.trim();
+
     // Normalize and resolve the path within the vault
     const normalizedPath = relativePath.startsWith('/')
       ? relativePath.slice(1)
@@ -41,6 +50,12 @@ export class FileSystemService {
       throw new Error(`Access denied: ${path}`);
     }
 
+    // Check if the path is a directory first
+    const isDir = await this.isDirectory(path);
+    if (isDir) {
+      throw new Error(`Cannot read directory as file: ${path}. Use list_directory tool instead.`);
+    }
+
     try {
       const file = Bun.file(fullPath);
       const exists = await file.exists();
@@ -59,13 +74,16 @@ export class FileSystemService {
         if (error.message.includes('permission') || error.message.includes('access')) {
           throw new Error(`Permission denied: ${path}`);
         }
+        if (error.message.includes('Cannot read directory')) {
+          throw error;
+        }
       }
       throw new Error(`Failed to read file: ${path} - ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
 
   async writeNote(params: NoteWriteParams): Promise<void> {
-    const { path, content, frontmatter } = params;
+    const { path, content, frontmatter, mode = 'overwrite' } = params;
     const fullPath = this.resolvePath(path);
 
     if (!this.pathFilter.isAllowed(path)) {
@@ -81,13 +99,47 @@ export class FileSystemService {
     }
 
     try {
-      // Prepare content with frontmatter
-      const finalContent = frontmatter
-        ? this.frontmatterHandler.stringify(frontmatter, content)
-        : content;
+      let finalContent: string;
+
+      if (mode === 'overwrite') {
+        // Original behavior - replace entire content
+        finalContent = frontmatter
+          ? this.frontmatterHandler.stringify(frontmatter, content)
+          : content;
+      } else {
+        // For append/prepend, we need to read existing content
+        let existingNote: ParsedNote;
+        try {
+          existingNote = await this.readNote(path);
+        } catch (error) {
+          // File doesn't exist, treat as overwrite
+          finalContent = frontmatter
+            ? this.frontmatterHandler.stringify(frontmatter, content)
+            : content;
+        }
+
+        if (existingNote!) {
+          // Merge frontmatter if provided
+          const mergedFrontmatter = frontmatter
+            ? { ...existingNote.frontmatter, ...frontmatter }
+            : existingNote.frontmatter;
+
+          if (mode === 'append') {
+            finalContent = this.frontmatterHandler.stringify(
+              mergedFrontmatter,
+              existingNote.content + content
+            );
+          } else if (mode === 'prepend') {
+            finalContent = this.frontmatterHandler.stringify(
+              mergedFrontmatter,
+              content + existingNote.content
+            );
+          }
+        }
+      }
 
       // Bun.write automatically creates directories if they don't exist
-      await Bun.write(fullPath, finalContent);
+      await Bun.write(fullPath, finalContent!);
     } catch (error) {
       if (error instanceof Error) {
         if (error.message.includes('permission') || error.message.includes('access')) {
@@ -105,39 +157,23 @@ export class FileSystemService {
     const fullPath = this.resolvePath(path);
 
     try {
-      const glob = new Bun.Glob("*");
+      const entries = await readdir(fullPath, { withFileTypes: true });
       const files: string[] = [];
       const directories: string[] = [];
 
-      for await (const entry of glob.scan(fullPath)) {
-        const entryPath = path ? `${path}/${entry}` : entry;
+      for (const entry of entries) {
+        const entryPath = path ? `${path}/${entry.name}` : entry.name;
 
         if (!this.pathFilter.isAllowed(entryPath)) {
           continue;
         }
 
-        const entryFullPath = join(fullPath, entry);
-
-        // Use Bun to determine if it's a file or directory
-        const file = Bun.file(entryFullPath);
-        const exists = await file.exists();
-
-        if (exists) {
-          // If it's a file that exists according to Bun.file, it's a regular file
-          files.push(entry);
-        } else {
-          // Check if it might be a directory by trying to scan it
-          try {
-            const testGlob = new Bun.Glob("*");
-            const testScan = testGlob.scan(entryFullPath);
-            // If we can start scanning, it's a directory
-            await testScan.next();
-            directories.push(entry);
-          } catch {
-            // If we can't scan it, skip it (might be a special file or no permissions)
-            continue;
-          }
+        if (entry.isDirectory()) {
+          directories.push(entry.name);
+        } else if (entry.isFile()) {
+          files.push(entry.name);
         }
+        // Skip other types (symlinks, etc.)
       }
 
       return {
@@ -183,11 +219,8 @@ export class FileSystemService {
     }
 
     try {
-      // Try to scan as directory using Bun's glob
-      const glob = new Bun.Glob("*");
-      const iter = glob.scan(fullPath);
-      await iter.next();
-      return true;
+      const stats = await stat(fullPath);
+      return stats.isDirectory();
     } catch {
       return false;
     }
@@ -471,6 +504,96 @@ export class FileSystemService {
     return results
       .filter((result): result is PromiseFulfilledResult<NoteInfo> => result.status === 'fulfilled')
       .map(result => result.value);
+  }
+
+  async manageTags(params: TagManagementParams): Promise<TagManagementResult> {
+    const { path, operation, tags = [] } = params;
+
+    if (!this.pathFilter.isAllowed(path)) {
+      return {
+        path,
+        operation,
+        tags: [],
+        success: false,
+        message: `Access denied: ${path}`
+      };
+    }
+
+    try {
+      const note = await this.readNote(path);
+      let currentTags: string[] = [];
+
+      // Extract tags from frontmatter
+      if (note.frontmatter.tags) {
+        if (Array.isArray(note.frontmatter.tags)) {
+          currentTags = note.frontmatter.tags;
+        } else if (typeof note.frontmatter.tags === 'string') {
+          currentTags = [note.frontmatter.tags];
+        }
+      }
+
+      // Also extract inline tags from content
+      const inlineTagMatches = note.content.match(/#[a-zA-Z0-9_-]+/g) || [];
+      const inlineTags = inlineTagMatches.map(tag => tag.slice(1)); // Remove #
+      currentTags = [...new Set([...currentTags, ...inlineTags])]; // Deduplicate
+
+      if (operation === 'list') {
+        return {
+          path,
+          operation,
+          tags: currentTags,
+          success: true
+        };
+      }
+
+      let newTags = [...currentTags];
+
+      if (operation === 'add') {
+        for (const tag of tags) {
+          if (!newTags.includes(tag)) {
+            newTags.push(tag);
+          }
+        }
+      } else if (operation === 'remove') {
+        newTags = newTags.filter(tag => !tags.includes(tag));
+      }
+
+      // Update frontmatter with new tags
+      const updatedFrontmatter = {
+        ...note.frontmatter,
+        tags: newTags.length > 0 ? newTags : undefined
+      };
+
+      // Remove undefined values
+      if (updatedFrontmatter.tags === undefined) {
+        delete updatedFrontmatter.tags;
+      }
+
+      // Write back the note with updated frontmatter
+      await this.writeNote({
+        path,
+        content: note.content,
+        frontmatter: updatedFrontmatter,
+        mode: 'overwrite'
+      });
+
+      return {
+        path,
+        operation,
+        tags: newTags,
+        success: true,
+        message: `Successfully ${operation === 'add' ? 'added' : 'removed'} tags`
+      };
+
+    } catch (error) {
+      return {
+        path,
+        operation,
+        tags: [],
+        success: false,
+        message: error instanceof Error ? error.message : 'Unknown error'
+      };
+    }
   }
 
   getVaultPath(): string {

@@ -25,7 +25,7 @@ const searchService = new SearchService(vaultPath, pathFilter);
 
 const server = new Server({
   name: "mcp-obsidian",
-  version: "0.1.0"
+  version: "0.3.0"
 }, {
   capabilities: {
     tools: {},
@@ -66,6 +66,12 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
             frontmatter: {
               type: "object",
               description: "Frontmatter object (optional)"
+            },
+            mode: {
+              type: "string",
+              enum: ["overwrite", "append", "prepend"],
+              description: "Write mode: 'overwrite' (default), 'append', or 'prepend'",
+              default: "overwrite"
             }
           },
           required: ["path", "content"]
@@ -223,24 +229,91 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
           },
           required: ["paths"]
         }
+      },
+      {
+        name: "get_frontmatter",
+        description: "Extract frontmatter from a note without reading the content",
+        inputSchema: {
+          type: "object",
+          properties: {
+            path: {
+              type: "string",
+              description: "Path to the note relative to vault root"
+            }
+          },
+          required: ["path"]
+        }
+      },
+      {
+        name: "manage_tags",
+        description: "Add, remove, or list tags in a note",
+        inputSchema: {
+          type: "object",
+          properties: {
+            path: {
+              type: "string",
+              description: "Path to the note relative to vault root"
+            },
+            operation: {
+              type: "string",
+              enum: ["add", "remove", "list"],
+              description: "Operation to perform: 'add', 'remove', or 'list'"
+            },
+            tags: {
+              type: "array",
+              items: { type: "string" },
+              description: "Array of tags (required for 'add' and 'remove' operations)"
+            }
+          },
+          required: ["path", "operation"]
+        }
       }
     ]
   };
 });
 
+// Helper function to trim path arguments
+function trimPaths(args: any): any {
+  const trimmed = { ...args };
+
+  // Trim single path properties
+  if (trimmed.path && typeof trimmed.path === 'string') {
+    trimmed.path = trimmed.path.trim();
+  }
+  if (trimmed.oldPath && typeof trimmed.oldPath === 'string') {
+    trimmed.oldPath = trimmed.oldPath.trim();
+  }
+  if (trimmed.newPath && typeof trimmed.newPath === 'string') {
+    trimmed.newPath = trimmed.newPath.trim();
+  }
+  if (trimmed.confirmPath && typeof trimmed.confirmPath === 'string') {
+    trimmed.confirmPath = trimmed.confirmPath.trim();
+  }
+
+  // Trim path arrays
+  if (trimmed.paths && Array.isArray(trimmed.paths)) {
+    trimmed.paths = trimmed.paths.map((p: any) =>
+      typeof p === 'string' ? p.trim() : p
+    );
+  }
+
+  return trimmed;
+}
+
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
   const { name, arguments: args } = request.params;
+  const trimmedArgs = trimPaths(args);
 
   try {
     switch (name) {
       case "read_note": {
-        const note = await fileSystem.readNote(args.path);
+        const note = await fileSystem.readNote(trimmedArgs.path);
         return {
           content: [
             {
               type: "text",
               text: JSON.stringify({
-                path: args.path,
+                path: trimmedArgs.path,
                 frontmatter: note.frontmatter,
                 content: note.content
               }, null, 2)
@@ -251,28 +324,29 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
       case "write_note": {
         await fileSystem.writeNote({
-          path: args.path,
-          content: args.content,
-          frontmatter: args.frontmatter
+          path: trimmedArgs.path,
+          content: trimmedArgs.content,
+          frontmatter: trimmedArgs.frontmatter,
+          mode: trimmedArgs.mode || 'overwrite'
         });
         return {
           content: [
             {
               type: "text",
-              text: `Successfully wrote note: ${args.path}`
+              text: `Successfully wrote note: ${trimmedArgs.path} (mode: ${trimmedArgs.mode || 'overwrite'})`
             }
           ]
         };
       }
 
       case "list_directory": {
-        const listing = await fileSystem.listDirectory(args.path || '');
+        const listing = await fileSystem.listDirectory(trimmedArgs.path || '');
         return {
           content: [
             {
               type: "text",
               text: JSON.stringify({
-                path: args.path || '/',
+                path: trimmedArgs.path || '/',
                 directories: listing.directories,
                 files: listing.files
               }, null, 2)
@@ -283,8 +357,8 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
       case "delete_note": {
         const result = await fileSystem.deleteNote({
-          path: args.path,
-          confirmPath: args.confirmPath
+          path: trimmedArgs.path,
+          confirmPath: trimmedArgs.confirmPath
         });
         return {
           content: [
@@ -299,18 +373,18 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
       case "search_notes": {
         const results = await searchService.search({
-          query: args.query,
-          limit: args.limit,
-          searchContent: args.searchContent,
-          searchFrontmatter: args.searchFrontmatter,
-          caseSensitive: args.caseSensitive
+          query: trimmedArgs.query,
+          limit: trimmedArgs.limit,
+          searchContent: trimmedArgs.searchContent,
+          searchFrontmatter: trimmedArgs.searchFrontmatter,
+          caseSensitive: trimmedArgs.caseSensitive
         });
         return {
           content: [
             {
               type: "text",
               text: JSON.stringify({
-                query: args.query,
+                query: trimmedArgs.query,
                 resultCount: results.length,
                 results: results
               }, null, 2)
@@ -321,9 +395,9 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
       case "move_note": {
         const result = await fileSystem.moveNote({
-          oldPath: args.oldPath,
-          newPath: args.newPath,
-          overwrite: args.overwrite
+          oldPath: trimmedArgs.oldPath,
+          newPath: trimmedArgs.newPath,
+          overwrite: trimmedArgs.overwrite
         });
         return {
           content: [
@@ -338,9 +412,9 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
       case "read_multiple_notes": {
         const result = await fileSystem.readMultipleNotes({
-          paths: args.paths,
-          includeContent: args.includeContent,
-          includeFrontmatter: args.includeFrontmatter
+          paths: trimmedArgs.paths,
+          includeContent: trimmedArgs.includeContent,
+          includeFrontmatter: trimmedArgs.includeFrontmatter
         });
         return {
           content: [
@@ -361,22 +435,22 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
       case "update_frontmatter": {
         await fileSystem.updateFrontmatter({
-          path: args.path,
-          frontmatter: args.frontmatter,
-          merge: args.merge
+          path: trimmedArgs.path,
+          frontmatter: trimmedArgs.frontmatter,
+          merge: trimmedArgs.merge
         });
         return {
           content: [
             {
               type: "text",
-              text: `Successfully updated frontmatter for: ${args.path}`
+              text: `Successfully updated frontmatter for: ${trimmedArgs.path}`
             }
           ]
         };
       }
 
       case "get_notes_info": {
-        const result = await fileSystem.getNotesInfo(args.paths);
+        const result = await fileSystem.getNotesInfo(trimmedArgs.paths);
         return {
           content: [
             {
@@ -387,6 +461,38 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
               }, null, 2)
             }
           ]
+        };
+      }
+
+      case "get_frontmatter": {
+        const note = await fileSystem.readNote(trimmedArgs.path);
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify({
+                path: trimmedArgs.path,
+                frontmatter: note.frontmatter
+              }, null, 2)
+            }
+          ]
+        };
+      }
+
+      case "manage_tags": {
+        const result = await fileSystem.manageTags({
+          path: trimmedArgs.path,
+          operation: trimmedArgs.operation,
+          tags: trimmedArgs.tags
+        });
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify(result, null, 2)
+            }
+          ],
+          isError: !result.success
         };
       }
 

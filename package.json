@@ -1,6 +1,6 @@
 {
-  "name": "mcp-obsidian",
-  "version": "0.2.0",
+  "name": "@bitbonsai/mcp-obsidian",
+  "version": "0.3.0",
   "description": "Lightweight MCP server for safe Obsidian vault access",
   "author": "bitbonsai",
   "license": "MIT",
@@ -18,7 +18,12 @@
   "scripts": {
     "start": "bun run server.ts",
     "test": "bun test",
-    "test:watch": "bun test --watch"
+    "test:watch": "bun test --watch",
+    "prepublishOnly": "bun test",
+    "prepack": "bun install",
+    "publish:dry": "npm publish --dry-run",
+    "publish:beta": "npm publish --tag beta",
+    "publish:latest": "npm publish"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",

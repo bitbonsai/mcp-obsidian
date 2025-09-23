@@ -8,6 +8,7 @@ export interface NoteWriteParams {
   path: string;
   content: string;
   frontmatter?: Record<string, any>;
+  mode?: 'overwrite' | 'append' | 'prepend';
 }
 
 export interface DeleteNoteParams {
@@ -100,4 +101,19 @@ export interface NoteInfo {
   size: number;
   modified: number; // timestamp
   hasFrontmatter: boolean;
+}
+
+// Tag management types
+export interface TagManagementParams {
+  path: string;
+  operation: 'add' | 'remove' | 'list';
+  tags?: string[];
+}
+
+export interface TagManagementResult {
+  path: string;
+  operation: string;
+  tags: string[];
+  success: boolean;
+  message?: string;
 }
