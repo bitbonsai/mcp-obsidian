@@ -6,16 +6,17 @@ A lightweight Model Context Protocol (MCP) server for safe Obsidian vault access
 
 ## Quick Start (5 minutes)
 
-1. **Install Bun runtime:**
+1. **Install Node.js runtime:**
    ```bash
-   curl -fsSL https://bun.sh/install | bash
+   # Download from https://nodejs.org (v18.0.0 or later)
+   # or use a package manager like nvm, brew, apt, etc.
    ```
 
 2. **Test the server:**
 
    If using the published package:
    ```bash
-   bunx @modelcontextprotocol/inspector bunx @mauricio.wolff/mcp-obsidian /path/to/your/vault
+   npx @modelcontextprotocol/inspector npx @mauricio.wolff/mcp-obsidian /path/to/your/vault
    ```
 
 3. **Configure your AI client:**
@@ -25,7 +26,7 @@ A lightweight Model Context Protocol (MCP) server for safe Obsidian vault access
    {
      "mcpServers": {
        "obsidian": {
-         "command": "bunx",
+         "command": "npx",
          "args": ["@mauricio.wolff/mcp-obsidian", "/path/to/your/vault"]
        }
      }
@@ -37,7 +38,7 @@ A lightweight Model Context Protocol (MCP) server for safe Obsidian vault access
    {
      "mcpServers": {
        "obsidian": {
-         "command": "bunx",
+         "command": "npx",
          "args": ["@mauricio.wolff/mcp-obsidian", "/path/to/your/vault"],
          "env": {}
        }
@@ -71,12 +72,12 @@ A lightweight Model Context Protocol (MCP) server for safe Obsidian vault access
 - ✅ **NEW:** Tag management: add, remove, and list tags in notes
 - ✅ Safe deletion with confirmation requirement to prevent accidents
 - ✅ Automatic path trimming to handle whitespace in inputs
-- ✅ TypeScript support with Bun runtime (no compilation needed)
+- ✅ TypeScript support with Node.js runtime (using tsx for execution)
 - ✅ Comprehensive error handling and validation
 
 ## Prerequisites
 
-- [Bun](https://bun.sh) runtime (v1.0.0 or later)
+- [Node.js](https://nodejs.org) runtime (v18.0.0 or later)
 - An Obsidian vault (local directory with `.md` files)
 - MCP-compatible AI client (Claude Desktop, ChatGPT Desktop, Claude Code, etc.)
 
@@ -84,23 +85,23 @@ A lightweight Model Context Protocol (MCP) server for safe Obsidian vault access
 
 ### For End Users (Recommended)
 
-No installation needed! Use `bunx` to run directly:
+No installation needed! Use `npx` to run directly:
 
 ```bash
-bunx @mauricio.wolff/mcp-obsidian /path/to/your/obsidian/vault
+npx @mauricio.wolff/mcp-obsidian /path/to/your/obsidian/vault
 ```
 
 ### For Developers
 
 1. Clone this repository
-2. Install dependencies with Bun:
+2. Install dependencies with npm:
 ```bash
-bun install
+npm install
 ```
 
 3. Test locally with MCP inspector:
 ```bash
-bunx @modelcontextprotocol/inspector bun server.ts /path/to/your/vault
+npx @modelcontextprotocol/inspector npm start /path/to/your/vault
 ```
 
 ## Usage
@@ -109,12 +110,12 @@ bunx @modelcontextprotocol/inspector bun server.ts /path/to/your/vault
 
 **End users:**
 ```bash
-bunx @mauricio.wolff/mcp-obsidian /path/to/your/obsidian/vault
+npx @mauricio.wolff/mcp-obsidian /path/to/your/obsidian/vault
 ```
 
 **Developers:**
 ```bash
-bun server.ts /path/to/your/obsidian/vault
+npm start /path/to/your/obsidian/vault
 ```
 
 ### AI Client Configuration
@@ -128,7 +129,7 @@ Add to your Claude Desktop configuration file:
 {
   "mcpServers": {
     "obsidian": {
-      "command": "bunx",
+      "command": "npx",
       "args": ["@mauricio.wolff/mcp-obsidian", "/Users/yourname/Documents/MyVault"]
     }
   }
@@ -140,11 +141,11 @@ Add to your Claude Desktop configuration file:
 {
   "mcpServers": {
     "obsidian-personal": {
-      "command": "bunx",
+      "command": "npx",
       "args": ["@mauricio.wolff/mcp-obsidian", "/Users/yourname/Documents/PersonalVault"]
     },
     "obsidian-work": {
-      "command": "bunx",
+      "command": "npx",
       "args": ["@mauricio.wolff/mcp-obsidian", "/Users/yourname/Documents/WorkVault"]
     }
   }
@@ -180,7 +181,7 @@ Edit `~/.claude.json`:
 {
   "mcpServers": {
     "obsidian": {
-      "command": "bunx",
+      "command": "npx",
       "args": ["@mauricio.wolff/mcp-obsidian", "/path/to/your/vault"],
       "env": {}
     }
@@ -196,7 +197,7 @@ Edit `.claude.json` in your project or add to the projects section:
     "/path/to/your/project": {
       "mcpServers": {
         "obsidian": {
-          "command": "bunx",
+          "command": "npx",
           "args": ["@mauricio.wolff/mcp-obsidian", "/path/to/your/vault"]
         }
       }
@@ -207,7 +208,7 @@ Edit `.claude.json` in your project or add to the projects section:
 
 **Using Claude Code CLI:**
 ```bash
-claude mcp add obsidian --scope user bunx @mauricio.wolff/mcp-obsidian /path/to/your/vault
+claude mcp add obsidian --scope user npx @mauricio.wolff/mcp-obsidian /path/to/your/vault
 ```
 
 #### Other MCP-Compatible Clients (2025)
@@ -241,11 +242,11 @@ Most modern MCP clients use similar JSON configuration patterns. Refer to your s
 
 ### Common Issues
 
-#### "command not found: bunx"
-- **Solution:** Install Bun runtime from [bun.sh](https://bun.sh)
-- **Alternative:** Use npm: `npx @mauricio.wolff/mcp-obsidian /path/to/vault`
+#### "command not found: npx"
+- **Solution:** Install Node.js runtime from [nodejs.org](https://nodejs.org)
+- **Alternative:** Use global install: `npm install -g @mauricio.wolff/mcp-obsidian`
 
-#### "Usage: bun server.ts /path/to/vault"
+#### "Usage: node server.ts /path/to/vault"
 - **Cause:** No vault path provided
 - **Solution:** Specify the full path to your Obsidian vault directory
 
@@ -272,20 +273,20 @@ Most modern MCP clients use similar JSON configuration patterns. Refer to your s
 
 Run with error logging:
 ```bash
-bunx @mauricio.wolff/mcp-obsidian /path/to/vault 2>debug.log
+npx @mauricio.wolff/mcp-obsidian /path/to/vault 2>debug.log
 ```
 
 ### Getting Help
 
 - [Open an issue](https://github.com/bitbonsai/mcp-obsidian/issues) on GitHub
-- Include your OS, Bun version, and error messages
+- Include your OS, Node.js version, and error messages
 - Provide the vault directory structure (without sensitive content)
 
 ## Testing
 
 Run the test suite:
 ```bash
-bun test
+npm test
 ```
 
 ## API Methods
@@ -691,7 +692,7 @@ This MCP server implements several security measures to protect your Obsidian va
 1. Fork the repository
 2. Create a feature branch: `git checkout -b feature-name`
 3. Make your changes and add tests
-4. Ensure all tests pass: `bun test`
+4. Ensure all tests pass: `npm test`
 5. Submit a pull request
 
 ## License
