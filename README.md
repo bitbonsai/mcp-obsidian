@@ -15,7 +15,7 @@ A lightweight Model Context Protocol (MCP) server for safe Obsidian vault access
 
    If using the published package:
    ```bash
-   bunx @modelcontextprotocol/inspector @mauricio.wolff/mcp-obsidian /path/to/your/vault
+   bunx @modelcontextprotocol/inspector bunx @mauricio.wolff/mcp-obsidian /path/to/your/vault
    ```
 
 3. **Configure your AI client:**
