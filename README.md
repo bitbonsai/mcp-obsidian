@@ -16,7 +16,7 @@ A lightweight Model Context Protocol (MCP) server for safe Obsidian vault access
 
    If using the published package:
    ```bash
-   npx @modelcontextprotocol/inspector npx @mauricio.wolff/mcp-obsidian /path/to/your/vault
+   npx @modelcontextprotocol/inspector npx @mauricio.wolff/mcp-obsidian@latest /path/to/your/vault
    ```
 
 3. **Configure your AI client:**
@@ -27,7 +27,7 @@ A lightweight Model Context Protocol (MCP) server for safe Obsidian vault access
      "mcpServers": {
        "obsidian": {
          "command": "npx",
-         "args": ["@mauricio.wolff/mcp-obsidian", "/path/to/your/vault"]
+         "args": ["@mauricio.wolff/mcp-obsidian@latest", "/path/to/your/vault"]
        }
      }
    }
@@ -39,7 +39,7 @@ A lightweight Model Context Protocol (MCP) server for safe Obsidian vault access
      "mcpServers": {
        "obsidian": {
          "command": "npx",
-         "args": ["@mauricio.wolff/mcp-obsidian", "/path/to/your/vault"],
+         "args": ["@mauricio.wolff/mcp-obsidian@latest", "/path/to/your/vault"],
          "env": {}
        }
      }
@@ -88,7 +88,7 @@ A lightweight Model Context Protocol (MCP) server for safe Obsidian vault access
 No installation needed! Use `npx` to run directly:
 
 ```bash
-npx @mauricio.wolff/mcp-obsidian /path/to/your/obsidian/vault
+npx @mauricio.wolff/mcp-obsidian@latest /path/to/your/obsidian/vault
 ```
 
 ### For Developers
@@ -110,7 +110,7 @@ npx @modelcontextprotocol/inspector npm start /path/to/your/vault
 
 **End users:**
 ```bash
-npx @mauricio.wolff/mcp-obsidian /path/to/your/obsidian/vault
+npx @mauricio.wolff/mcp-obsidian@latest /path/to/your/obsidian/vault
 ```
 
 **Developers:**
@@ -130,7 +130,7 @@ Add to your Claude Desktop configuration file:
   "mcpServers": {
     "obsidian": {
       "command": "npx",
-      "args": ["@mauricio.wolff/mcp-obsidian", "/Users/yourname/Documents/MyVault"]
+      "args": ["@mauricio.wolff/mcp-obsidian@latest", "/Users/yourname/Documents/MyVault"]
     }
   }
 }
@@ -142,11 +142,11 @@ Add to your Claude Desktop configuration file:
   "mcpServers": {
     "obsidian-personal": {
       "command": "npx",
-      "args": ["@mauricio.wolff/mcp-obsidian", "/Users/yourname/Documents/PersonalVault"]
+      "args": ["@mauricio.wolff/mcp-obsidian@latest", "/Users/yourname/Documents/PersonalVault"]
     },
     "obsidian-work": {
       "command": "npx",
-      "args": ["@mauricio.wolff/mcp-obsidian", "/Users/yourname/Documents/WorkVault"]
+      "args": ["@mauricio.wolff/mcp-obsidian@latest", "/Users/yourname/Documents/WorkVault"]
     }
   }
 }
@@ -182,7 +182,7 @@ Edit `~/.claude.json`:
   "mcpServers": {
     "obsidian": {
       "command": "npx",
-      "args": ["@mauricio.wolff/mcp-obsidian", "/path/to/your/vault"],
+      "args": ["@mauricio.wolff/mcp-obsidian@latest", "/path/to/your/vault"],
       "env": {}
     }
   }
@@ -198,7 +198,7 @@ Edit `.claude.json` in your project or add to the projects section:
       "mcpServers": {
         "obsidian": {
           "command": "npx",
-          "args": ["@mauricio.wolff/mcp-obsidian", "/path/to/your/vault"]
+          "args": ["@mauricio.wolff/mcp-obsidian@latest", "/path/to/your/vault"]
         }
       }
     }
