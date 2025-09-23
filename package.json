@@ -1,13 +1,14 @@
 {
   "name": "@mauricio.wolff/mcp-obsidian",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Lightweight MCP server for safe Obsidian vault access",
   "author": "bitbonsai",
   "license": "MIT",
   "type": "module",
   "main": "server.ts",
   "bin": {
-    "mcp-obsidian": "./server.ts"
+    "mcp-obsidian": "./server.ts",
+    "@mauricio.wolff/mcp-obsidian": "./server.ts"
   },
   "files": [
     "server.ts",

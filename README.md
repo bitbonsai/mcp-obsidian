@@ -12,14 +12,42 @@ A lightweight Model Context Protocol (MCP) server for safe Obsidian vault access
    ```
 
 2. **Test the server:**
+
+   If using the published package:
    ```bash
-   bunx @bitbonsai/mcp-obsidian /path/to/your/obsidian/vault
+   bunx @modelcontextprotocol/inspector @mauricio.wolff/mcp-obsidian /path/to/your/vault
    ```
 
 3. **Configure your AI client:**
-   - **Claude Desktop**: Add to `claude_desktop_config.json`
-   - **Claude Code**: Add to `~/.claude.json`
-   - **Others**: See [platform-specific guides](#ai-client-configuration) below
+
+   **Claude Desktop** - Copy this to `claude_desktop_config.json`:
+   ```json
+   {
+     "mcpServers": {
+       "obsidian": {
+         "command": "bunx",
+         "args": ["@mauricio.wolff/mcp-obsidian", "/path/to/your/vault"]
+       }
+     }
+   }
+   ```
+
+   **Claude Code** - Copy this to `~/.claude.json`:
+   ```json
+   {
+     "mcpServers": {
+       "obsidian": {
+         "command": "bunx",
+         "args": ["@mauricio.wolff/mcp-obsidian", "/path/to/your/vault"],
+         "env": {}
+       }
+     }
+   }
+   ```
+
+   Replace `/path/to/your/vault` with your actual Obsidian vault path.
+
+   For other platforms, see [detailed configuration guides](#ai-client-configuration) below.
 
 4. **Test with your AI:**
    - "List files in my Obsidian vault"
@@ -59,7 +87,7 @@ A lightweight Model Context Protocol (MCP) server for safe Obsidian vault access
 No installation needed! Use `bunx` to run directly:
 
 ```bash
-bunx @bitbonsai/mcp-obsidian /path/to/your/obsidian/vault
+bunx @mauricio.wolff/mcp-obsidian /path/to/your/obsidian/vault
 ```
 
 ### For Developers
@@ -70,13 +98,18 @@ bunx @bitbonsai/mcp-obsidian /path/to/your/obsidian/vault
 bun install
 ```
 
+3. Test locally with MCP inspector:
+```bash
+bunx @modelcontextprotocol/inspector bun server.ts /path/to/your/vault
+```
+
 ## Usage
 
 ### Running the Server
 
 **End users:**
 ```bash
-bunx @bitbonsai/mcp-obsidian /path/to/your/obsidian/vault
+bunx @mauricio.wolff/mcp-obsidian /path/to/your/obsidian/vault
 ```
 
 **Developers:**
@@ -96,7 +129,7 @@ Add to your Claude Desktop configuration file:
   "mcpServers": {
     "obsidian": {
       "command": "bunx",
-      "args": ["@bitbonsai/mcp-obsidian", "/Users/yourname/Documents/MyVault"]
+      "args": ["@mauricio.wolff/mcp-obsidian", "/Users/yourname/Documents/MyVault"]
     }
   }
 }
@@ -108,11 +141,11 @@ Add to your Claude Desktop configuration file:
   "mcpServers": {
     "obsidian-personal": {
       "command": "bunx",
-      "args": ["@bitbonsai/mcp-obsidian", "/Users/yourname/Documents/PersonalVault"]
+      "args": ["@mauricio.wolff/mcp-obsidian", "/Users/yourname/Documents/PersonalVault"]
     },
     "obsidian-work": {
       "command": "bunx",
-      "args": ["@bitbonsai/mcp-obsidian", "/Users/yourname/Documents/WorkVault"]
+      "args": ["@mauricio.wolff/mcp-obsidian", "/Users/yourname/Documents/WorkVault"]
     }
   }
 }
@@ -148,7 +181,7 @@ Edit `~/.claude.json`:
   "mcpServers": {
     "obsidian": {
       "command": "bunx",
-      "args": ["@bitbonsai/mcp-obsidian", "/path/to/your/vault"],
+      "args": ["@mauricio.wolff/mcp-obsidian", "/path/to/your/vault"],
       "env": {}
     }
   }
@@ -164,7 +197,7 @@ Edit `.claude.json` in your project or add to the projects section:
       "mcpServers": {
         "obsidian": {
           "command": "bunx",
-          "args": ["@bitbonsai/mcp-obsidian", "/path/to/your/vault"]
+          "args": ["@mauricio.wolff/mcp-obsidian", "/path/to/your/vault"]
         }
       }
     }
@@ -174,7 +207,7 @@ Edit `.claude.json` in your project or add to the projects section:
 
 **Using Claude Code CLI:**
 ```bash
-claude mcp add obsidian --scope user bunx @bitbonsai/mcp-obsidian /path/to/your/vault
+claude mcp add obsidian --scope user bunx @mauricio.wolff/mcp-obsidian /path/to/your/vault
 ```
 
 #### Other MCP-Compatible Clients (2025)
@@ -210,7 +243,7 @@ Most modern MCP clients use similar JSON configuration patterns. Refer to your s
 
 #### "command not found: bunx"
 - **Solution:** Install Bun runtime from [bun.sh](https://bun.sh)
-- **Alternative:** Use npm: `npx @bitbonsai/mcp-obsidian /path/to/vault`
+- **Alternative:** Use npm: `npx @mauricio.wolff/mcp-obsidian /path/to/vault`
 
 #### "Usage: bun server.ts /path/to/vault"
 - **Cause:** No vault path provided
@@ -239,7 +272,7 @@ Most modern MCP clients use similar JSON configuration patterns. Refer to your s
 
 Run with error logging:
 ```bash
-bunx @bitbonsai/mcp-obsidian /path/to/vault 2>debug.log
+bunx @mauricio.wolff/mcp-obsidian /path/to/vault 2>debug.log
 ```
 
 ### Getting Help
