@@ -8,7 +8,7 @@ import { PathFilter } from "./src/pathfilter.js";
 import { SearchService } from "./src/search.js";
 const vaultPath = process.argv[2];
 if (!vaultPath) {
-    console.error("Usage: node server.ts /path/to/vault");
+    console.error("Usage: npx @mauricio.wolff/mcp-obsidian /path/to/vault");
     process.exit(1);
 }
 // Initialize services
