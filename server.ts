@@ -1,4 +1,4 @@
-#!/usr/bin/env bun
+#!/usr/bin/env node
 
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
@@ -13,7 +13,7 @@ import { SearchService } from "./src/search.js";
 
 const vaultPath = process.argv[2];
 if (!vaultPath) {
-  console.error("Usage: bun server.ts /path/to/vault");
+  console.error("Usage: node server.ts /path/to/vault");
   process.exit(1);
 }
 

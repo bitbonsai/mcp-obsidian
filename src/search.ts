@@ -1,4 +1,5 @@
 import { join } from 'path';
+import { readFile, readdir, stat } from 'node:fs/promises';
 import type { PathFilter } from './pathfilter.js';
 import type { SearchParams, SearchResult } from './types.js';
 
@@ -22,18 +23,20 @@ export class SearchService {
     }
 
     const results: SearchResult[] = [];
-    const glob = new Bun.Glob("**/*.md");
     const maxLimit = Math.min(limit, 20);
 
-    for await (const relativePath of glob.scan(this.vaultPath)) {
+    // Recursively find all .md files
+    const markdownFiles = await this.findMarkdownFiles(this.vaultPath);
+
+    for (const fullPath of markdownFiles) {
+      // Convert absolute path back to relative path
+      const relativePath = fullPath.substring(this.vaultPath.length + 1).replace(/\\/g, '/');
+
       if (!this.pathFilter.isAllowed(relativePath)) continue;
       if (results.length >= maxLimit) break;
 
-      const fullPath = join(this.vaultPath, relativePath);
-      const file = Bun.file(fullPath);
-
       try {
-        const content = await file.text();
+        const content = await readFile(fullPath, 'utf-8');
         let searchableText = '';
 
         // Prepare search text based on options
@@ -93,5 +96,29 @@ export class SearchService {
     }
 
     return results;
+  }
+
+  private async findMarkdownFiles(dirPath: string): Promise<string[]> {
+    const markdownFiles: string[] = [];
+
+    try {
+      const entries = await readdir(dirPath, { withFileTypes: true });
+
+      for (const entry of entries) {
+        const fullPath = join(dirPath, entry.name);
+
+        if (entry.isDirectory()) {
+          // Recursively search subdirectories
+          const subFiles = await this.findMarkdownFiles(fullPath);
+          markdownFiles.push(...subFiles);
+        } else if (entry.isFile() && entry.name.endsWith('.md')) {
+          markdownFiles.push(fullPath);
+        }
+      }
+    } catch (error) {
+      // Skip directories that can't be read
+    }
+
+    return markdownFiles;
   }
 }

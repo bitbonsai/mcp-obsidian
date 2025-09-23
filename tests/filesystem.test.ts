@@ -1,4 +1,4 @@
-import { test, expect, beforeEach, afterEach } from "bun:test";
+import { test, expect, beforeEach, afterEach } from "vitest";
 import { FileSystemService } from "../src/filesystem.js";
 import { writeFile, mkdir, rmdir } from "fs/promises";
 import { join } from "path";

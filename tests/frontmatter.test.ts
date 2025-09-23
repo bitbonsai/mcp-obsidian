@@ -1,4 +1,4 @@
-import { test, expect } from "bun:test";
+import { test, expect } from "vitest";
 import { FrontmatterHandler } from "../src/frontmatter.js";
 
 const handler = new FrontmatterHandler();

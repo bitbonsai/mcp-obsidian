@@ -1,4 +1,5 @@
 import matter from 'gray-matter';
+import * as yaml from 'js-yaml';
 import type { ParsedNote, FrontmatterValidationResult } from './types.js';
 
 export class FrontmatterHandler {
@@ -41,8 +42,8 @@ export class FrontmatterHandler {
     };
 
     try {
-      // Test if the frontmatter can be serialized to valid YAML using Bun's YAML
-      Bun.YAML.stringify(frontmatterData);
+      // Test if the frontmatter can be serialized to valid YAML using js-yaml
+      yaml.dump(frontmatterData);
     } catch (error) {
       result.isValid = false;
       result.errors.push(`Invalid YAML structure: ${error instanceof Error ? error.message : 'Unknown error'}`);

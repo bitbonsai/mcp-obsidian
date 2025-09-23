@@ -1,5 +1,6 @@
 import { join, resolve, relative, dirname } from 'path';
-import { readdir, stat } from 'node:fs/promises';
+import { readdir, stat, readFile, writeFile, unlink, mkdir, access } from 'node:fs/promises';
+import { constants } from 'node:fs';
 import { FrontmatterHandler } from './frontmatter.js';
 import { PathFilter } from './pathfilter.js';
 import type { ParsedNote, DirectoryListing, NoteWriteParams, DeleteNoteParams, DeleteResult, MoveNoteParams, MoveResult, BatchReadParams, BatchReadResult, UpdateFrontmatterParams, NoteInfo, TagManagementParams, TagManagementResult } from './types.js';
@@ -57,14 +58,13 @@ export class FileSystemService {
     }
 
     try {
-      const file = Bun.file(fullPath);
-      const exists = await file.exists();
-
-      if (!exists) {
+      try {
+        await access(fullPath, constants.F_OK);
+      } catch {
         throw new Error(`File not found: ${path}`);
       }
 
-      const content = await file.text();
+      const content = await readFile(fullPath, 'utf-8');
       return this.frontmatterHandler.parse(content);
     } catch (error) {
       if (error instanceof Error) {
@@ -138,8 +138,9 @@ export class FileSystemService {
         }
       }
 
-      // Bun.write automatically creates directories if they don't exist
-      await Bun.write(fullPath, finalContent!);
+      // Create directories if they don't exist
+      await mkdir(dirname(fullPath), { recursive: true });
+      await writeFile(fullPath, finalContent!, 'utf-8');
     } catch (error) {
       if (error instanceof Error) {
         if (error.message.includes('permission') || error.message.includes('access')) {
@@ -204,8 +205,8 @@ export class FileSystemService {
     }
 
     try {
-      const file = Bun.file(fullPath);
-      return await file.exists();
+      await access(fullPath, constants.F_OK);
+      return true;
     } catch {
       return false;
     }
@@ -260,10 +261,9 @@ export class FileSystemService {
       }
 
       // Check if file exists
-      const file = Bun.file(fullPath);
-      const exists = await file.exists();
-
-      if (!exists) {
+      try {
+        await access(fullPath, constants.F_OK);
+      } catch {
         return {
           success: false,
           path: path,
@@ -271,8 +271,8 @@ export class FileSystemService {
         };
       }
 
-      // Perform the deletion using Bun's native API
-      await Bun.file(fullPath).delete();
+      // Perform the deletion using Node.js native API
+      await unlink(fullPath);
 
       return {
         success: true,
@@ -331,10 +331,9 @@ export class FileSystemService {
 
     try {
       // Check if source file exists
-      const sourceFile = Bun.file(oldFullPath);
-      const sourceExists = await sourceFile.exists();
-
-      if (!sourceExists) {
+      try {
+        await access(oldFullPath, constants.F_OK);
+      } catch {
         return {
           success: false,
           oldPath,
@@ -344,8 +343,13 @@ export class FileSystemService {
       }
 
       // Check if target already exists
-      const targetFile = Bun.file(newFullPath);
-      const targetExists = await targetFile.exists();
+      let targetExists = false;
+      try {
+        await access(newFullPath, constants.F_OK);
+        targetExists = true;
+      } catch {
+        // Target doesn't exist, which is fine
+      }
 
       if (targetExists && !overwrite) {
         return {
@@ -357,16 +361,16 @@ export class FileSystemService {
       }
 
       // Read source content
-      const content = await sourceFile.text();
+      const content = await readFile(oldFullPath, 'utf-8');
 
-      // Write to new location (auto-creates directories)
-      await Bun.write(newFullPath, content);
+      // Write to new location (create directories if they don't exist)
+      await mkdir(dirname(newFullPath), { recursive: true });
+      await writeFile(newFullPath, content, 'utf-8');
 
       // Verify the write was successful
-      const newFile = Bun.file(newFullPath);
-      const newExists = await newFile.exists();
-
-      if (!newExists) {
+      try {
+        await access(newFullPath, constants.F_OK);
+      } catch {
         return {
           success: false,
           oldPath,
@@ -376,7 +380,7 @@ export class FileSystemService {
       }
 
       // Delete the source file
-      await sourceFile.delete();
+      await unlink(oldFullPath);
 
       return {
         success: true,
@@ -477,18 +481,20 @@ export class FileSystemService {
         }
 
         const fullPath = this.resolvePath(path);
-        const file = Bun.file(fullPath);
 
-        const exists = await file.exists();
-        if (!exists) {
+        try {
+          await access(fullPath, constants.F_OK);
+        } catch {
           throw new Error(`File not found: ${path}`);
         }
 
-        const size = file.size;
-        const lastModified = file.lastModified;
+        const stats = await stat(fullPath);
+        const size = stats.size;
+        const lastModified = stats.mtime.getTime();
 
         // Quick check for frontmatter without reading full content
-        const firstChunk = await file.slice(0, 100).text();
+        const file = await readFile(fullPath, 'utf-8');
+        const firstChunk = file.slice(0, 100);
         const hasFrontmatter = firstChunk.startsWith('---\n');
 
         return {

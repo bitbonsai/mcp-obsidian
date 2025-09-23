@@ -17,11 +17,11 @@
     "LICENSE"
   ],
   "scripts": {
-    "start": "bun run server.ts",
-    "test": "bun test",
-    "test:watch": "bun test --watch",
-    "prepublishOnly": "bun test",
-    "prepack": "bun install",
+    "start": "tsx server.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "prepublishOnly": "npm test",
+    "prepack": "npm install",
     "publish:dry": "npm publish --dry-run",
     "publish:beta": "npm publish --tag beta",
     "publish:latest": "npm publish"
@@ -31,10 +31,15 @@
     "gray-matter": "^4.0.3"
   },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/node": "^20.0.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^1.0.0",
+    "js-yaml": "^4.1.0",
+    "@types/js-yaml": "^4.0.0"
   },
   "engines": {
-    "bun": ">=1.0.0"
+    "node": ">=18.0.0"
   },
   "repository": {
     "type": "git",
@@ -46,7 +51,7 @@
     "model-context-protocol",
     "claude",
     "ai",
-    "bun",
+    "node",
     "filesystem",
     "frontmatter",
     "yaml"
