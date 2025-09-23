@@ -1,5 +1,4 @@
 import matter from 'gray-matter';
-import * as yaml from 'js-yaml';
 export class FrontmatterHandler {
     parse(content) {
         try {
@@ -38,8 +37,8 @@ export class FrontmatterHandler {
             warnings: []
         };
         try {
-            // Test if the frontmatter can be serialized to valid YAML using js-yaml
-            yaml.dump(frontmatterData);
+            // Test if the frontmatter can be serialized to valid YAML using gray-matter
+            matter.stringify('', frontmatterData);
         }
         catch (error) {
             result.isValid = false;

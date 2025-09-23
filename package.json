@@ -1,6 +1,6 @@
 {
   "name": "@mauricio.wolff/mcp-obsidian",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "description": "Lightweight MCP server for safe Obsidian vault access",
   "author": "bitbonsai",
   "license": "MIT",
@@ -34,9 +34,7 @@
     "@types/node": "^20.0.0",
     "tsx": "^4.0.0",
     "typescript": "^5.0.0",
-    "vitest": "^1.0.0",
-    "js-yaml": "^4.1.0",
-    "@types/js-yaml": "^4.0.0"
+    "vitest": "^1.0.0"
   },
   "engines": {
     "node": ">=18.0.0"
