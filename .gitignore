@@ -117,6 +117,9 @@ Thumbs.db
 *.swo
 *~
 
+# Claude Code settings
+.claude/settings.local.json
+
 # Bun
 bun.lockb
 
