@@ -4,7 +4,8 @@
       "WebSearch",
       "WebFetch(domain:bun.com)",
       "WebFetch(domain:bun.sh)",
-      "WebFetch(domain:github.com)"
+      "WebFetch(domain:github.com)",
+      "Bash(npm run build:*)"
     ],
     "deny": [],
     "ask": []

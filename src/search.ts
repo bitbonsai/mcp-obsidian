@@ -1,5 +1,5 @@
 import { join } from 'path';
-import { readFile, readdir, stat } from 'node:fs/promises';
+import { readFile, readdir } from 'node:fs/promises';
 import type { PathFilter } from './pathfilter.js';
 import type { SearchParams, SearchResult } from './types.js';
 
@@ -49,7 +49,7 @@ export class SearchService {
         } else if (searchFrontmatter) {
           // Search only frontmatter
           const frontmatterMatch = content.match(/^---\n([\s\S]*?)\n---\n/);
-          searchableText = frontmatterMatch ? frontmatterMatch[1] : '';
+          searchableText = frontmatterMatch ? frontmatterMatch[1] || '' : '';
         }
 
         const searchIn = caseSensitive ? searchableText : searchableText.toLowerCase();

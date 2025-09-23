@@ -435,7 +435,7 @@ export class FileSystemService {
         successful.push(result.value);
       } else {
         failed.push({
-          path: paths[index],
+          path: paths[index] || '',
           error: result.reason instanceof Error ? result.reason.message : 'Unknown error'
         });
       }
@@ -565,13 +565,13 @@ export class FileSystemService {
       }
 
       // Update frontmatter with new tags
-      const updatedFrontmatter = {
-        ...note.frontmatter,
-        tags: newTags.length > 0 ? newTags : undefined
+      const updatedFrontmatter: Record<string, any> = {
+        ...note.frontmatter
       };
 
-      // Remove undefined values
-      if (updatedFrontmatter.tags === undefined) {
+      if (newTags.length > 0) {
+        updatedFrontmatter.tags = newTags;
+      } else if ('tags' in updatedFrontmatter) {
         delete updatedFrontmatter.tags;
       }
 

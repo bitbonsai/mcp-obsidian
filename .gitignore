@@ -9,7 +9,6 @@ coverage/
 
 # Production
 build/
-dist/
 
 # Runtime data
 pids
@@ -81,7 +80,6 @@ jspm_packages/
 
 # Nuxt.js build / generate output
 .nuxt
-dist
 
 # Gatsby files
 .cache/

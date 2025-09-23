@@ -7,20 +7,20 @@
   "type": "module",
   "main": "server.ts",
   "bin": {
-    "mcp-obsidian": "./server.ts",
-    "@mauricio.wolff/mcp-obsidian": "./server.ts"
+    "mcp-obsidian": "./dist/server.js",
+    "@mauricio.wolff/mcp-obsidian": "./dist/server.js"
   },
   "files": [
-    "server.ts",
-    "src/**/*",
+    "dist/**/*",
     "README.md",
     "LICENSE"
   ],
   "scripts": {
     "start": "tsx server.ts",
+    "build": "tsc --project tsconfig.build.json",
     "test": "vitest run",
     "test:watch": "vitest",
-    "prepublishOnly": "npm test",
+    "prepublishOnly": "npm run build && npm test",
     "prepack": "npm install",
     "publish:dry": "npm publish --dry-run",
     "publish:beta": "npm publish --tag beta",
