@@ -6,7 +6,9 @@
 
 A lightweight Model Context Protocol (MCP) server for safe Obsidian vault access. This server provides AI assistants with the ability to read and write notes in an Obsidian vault while preventing YAML frontmatter corruption.
 
-**Supported AI Platforms:** Claude Desktop, Claude Code, ChatGPT Desktop (Enterprise+), IntelliJ IDEA 2025.1+, Cursor IDE, and other MCP-compatible clients.
+🌐 **Website:** [mcp-obsidian.org](https://mcp-obsidian.org)
+
+**Supported AI Platforms:** Claude Desktop, Claude Code, ChatGPT Desktop (Enterprise+), IntelliJ IDEA 2025.1+, Cursor IDE, Windsurf IDE, and other MCP-compatible clients.
 
 https://github.com/user-attachments/assets/657ac4c6-1cd2-4cc3-829f-fd095a32f71c
 
@@ -80,6 +82,9 @@ https://github.com/user-attachments/assets/657ac4c6-1cd2-4cc3-829f-fd095a32f71c
 - ✅ Automatic path trimming to handle whitespace in inputs
 - ✅ TypeScript support with Node.js runtime (using tsx for execution)
 - ✅ Comprehensive error handling and validation
+- ✅ **Performance optimized**: No unnecessary token consumption, efficient for large vaults
+- ✅ **Zero dependencies**: No Obsidian plugins required, works with any vault structure
+- ✅ **Intelligent link handling**: Smart processing of internal links and references
 
 ## Prerequisites
 
@@ -108,6 +113,15 @@ npm install
 3. Test locally with MCP inspector:
 ```bash
 npx @modelcontextprotocol/inspector npm start /path/to/your/vault
+```
+
+**Pro tip:** Use MCP Inspector to test all server functionality before configuring with AI clients:
+```bash
+# Install globally for easier access
+npm install -g @modelcontextprotocol/inspector
+
+# Test with any vault
+mcp-inspector npx @mauricio.wolff/mcp-obsidian@latest /path/to/your/vault
 ```
 
 ## Usage
@@ -222,6 +236,7 @@ claude mcp add obsidian --scope user npx @mauricio.wolff/mcp-obsidian /path/to/y
 **Confirmed MCP Support:**
 - **IntelliJ IDEA 2025.1+** - Native MCP client support
 - **Cursor IDE** - Built-in MCP compatibility
+- **Windsurf IDE** - Full MCP integration
 - **Zed, Replit, Codeium, Sourcegraph** - In development
 - **Microsoft Copilot Studio** - Native MCP support with one-click server connections
 
@@ -243,6 +258,12 @@ Most modern MCP clients use similar JSON configuration patterns. Refer to your s
 - "Remove the 'draft' tag from my completed article"
 - "List all markdown files in my 'Projects' folder"
 - "Delete the old draft note 'draft-ideas.md' (with confirmation)"
+
+#### Advanced Use Cases:
+- **Knowledge Synthesis**: "Summarize all my research notes tagged with 'machine-learning' from the last month"
+- **Project Management**: "Update the status in all project notes to 'completed' and add today's date"
+- **Content Analysis**: "Find all notes that mention 'API design' and create a comprehensive guide"
+- **Smart Tagging**: "Review my untagged notes and suggest appropriate tags based on content"
 
 ## Troubleshooting
 
@@ -691,6 +712,7 @@ This MCP server implements several security measures to protect your Obsidian va
 - `src/frontmatter.ts` - YAML frontmatter handling with gray-matter
 - `src/filesystem.ts` - Safe file operations with path validation
 - `src/pathfilter.ts` - Directory and file filtering
+- `src/search.ts` - Note search functionality with content and frontmatter support
 - `src/types.ts` - TypeScript type definitions
 
 ## Contributing
