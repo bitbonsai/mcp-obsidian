@@ -74,8 +74,8 @@ https://github.com/user-attachments/assets/657ac4c6-1cd2-4cc3-829f-fd095a32f71c
   - Search: `search_notes` with content and frontmatter support
   - Metadata: `get_frontmatter`, `update_frontmatter`, `get_notes_info`
   - Tag management: `manage_tags` (add, remove, list)
-- ✅ **NEW:** Write modes: `overwrite`, `append`, `prepend` for flexible content editing
-- ✅ **NEW:** Tag management: add, remove, and list tags in notes
+- ✅ Write modes: `overwrite`, `append`, `prepend` for flexible content editing
+- ✅ Tag management: add, remove, and list tags in notes
 - ✅ Safe deletion with confirmation requirement to prevent accidents
 - ✅ Automatic path trimming to handle whitespace in inputs
 - ✅ TypeScript support with Node.js runtime (using tsx for execution)
