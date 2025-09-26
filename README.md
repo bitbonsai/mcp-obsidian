@@ -13,7 +13,9 @@ A universal AI bridge for Obsidian vaults using the Model Context Protocol (MCP)
 </div>
 
 <div align="center">
-  
+
+[![GitHub Stars](https://img.shields.io/github/stars/bitbonsai/mcp-obsidian?style=flat&logo=github&logoColor=white&color=9065ea&labelColor=262626)](https://github.com/bitbonsai/mcp-obsidian) 
+[![GitHub Sponsors](https://img.shields.io/github/sponsors/BitBonsai?style=flat&logo=github&logoColor=white&color=9065ea&labelColor=262626)](https://github.com/sponsors/bitbonsai) 
 [![GitHub Sponsors](https://img.shields.io/github/sponsors/BitBonsai?style=flat&logo=github&logoColor=white&color=9065ea&labelColor=262626)](https://github.com/sponsors/bitbonsai) 
 [![Ko-Fi](https://img.shields.io/badge/Ko--fi-Support%20Me-9065ea?style=flat&logo=ko-fi&logoColor=white&labelColor=262626)](https://ko-fi.com/bitbonsai) 
 [![Liberapay](https://img.shields.io/badge/Liberapay-Weekly%20Support-9065ea?style=flat&logo=liberapay&logoColor=white&labelColor=262626)](https://liberapay.com/bitbonsai/)
