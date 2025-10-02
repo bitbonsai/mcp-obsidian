@@ -263,7 +263,9 @@ claude mcp add obsidian --scope user npx @mauricio.wolff/mcp-obsidian /path/to/y
 
 On Goose Desktop settings, click **Add custom extension**, and on the command field add:
 
-`npx @mauricio.wolff/mcp-obsidian@latest /path/to/your/vault`
+```bash
+npx @mauricio.wolff/mcp-obsidian@latest /path/to/your/vault
+```
 
 #### Other MCP-Compatible Clients (2025)
 
