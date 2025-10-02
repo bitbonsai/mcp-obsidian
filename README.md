@@ -259,6 +259,12 @@ Edit `.claude.json` in your project or add to the projects section:
 claude mcp add obsidian --scope user npx @mauricio.wolff/mcp-obsidian /path/to/your/vault
 ```
 
+#### Goose Desktop
+
+On Goose Desktop settings, click **Add custom extension**, and on the command field add:
+
+`npx @mauricio.wolff/mcp-obsidian@latest /path/to/your/vault`
+
 #### Other MCP-Compatible Clients (2025)
 
 **Confirmed MCP Support:**
