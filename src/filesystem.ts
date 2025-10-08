@@ -3,7 +3,7 @@ import { readdir, stat, readFile, writeFile, unlink, mkdir, access } from 'node:
 import { constants } from 'node:fs';
 import { FrontmatterHandler } from './frontmatter.js';
 import { PathFilter } from './pathfilter.js';
-import type { ParsedNote, DirectoryListing, NoteWriteParams, DeleteNoteParams, DeleteResult, MoveNoteParams, MoveResult, BatchReadParams, BatchReadResult, UpdateFrontmatterParams, NoteInfo, TagManagementParams, TagManagementResult } from './types.js';
+import type { ParsedNote, DirectoryListing, NoteWriteParams, DeleteNoteParams, DeleteResult, MoveNoteParams, MoveResult, BatchReadParams, BatchReadResult, UpdateFrontmatterParams, NoteInfo, TagManagementParams, TagManagementResult, PatchNoteParams, PatchNoteResult } from './types.js';
 
 export class FileSystemService {
   private frontmatterHandler: FrontmatterHandler;
@@ -151,6 +151,80 @@ export class FileSystemService {
         }
       }
       throw new Error(`Failed to write file: ${path} - ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  }
+
+  async patchNote(params: PatchNoteParams): Promise<PatchNoteResult> {
+    const { path, oldString, newString, replaceAll = false } = params;
+
+    if (!this.pathFilter.isAllowed(path)) {
+      return {
+        success: false,
+        path,
+        message: `Access denied: ${path}`
+      };
+    }
+
+    // Validate that oldString and newString are different
+    if (oldString === newString) {
+      return {
+        success: false,
+        path,
+        message: 'oldString and newString must be different'
+      };
+    }
+
+    try {
+      // Read the existing note
+      const note = await this.readNote(path);
+
+      // Get the full content with frontmatter
+      const fullContent = note.originalContent;
+
+      // Count occurrences of oldString
+      const occurrences = fullContent.split(oldString).length - 1;
+
+      if (occurrences === 0) {
+        return {
+          success: false,
+          path,
+          message: `String not found in note: "${oldString.substring(0, 50)}${oldString.length > 50 ? '...' : ''}"`,
+          matchCount: 0
+        };
+      }
+
+      // If not replaceAll and multiple occurrences exist, fail
+      if (!replaceAll && occurrences > 1) {
+        return {
+          success: false,
+          path,
+          message: `Found ${occurrences} occurrences of the string. Use replaceAll=true to replace all occurrences, or provide a more specific string to match exactly one occurrence.`,
+          matchCount: occurrences
+        };
+      }
+
+      // Perform the replacement
+      const updatedContent = replaceAll
+        ? fullContent.split(oldString).join(newString)
+        : fullContent.replace(oldString, newString);
+
+      // Write the updated content
+      const fullPath = this.resolvePath(path);
+      await writeFile(fullPath, updatedContent, 'utf-8');
+
+      return {
+        success: true,
+        path,
+        message: `Successfully replaced ${replaceAll ? occurrences : 1} occurrence${occurrences > 1 ? 's' : ''}`,
+        matchCount: occurrences
+      };
+
+    } catch (error) {
+      return {
+        success: false,
+        path,
+        message: `Failed to patch note: ${error instanceof Error ? error.message : 'Unknown error'}`
+      };
     }
   }
 

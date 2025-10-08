@@ -25,7 +25,7 @@ const searchService = new SearchService(vaultPath, pathFilter);
 
 const server = new Server({
   name: "mcp-obsidian",
-  version: "0.5.4"
+  version: "0.6.0"
 }, {
   capabilities: {
     tools: {},
@@ -75,6 +75,33 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
             }
           },
           required: ["path", "content"]
+        }
+      },
+      {
+        name: "patch_note",
+        description: "Efficiently update part of a note by replacing a specific string. This is more efficient than rewriting the entire note for small changes.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            path: {
+              type: "string",
+              description: "Path to the note relative to vault root"
+            },
+            oldString: {
+              type: "string",
+              description: "The exact string to replace. Must match exactly including whitespace and line breaks."
+            },
+            newString: {
+              type: "string",
+              description: "The new string to insert in place of oldString"
+            },
+            replaceAll: {
+              type: "boolean",
+              description: "If true, replace all occurrences. If false (default), the operation will fail if multiple matches are found to prevent unintended replacements.",
+              default: false
+            }
+          },
+          required: ["path", "oldString", "newString"]
         }
       },
       {
@@ -336,6 +363,24 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
               text: `Successfully wrote note: ${trimmedArgs.path} (mode: ${trimmedArgs.mode || 'overwrite'})`
             }
           ]
+        };
+      }
+
+      case "patch_note": {
+        const result = await fileSystem.patchNote({
+          path: trimmedArgs.path,
+          oldString: trimmedArgs.oldString,
+          newString: trimmedArgs.newString,
+          replaceAll: trimmedArgs.replaceAll
+        });
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify(result, null, 2)
+            }
+          ],
+          isError: !result.success
         };
       }
 

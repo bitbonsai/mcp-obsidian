@@ -11,6 +11,20 @@ export interface NoteWriteParams {
   mode?: 'overwrite' | 'append' | 'prepend';
 }
 
+export interface PatchNoteParams {
+  path: string;
+  oldString: string;
+  newString: string;
+  replaceAll?: boolean;
+}
+
+export interface PatchNoteResult {
+  success: boolean;
+  path: string;
+  message: string;
+  matchCount?: number;
+}
+
 export interface DeleteNoteParams {
   path: string;
   confirmPath: string;
