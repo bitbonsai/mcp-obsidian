@@ -1,0 +1,60 @@
+# Source files
+*.ts
+!*.d.ts
+
+# Tests
+*.test.js
+*.test.ts
+*.spec.js
+*.spec.ts
+__tests__/
+test/
+tests/
+
+# Config files
+tsconfig.json
+tsconfig.build.json
+vitest.config.ts
+.eslintrc*
+.prettierrc*
+.editorconfig
+
+# Development files
+debug-server.js
+.nvmrc
+.npmrc
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+.circleci/
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Documentation (optional - you may want to keep some)
+CHANGELOG.md
+docs/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependencies
+node_modules/
