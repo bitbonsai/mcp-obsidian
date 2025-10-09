@@ -5,6 +5,40 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.1] - 2025-10-09
+
+### Added
+- **Comprehensive patch_note testing**: Added 16 tests covering all edge cases
+  - Single and multiple occurrence handling
+  - Empty string validation
+  - Special character handling (regex chars treated literally)
+  - Whitespace preservation (tabs and spaces)
+  - Case sensitivity verification
+  - Performance testing (100+ replacements)
+  - Path handling with spaces
+- **Test reorganization**: Moved tests from `tests/` to `src/` for better co-location
+  - Merged filesystem, patch, and integration tests into single file
+  - All 38 tests passing
+
+### Fixed
+- **patch_note validation**: Added validation for empty `oldString` and `newString` parameters
+- **Error messages**: Improved error messages for empty string parameters
+
+### Changed
+- **Test structure**: Reorganized test files to be co-located with source files
+  - `src/filesystem.test.ts` (30 tests)
+  - `src/frontmatter.test.ts` (8 tests)
+
+## [0.6.0] - 2025-10-08
+
+### Added
+- **patch_note tool**: Efficient partial note updates by replacing specific strings
+  - Replace single or multiple occurrences
+  - Multiline string support
+  - Safety checks for multiple matches
+  - Preserves frontmatter
+  - More efficient than rewriting entire files
+
 ## [0.5.4] - 2025-09-23
 
 ### Fixed
