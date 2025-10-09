@@ -138,6 +138,21 @@ export class FileSystemService {
                 message: `Access denied: ${path}`
             };
         }
+        // Validate that strings are not empty
+        if (!oldString || oldString.trim() === '') {
+            return {
+                success: false,
+                path,
+                message: 'oldString cannot be empty'
+            };
+        }
+        if (newString === '') {
+            return {
+                success: false,
+                path,
+                message: 'newString cannot be empty'
+            };
+        }
         // Validate that oldString and newString are different
         if (oldString === newString) {
             return {

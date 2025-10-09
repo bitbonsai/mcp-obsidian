@@ -1,5 +1,5 @@
 import { test, expect } from "vitest";
-import { FrontmatterHandler } from "../src/frontmatter.js";
+import { FrontmatterHandler } from "./frontmatter.js";
 
 const handler = new FrontmatterHandler();
 
