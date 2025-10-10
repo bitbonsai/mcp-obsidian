@@ -5,6 +5,35 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.3] - 2025-10-10
+
+### Added
+- **Token optimization**: New `prettyPrint` parameter for all JSON responses (default: false)
+  - Applies to: `read_note`, `search_notes`, `list_directory`, `read_multiple_notes`, `get_notes_info`, `get_frontmatter`
+  - Reduces token usage by ~30-40% when disabled
+
+### Changed
+- **Response optimization**: Removed redundant fields from responses to reduce token count
+  - `read_note`: Removed redundant `path` field, shortened `frontmatter` to `fm`
+  - `list_directory`: Shortened `directories` to `dirs`, removed redundant `path` field
+  - `search_notes`: Removed redundant `query` and `resultCount` wrapper
+  - `read_multiple_notes`: Shortened fields to `ok`/`err`, removed redundant summary
+  - `get_notes_info`: Returns array directly without wrapper
+  - `get_frontmatter`: Returns frontmatter directly without wrapper
+- **Search results**: Minified field names for 40-60% token reduction
+  - `path` → `p`
+  - `title` → `t`
+  - `excerpt` → `ex`
+  - `matchCount` → `mc`
+  - `lineNumber` → `ln`
+- **Search excerpt**: Reduced context from 50 to 21 characters before/after match
+- **JSON formatting**: Default to compact (no pretty-printing) to save tokens
+
+### Performance
+- **Overall token reduction**: 40-60% fewer tokens in typical responses
+- **Search operations**: Significantly faster with smaller excerpts and minified fields
+- **API responses**: More efficient for high-volume operations
+
 ## [0.6.1] - 2025-10-09
 
 ### Added

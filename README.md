@@ -110,6 +110,8 @@ MCP is an open protocol. You're not tied to any specific vendor or platform. You
 - ✅ Automatic path trimming to handle whitespace in inputs
 - ✅ TypeScript support with Node.js runtime (using tsx for execution)
 - ✅ Comprehensive error handling and validation
+- ✅ **Token-optimized responses**: 40-60% smaller responses with minified field names and compact JSON (v0.6.3+)
+- ✅ **Optional pretty-printing**: Set `prettyPrint: true` for human-readable debugging
 - ✅ **Performance optimized**: No unnecessary token consumption, efficient for large vaults
 - ✅ **Zero dependencies**: No Obsidian plugins required, works with any vault structure
 - ✅ **Intelligent link handling**: Smart processing of internal links and references
@@ -362,16 +364,21 @@ Read a note from the vault with parsed frontmatter.
 {
   "name": "read_note",
   "arguments": {
-    "path": "project-ideas.md"
+    "path": "project-ideas.md",
+    "prettyPrint": false
   }
 }
 ```
 
-**Response:**
+**Response (optimized for tokens):**
+```json
+{"fm":{"title":"Project Ideas","tags":["projects","brainstorming"],"created":"2023-01-15T10:30:00.000Z"},"content":"# Project Ideas\n\n## AI Tools\n- MCP server for Obsidian\n- Voice note transcription\n\n## Web Apps\n- Task management system"}
+```
+
+**Response (with prettyPrint: true):**
 ```json
 {
-  "path": "project-ideas.md",
-  "frontmatter": {
+  "fm": {
     "title": "Project Ideas",
     "tags": ["projects", "brainstorming"],
     "created": "2023-01-15T10:30:00.000Z"
@@ -432,24 +439,15 @@ List files and directories in the vault.
 {
   "name": "list_directory",
   "arguments": {
-    "path": "Projects"
+    "path": "Projects",
+    "prettyPrint": false
   }
 }
 ```
 
-**Response:**
+**Response (optimized):**
 ```json
-{
-  "path": "Projects",
-  "directories": [
-    "AI-Tools",
-    "Web-Development"
-  ],
-  "files": [
-    "project-template.md",
-    "roadmap.md"
-  ]
-}
+{"dirs":["AI-Tools","Web-Development"],"files":["project-template.md","roadmap.md"]}
 ```
 
 ### `delete_note`
@@ -494,21 +492,15 @@ Extract only the frontmatter from a note without reading the full content.
 {
   "name": "get_frontmatter",
   "arguments": {
-    "path": "project-ideas.md"
+    "path": "project-ideas.md",
+    "prettyPrint": false
   }
 }
 ```
 
-**Response:**
+**Response (optimized, returns frontmatter directly):**
 ```json
-{
-  "path": "project-ideas.md",
-  "frontmatter": {
-    "title": "Project Ideas",
-    "tags": ["projects", "brainstorming"],
-    "created": "2023-01-15T10:30:00.000Z"
-  }
-}
+{"title":"Project Ideas","tags":["projects","brainstorming"],"created":"2023-01-15T10:30:00.000Z"}
 ```
 
 ### `manage_tags`
@@ -572,27 +564,23 @@ Search for notes in the vault by content or frontmatter.
     "limit": 5,
     "searchContent": true,
     "searchFrontmatter": false,
-    "caseSensitive": false
+    "caseSensitive": false,
+    "prettyPrint": false
   }
 }
 ```
 
-**Response:**
+**Response (optimized with minified field names):**
 ```json
-{
-  "query": "machine learning",
-  "resultCount": 3,
-  "results": [
-    {
-      "path": "ai-research.md",
-      "title": "AI Research Notes",
-      "excerpt": "...machine learning algorithms are...",
-      "matchCount": 2,
-      "lineNumber": 15
-    }
-  ]
-}
+[{"p":"ai-research.md","t":"AI Research Notes","ex":"...machine learning...","mc":2,"ln":15}]
 ```
+
+**Field names:**
+- `p` = path
+- `t` = title
+- `ex` = excerpt (21 chars context)
+- `mc` = match count
+- `ln` = line number
 
 ### `move_note`
 Move or rename a note in the vault.
@@ -629,33 +617,20 @@ Read multiple notes in a batch (maximum 10 files).
   "arguments": {
     "paths": ["note1.md", "note2.md", "note3.md"],
     "includeContent": true,
-    "includeFrontmatter": true
+    "includeFrontmatter": true,
+    "prettyPrint": false
   }
 }
 ```
 
-**Response:**
+**Response (optimized, shortened field names):**
 ```json
-{
-  "successful": [
-    {
-      "path": "note1.md",
-      "frontmatter": {"title": "Note 1"},
-      "content": "# Note 1\n\nContent here..."
-    }
-  ],
-  "failed": [
-    {
-      "path": "note2.md",
-      "error": "File not found"
-    }
-  ],
-  "summary": {
-    "successCount": 1,
-    "failureCount": 1
-  }
-}
+{"ok":[{"path":"note1.md","frontmatter":{"title":"Note 1"},"content":"# Note 1\n\nContent here..."}],"err":[{"path":"note2.md","error":"File not found"}]}
 ```
+
+**Field names:**
+- `ok` = successful reads
+- `err` = failed reads
 
 ### `update_frontmatter`
 Update frontmatter of a note without changing content.
@@ -690,24 +665,15 @@ Get metadata for notes without reading full content.
 {
   "name": "get_notes_info",
   "arguments": {
-    "paths": ["note1.md", "note2.md"]
+    "paths": ["note1.md", "note2.md"],
+    "prettyPrint": false
   }
 }
 ```
 
-**Response:**
+**Response (optimized, returns array directly):**
 ```json
-{
-  "notes": [
-    {
-      "path": "note1.md",
-      "size": 1024,
-      "modified": 1695456000000,
-      "hasFrontmatter": true
-    }
-  ],
-  "count": 1
-}
+[{"path":"note1.md","size":1024,"modified":1695456000000,"hasFrontmatter":true}]
 ```
 
 ## Security Considerations

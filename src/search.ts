@@ -58,8 +58,8 @@ export class SearchService {
         const index = searchIn.indexOf(searchQuery);
         if (index !== -1) {
           // Extract excerpt around first match
-          const excerptStart = Math.max(0, index - 50);
-          const excerptEnd = Math.min(searchableText.length, index + searchQuery.length + 50);
+          const excerptStart = Math.max(0, index - 21);
+          const excerptEnd = Math.min(searchableText.length, index + searchQuery.length + 21);
           let excerpt = searchableText.slice(excerptStart, excerptEnd).trim();
 
           // Add ellipsis if excerpt is truncated
@@ -82,11 +82,11 @@ export class SearchService {
           const title = relativePath.split('/').pop()?.replace(/\.md$/, '') || relativePath;
 
           results.push({
-            path: relativePath,
-            title: title,
-            excerpt: excerpt,
-            matchCount: matchCount,
-            lineNumber: lineNumber
+            p: relativePath,
+            t: title,
+            ex: excerpt,
+            mc: matchCount,
+            ln: lineNumber
           });
         }
       } catch (error) {

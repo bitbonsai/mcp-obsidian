@@ -25,7 +25,7 @@ const searchService = new SearchService(vaultPath, pathFilter);
 
 const server = new Server({
   name: "mcp-obsidian",
-  version: "0.6.1"
+  version: "0.6.3"
 }, {
   capabilities: {
     tools: {},
@@ -44,6 +44,11 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
             path: {
               type: "string",
               description: "Path to the note relative to vault root"
+            },
+            prettyPrint: {
+              type: "boolean",
+              description: "Format JSON response with indentation (default: false)",
+              default: false
             }
           },
           required: ["path"]
@@ -114,6 +119,11 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
               type: "string",
               description: "Path relative to vault root (default: '/')",
               default: "/"
+            },
+            prettyPrint: {
+              type: "boolean",
+              description: "Format JSON response with indentation (default: false)",
+              default: false
             }
           }
         }
@@ -165,6 +175,11 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
               type: "boolean",
               description: "Case sensitive search (default: false)",
               default: false
+            },
+            prettyPrint: {
+              type: "boolean",
+              description: "Format JSON response with indentation (default: false)",
+              default: false
             }
           },
           required: ["query"]
@@ -214,6 +229,11 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
               type: "boolean",
               description: "Include frontmatter (default: true)",
               default: true
+            },
+            prettyPrint: {
+              type: "boolean",
+              description: "Format JSON response with indentation (default: false)",
+              default: false
             }
           },
           required: ["paths"]
@@ -252,6 +272,11 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
               type: "array",
               items: { type: "string" },
               description: "Array of note paths to get info for"
+            },
+            prettyPrint: {
+              type: "boolean",
+              description: "Format JSON response with indentation (default: false)",
+              default: false
             }
           },
           required: ["paths"]
@@ -266,6 +291,11 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
             path: {
               type: "string",
               description: "Path to the note relative to vault root"
+            },
+            prettyPrint: {
+              type: "boolean",
+              description: "Format JSON response with indentation (default: false)",
+              default: false
             }
           },
           required: ["path"]
@@ -335,15 +365,15 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
     switch (name) {
       case "read_note": {
         const note = await fileSystem.readNote(trimmedArgs.path);
+        const indent = trimmedArgs.prettyPrint ? 2 : undefined;
         return {
           content: [
             {
               type: "text",
               text: JSON.stringify({
-                path: trimmedArgs.path,
-                frontmatter: note.frontmatter,
+                fm: note.frontmatter,
                 content: note.content
-              }, null, 2)
+              }, null, indent)
             }
           ]
         };
@@ -386,15 +416,15 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
       case "list_directory": {
         const listing = await fileSystem.listDirectory(trimmedArgs.path || '');
+        const indent = trimmedArgs.prettyPrint ? 2 : undefined;
         return {
           content: [
             {
               type: "text",
               text: JSON.stringify({
-                path: trimmedArgs.path || '/',
-                directories: listing.directories,
+                dirs: listing.directories,
                 files: listing.files
-              }, null, 2)
+              }, null, indent)
             }
           ]
         };
@@ -424,15 +454,12 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           searchFrontmatter: trimmedArgs.searchFrontmatter,
           caseSensitive: trimmedArgs.caseSensitive
         });
+        const indent = trimmedArgs.prettyPrint ? 2 : undefined;
         return {
           content: [
             {
               type: "text",
-              text: JSON.stringify({
-                query: trimmedArgs.query,
-                resultCount: results.length,
-                results: results
-              }, null, 2)
+              text: JSON.stringify(results, null, indent)
             }
           ]
         };
@@ -461,18 +488,15 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           includeContent: trimmedArgs.includeContent,
           includeFrontmatter: trimmedArgs.includeFrontmatter
         });
+        const indent = trimmedArgs.prettyPrint ? 2 : undefined;
         return {
           content: [
             {
               type: "text",
               text: JSON.stringify({
-                successful: result.successful,
-                failed: result.failed,
-                summary: {
-                  successCount: result.successful.length,
-                  failureCount: result.failed.length
-                }
-              }, null, 2)
+                ok: result.successful,
+                err: result.failed
+              }, null, indent)
             }
           ]
         };
@@ -496,14 +520,12 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
       case "get_notes_info": {
         const result = await fileSystem.getNotesInfo(trimmedArgs.paths);
+        const indent = trimmedArgs.prettyPrint ? 2 : undefined;
         return {
           content: [
             {
               type: "text",
-              text: JSON.stringify({
-                notes: result,
-                count: result.length
-              }, null, 2)
+              text: JSON.stringify(result, null, indent)
             }
           ]
         };
@@ -511,14 +533,12 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
       case "get_frontmatter": {
         const note = await fileSystem.readNote(trimmedArgs.path);
+        const indent = trimmedArgs.prettyPrint ? 2 : undefined;
         return {
           content: [
             {
               type: "text",
-              text: JSON.stringify({
-                path: trimmedArgs.path,
-                frontmatter: note.frontmatter
-              }, null, 2)
+              text: JSON.stringify(note.frontmatter, null, indent)
             }
           ]
         };

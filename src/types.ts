@@ -62,11 +62,11 @@ export interface SearchParams {
 }
 
 export interface SearchResult {
-  path: string;
-  title: string;
-  excerpt: string;
-  matchCount: number;
-  lineNumber?: number;
+  p: string;        // path
+  t: string;        // title
+  ex: string;       // excerpt
+  mc: number;       // matchCount
+  ln?: number;      // lineNumber
 }
 
 // Move types
