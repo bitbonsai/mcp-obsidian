@@ -126,3 +126,4 @@ bun.lockb
 # NPM publishing
 npm-debug.log*
 .npm
+.npmrc
