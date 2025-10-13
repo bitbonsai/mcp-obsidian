@@ -1,4 +1,5 @@
 ---
+import pkg from '../../../package.json';
 
 export interface Props {
   title?: string;
@@ -223,35 +224,33 @@ const fullTitle = title.includes("MCP-Obsidian") ? title : `${title} | MCP-Obsid
     </style>
 
     <!-- JSON-LD Schema -->
-    <script type="application/ld+json" is:inline>
-      {
-        "@context": "https://schema.org",
-        "@type": "SoftwareApplication",
-        "name": "MCP-Obsidian",
-        "description": "Universal AI bridge for Obsidian vaults using the Model Context Protocol. Connect any MCP-compatible AI assistant to your knowledge base.",
-        "url": "https://mcp-obsidian.org",
-        "downloadUrl": "https://www.npmjs.com/package/@mauricio.wolff/mcp-obsidian",
-        "softwareVersion": "0.6.0",
-        "operatingSystem": ["macOS", "Windows", "Linux"],
-        "applicationCategory": "DeveloperApplication",
-        "offers": {
-          "@type": "Offer",
-          "price": "0",
-          "priceCurrency": "USD"
-        },
-        "author": {
-          "@type": "Organization",
-          "name": "bitbonsai",
-          "url": "https://github.com/bitbonsai"
-        },
-        "maintainer": {
-          "@type": "Organization",
-          "name": "bitbonsai",
-          "url": "https://github.com/bitbonsai"
-        },
-        "codeRepository": "https://github.com/bitbonsai/mcp-obsidian"
-      }
-    </script>
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "MCP-Obsidian",
+      "description": "Universal AI bridge for Obsidian vaults using the Model Context Protocol. Connect any MCP-compatible AI assistant to your knowledge base.",
+      "url": "https://mcp-obsidian.org",
+      "downloadUrl": "https://www.npmjs.com/package/@mauricio.wolff/mcp-obsidian",
+      "softwareVersion": pkg.version,
+      "operatingSystem": ["macOS", "Windows", "Linux"],
+      "applicationCategory": "DeveloperApplication",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "bitbonsai",
+        "url": "https://github.com/bitbonsai"
+      },
+      "maintainer": {
+        "@type": "Organization",
+        "name": "bitbonsai",
+        "url": "https://github.com/bitbonsai"
+      },
+      "codeRepository": "https://github.com/bitbonsai/mcp-obsidian"
+    })}></script>
   </head>
   <body class="min-h-screen bg-background text-foreground antialiased relative pt-24">
     <!-- Animated Obsidian Logo Background -->
