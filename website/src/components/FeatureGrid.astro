@@ -1,0 +1,201 @@
+---
+import FeatureCard from "./FeatureCard.astro";
+
+// Features data with code examples
+const searchCodeExample = `[
+  {
+    "p": "Notes/GTD.md",
+    "t": "GTD",
+    "ex": "...getting things done...",
+    "mc": 5,
+    "ln": 12
+  },
+  {
+    "p": "Books/Deep Work.md",
+    "t": "Deep Work",
+    "ex": "...focus and productivity...",
+    "mc": 8,
+    "ln": 45
+  }
+]`;
+
+const frontmatterExample = `{
+  "status": "completed",
+  "tags": ["web", "typescript"],
+  "completed": "2025-01-20"
+}`;
+---
+
+<section
+  class="relative py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-background via-background/95 to-background"
+>
+  <div class="max-w-7xl mx-auto">
+    <!-- Section header -->
+    <div class="text-center mb-16 fade-in-on-scroll">
+      <h2 class="text-4xl sm:text-5xl font-bold gradient-text mb-6">
+        Built for Power Users
+      </h2>
+      <p class="text-xl text-muted-foreground max-w-3xl mx-auto">
+        Designed for safety, performance, and developer experience. Every
+        feature gives AI intelligent access without compromising your data.
+      </p>
+    </div>
+
+    <!-- Bento grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Large card: Intelligent Search -->
+      <FeatureCard
+        title="🔍 Powerful Search"
+        description="Fast search across your entire vault. AI can locate notes by content, tags, or metadata instantly."
+        icon="🎯"
+        size="large"
+        accent={true}
+        codeExample={searchCodeExample}
+      />
+
+      <!-- Medium cards -->
+      <FeatureCard
+        title="📝 Safe Frontmatter Handling"
+        description="YAML parser validates and preserves formatting, ensuring safe atomic updates to note metadata."
+        icon="🛡️"
+        size="medium"
+        codeExample={frontmatterExample}
+      />
+
+      <FeatureCard
+        title="⚡ File Operations"
+        description="Read, write, and manage notes safely. Create, update, and organize your vault with AI assistance."
+        icon="🚀"
+        size="medium"
+      />
+
+      <FeatureCard
+        title="🔒 Security First"
+        description="Path traversal protection and safe file operations. Controlled AI access through MCP protocol."
+        icon="🔐"
+        size="medium"
+      />
+
+      <!-- Small cards -->
+      <FeatureCard
+        title="Node.js Compatible"
+        description="Built with Node.js for broad compatibility and ecosystem support."
+        icon="🟢"
+        size="small"
+      />
+
+      <FeatureCard
+        title="Token Optimized"
+        description="40-60% smaller responses than previous versions with minified fields and compact JSON. Save tokens, save money."
+        icon="💰"
+        size="small"
+      />
+
+      <FeatureCard
+        title="TypeScript"
+        description="Fully typed for excellent developer experience."
+        icon="📘"
+        size="small"
+      />
+
+      <FeatureCard
+        title="Open Source"
+        description="MIT licensed and community driven."
+        icon="❤️"
+        size="small"
+      />
+
+      <!-- Additional medium card -->
+      <FeatureCard
+        title="🔧 Complete Toolkit"
+        description="12 MCP methods for vault management: read/write/patch files, search content, manage tags, update frontmatter, and more. Built for AI assistant integration."
+        icon="🛠️"
+        size="medium"
+      />
+
+      <FeatureCard
+        title="🎯 Multi-Platform"
+        description="Works with Claude Desktop, ChatGPT+ Desktop, Cursor IDE, and other MCP-compatible AI platforms."
+        icon="🌐"
+        size="medium"
+      />
+    </div>
+
+    <!-- Call to action -->
+    <div class="mt-16 text-center fade-in-on-scroll">
+      <div
+        class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-card/50 backdrop-blur-sm border border-border/50 text-muted-foreground"
+      >
+        <svg
+          class="w-5 h-5 text-accent animate-pulse"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+        >
+          <path
+            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+          ></path>
+        </svg>
+        <span>Ready to supercharge your Obsidian workflow?</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Grid improvements for better responsive behavior */
+  @media (min-width: 1024px) {
+    .grid {
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, minmax(200px, auto));
+    }
+
+    /* Large card takes up 2x2 space */
+    .grid > :first-child {
+      grid-column: 1 / 3;
+      grid-row: 1 / 3;
+    }
+
+    /* Medium cards take specific positions */
+    .grid > :nth-child(2) {
+      grid-column: 3;
+      grid-row: 1;
+    }
+
+    .grid > :nth-child(3) {
+      grid-column: 3;
+      grid-row: 2;
+    }
+
+    .grid > :nth-child(4) {
+      grid-column: 1;
+      grid-row: 3;
+    }
+
+    /* Small cards in the remaining space */
+    .grid > :nth-child(5) {
+      grid-column: 2;
+      grid-row: 3;
+    }
+
+    .grid > :nth-child(6) {
+      grid-column: 3;
+      grid-row: 3;
+    }
+  }
+
+  /* Animation stagger effect */
+  .fade-in-on-scroll:nth-child(odd) {
+    animation-delay: 0.1s;
+  }
+
+  .fade-in-on-scroll:nth-child(even) {
+    animation-delay: 0.2s;
+  }
+
+  /* Performance stats animation */
+  .text-3xl {
+    background: linear-gradient(135deg, currentColor, currentColor);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+</style>

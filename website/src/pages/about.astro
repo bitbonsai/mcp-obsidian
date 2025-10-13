@@ -1,0 +1,492 @@
+---
+import Layout from '@layouts/Layout.astro'
+
+// bit2 version (replaced during project creation)
+const version = '3.0.9';
+---
+
+<Layout title="About - bit2">
+  <main class="container">
+    <header class="hero">
+      <div class="hero-logo">
+        <img src="https://bitbons.ai/bit-logo.svg" alt="bit2 logo" class="logo" />
+      </div>
+      <h1 class="hero-title">
+        About <span class="brand">bit2</span>
+      </h1>
+      <p class="hero-subtitle">The modern web stack for building fast, content-focused applications.</p>
+      <div class="version-badge">
+        <span class="version-label">Built with bit2</span>
+        <span class="version-value">v{version}</span>
+      </div>
+    </header>
+
+    <section class="content-section">
+      <div class="section-header">
+        <h2>What's Included</h2>
+      </div>
+
+      <div class="tech-grid">
+        <div class="tech-card">
+          <div class="tech-icon">🚀</div>
+          <div class="tech-details">
+            <h3>Astro</h3>
+            <p>Modern web framework for content-driven websites with islands architecture</p>
+          </div>
+        </div>
+
+        <div class="tech-card">
+          <div class="tech-icon">💾</div>
+          <div class="tech-details">
+            <h3>libSQL/Turso</h3>
+            <p>SQLite for the edge, with seamless cloud scaling and global replication</p>
+          </div>
+        </div>
+
+        <div class="tech-card">
+          <div class="tech-icon">☁️</div>
+          <div class="tech-details">
+            <h3>Flexible Deployment</h3>
+            <p>Deploy to Cloudflare Pages, Vercel, or Netlify - your choice of platform</p>
+          </div>
+        </div>
+
+        <div class="tech-card">
+          <div class="tech-icon">⚡</div>
+          <div class="tech-details">
+            <h3>Bun</h3>
+            <p>Fast JavaScript runtime and package manager for modern development</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <div class="section-header">
+        <h2>Development Workflow</h2>
+      </div>
+
+      <div class="workflow-grid">
+        <div class="workflow-card local">
+          <div class="workflow-badge">DEV</div>
+          <div class="workflow-content">
+            <h3>Local Development</h3>
+            <p>
+              Uses a local SQLite database file (<code>./dev.db</code>) for fast iteration and offline
+              development.
+            </p>
+            <ul>
+              <li>Instant startup</li>
+              <li>No network dependencies</li>
+              <li>Perfect for prototyping</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="workflow-card production">
+          <div class="workflow-badge">PROD</div>
+          <div class="workflow-content">
+            <h3>Production Deployment</h3>
+            <p>Seamlessly switches to Turso cloud database with global edge distribution.</p>
+            <ul>
+              <li>Global edge replication</li>
+              <li>Sub-millisecond latency</li>
+              <li>Automatic scaling</li>
+              <li>Provider-agnostic deployment</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <div class="section-header">
+        <h2>Quick Start</h2>
+      </div>
+
+      <ol class="steps">
+        <li class="step">
+          <div class="step-title">Install the CLI</div>
+          <pre class="step-code"><code>bun install -g bit2-cli</code></pre>
+        </li>
+        <li class="step">
+          <div class="step-title">Create a project</div>
+          <pre class="step-code"><code>bit2 new my-awesome-app</code></pre>
+        </li>
+        <li class="step">
+          <div class="step-title">Enter the directory</div>
+          <pre class="step-code"><code>cd my-awesome-app</code></pre>
+        </li>
+        <li class="step">
+          <div class="step-title">Start the dev server</div>
+          <pre class="step-code"><code>bit2 dev</code></pre>
+        </li>
+        <li class="step">
+          <div class="step-title">Deploy to production</div>
+          <pre class="step-code"><code>bit2 deploy</code></pre>
+        </li>
+      </ol>
+    </section>
+
+    <div class="nav-footer">
+      <a href="/" class="nav-link">
+        <span class="nav-arrow">←</span>
+        <span class="nav-text">Back to Home</span>
+      </a>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  :root {
+    --color-primary: #fcd34d;
+    --color-primary-darker: #fbbf24;
+    --color-secondary: #273041;
+    --color-background: #1a2436;
+    --color-text-primary: #ffffff;
+    --color-text-secondary: #e5e7eb;
+    --color-text-muted: #9ca3af;
+    --background-gradient: linear-gradient(to bottom, #324265, #090f1d);
+    
+    /* Spacing variables */
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 1rem;
+    --space-lg: 1.5rem;
+    --space-xl: 2rem;
+    --space-2xl: 3rem;
+    --space-3xl: 4rem;
+    --space-4xl: 6rem;
+    
+    /* Size variables */
+    --size-xs: 0.125rem;
+    --size-sm: 0.25rem;
+    --size-md: 0.5rem;
+    --size-lg: 0.75rem;
+    --size-xl: 1rem;
+    --size-2xl: 1.25rem;
+    --size-3xl: 1.5rem;
+    --size-4xl: 2rem;
+    --size-5xl: 3rem;
+    --size-6xl: 5rem;
+  }
+
+  html,
+  body {
+    background: var(--background-gradient);
+    min-height: 100vh;
+  }
+
+  .container {
+    max-width: 80rem;
+    margin: 0 auto;
+    padding: var(--space-3xl) var(--space-xl);
+  }
+
+  /* Hero Section */
+  .hero {
+    text-align: center;
+    margin-bottom: var(--space-4xl);
+  }
+
+  .hero-logo {
+    margin-bottom: var(--space-xl);
+  }
+
+  .logo {
+    width: var(--size-6xl);
+    height: var(--size-6xl);
+    border-radius: var(--space-md);
+    box-shadow: 0 0.625rem 1.875rem rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease;
+  }
+
+  .logo:hover {
+    transform: scale(1.05);
+  }
+
+  .hero-title {
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 800;
+    line-height: 1.1;
+    margin: 0 0 var(--space-lg) 0;
+    color: var(--color-text-primary);
+  }
+
+  .brand {
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-subtitle {
+    font-size: 1.375rem;
+    color: var(--color-text-muted);
+    margin: 0 0 var(--space-xl) 0;
+    max-width: 40rem;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.5;
+  }
+
+  .version-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    background: var(--color-secondary);
+    border: 1px solid rgba(39, 48, 65, 0.5);
+    border-radius: var(--size-md);
+    font-size: 0.875rem;
+  }
+
+  .version-label {
+    color: var(--color-text-muted);
+  }
+
+  .version-value {
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+
+  /* Content Sections */
+  .content-section {
+    margin-bottom: var(--space-4xl);
+  }
+
+  .section-header {
+    margin-bottom: var(--space-xl);
+  }
+
+  .section-header h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin: 0;
+  }
+
+  /* Tech Grid */
+  .tech-grid {
+    display: grid;
+    gap: var(--space-lg);
+    grid-template-columns: repeat(auto-fit, minmax(17.5rem, 1fr));
+  }
+
+  .tech-card {
+    display: flex;
+    align-items: flex-start;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--size-lg);
+    padding: var(--space-xl);
+    transition: all 0.2s ease;
+  }
+
+  .tech-card:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(251, 191, 36, 0.3);
+    transform: translateY(-2px);
+  }
+
+  .tech-icon {
+    font-size: var(--size-4xl);
+    margin-right: var(--space-lg);
+    margin-top: var(--space-xs);
+  }
+
+  .tech-details h3 {
+    margin: 0 0 var(--space-sm) 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+  }
+
+  .tech-details p {
+    margin: 0;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+  }
+
+  /* Workflow Grid */
+  .workflow-grid {
+    display: grid;
+    gap: var(--space-xl);
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+  }
+
+  .workflow-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--size-lg);
+    padding: var(--space-xl);
+    position: relative;
+    transition: all 0.2s ease;
+  }
+
+  .workflow-card.local:hover {
+    border-color: rgba(251, 191, 36, 0.3);
+    transform: translateY(-2px);
+  }
+
+  .workflow-card.production:hover {
+    border-color: rgba(245, 158, 11, 0.3);
+    transform: translateY(-2px);
+  }
+
+  .workflow-badge {
+    position: absolute;
+    top: -0.75rem;
+    left: var(--space-xl);
+    padding: var(--space-sm) var(--size-lg);
+    border-radius: var(--space-sm);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: white;
+  }
+
+  .workflow-card.local .workflow-badge {
+    background: #f59e0b;
+  }
+
+  .workflow-card.production .workflow-badge {
+    background: #d97706;
+  }
+
+  .workflow-content h3 {
+    margin: 0 0 var(--space-md) 0;
+    font-size: 1.375rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+  }
+
+  .workflow-content p {
+    margin: 0 0 var(--space-md) 0;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+  }
+
+  .workflow-content ul {
+    margin: 0;
+    padding-left: var(--size-2xl);
+    color: var(--color-text-muted);
+  }
+
+  .workflow-content li {
+    margin-bottom: var(--space-sm);
+  }
+
+  /* Steps */
+  .steps {
+    margin: 0;
+    padding-left: var(--size-2xl);
+  }
+
+  .step {
+    margin-bottom: var(--size-2xl);
+  }
+
+  .step-title {
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+    margin-bottom: var(--space-sm);
+  }
+
+  .step-code {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+  }
+
+  .step-code code {
+    display: inline-block;
+    background-color: var(--color-background);
+    color: #e1e4e8;
+    overflow-x: auto;
+    border-radius: var(--size-md);
+    padding: var(--size-lg) var(--space-md);
+    font-family: 'Courier New', monospace;
+    font-size: 0.95rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  code {
+    background: var(--color-secondary);
+    color: var(--color-primary);
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--size-sm);
+    border: 1px solid rgba(39, 48, 65, 0.6);
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
+    font-size: 0.875rem;
+    font-weight: 600;
+    box-shadow: 0 0.0625rem 0.1875rem rgba(0, 0, 0, 0.2);
+  }
+
+  /* Navigation Footer */
+  .nav-footer {
+    text-align: center;
+    margin-top: var(--space-3xl);
+  }
+
+  .nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--size-lg);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--size-lg);
+    padding: var(--space-md) var(--space-lg);
+    text-decoration: none;
+    color: var(--color-text-primary);
+    font-weight: 500;
+    transition: all 0.2s ease;
+  }
+
+  .nav-link:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(251, 191, 36, 0.3);
+    transform: translateY(-2px);
+  }
+
+  .nav-arrow {
+    font-size: 1.125rem;
+    transition: transform 0.2s ease;
+  }
+
+  .nav-link:hover .nav-arrow {
+    transform: translateX(-0.25rem);
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .container {
+      padding: var(--space-xl) var(--space-md);
+    }
+
+    .hero {
+      margin-bottom: var(--space-3xl);
+    }
+
+    .content-section {
+      margin-bottom: var(--space-3xl);
+    }
+
+    .section-header h2 {
+      font-size: var(--size-4xl);
+    }
+
+    .tech-grid,
+    .workflow-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .tech-card,
+    .workflow-card {
+      padding: var(--space-lg);
+    }
+
+    .workflow-badge {
+      left: var(--space-lg);
+    }
+  }
+</style>

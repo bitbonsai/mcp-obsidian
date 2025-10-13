@@ -127,3 +127,11 @@ bun.lockb
 npm-debug.log*
 .npm
 .npmrc
+
+# Website (monorepo)
+website/node_modules/
+website/dist/
+website/.astro/
+website/.wrangler/
+website/package-lock.json
+website/bun.lock
