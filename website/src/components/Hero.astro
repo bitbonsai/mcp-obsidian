@@ -1,5 +1,5 @@
 ---
-// No props needed for hero section
+import pkg from '../../../package.json';
 ---
 
 <section
@@ -21,7 +21,7 @@
         class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-card/50 backdrop-blur-sm border border-border/50 text-sm text-muted-foreground"
       >
         <span class="w-2 h-2 bg-success rounded-full"></span>
-        v0.6.4
+        v{pkg.version}
       </span>
       <span
         class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-card/50 backdrop-blur-sm border border-border/50 text-sm text-muted-foreground"
