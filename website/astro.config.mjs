@@ -14,6 +14,18 @@ export default defineConfig({
         '@components': '/src/components',
         '@layouts': '/src/layouts'
       }
+    },
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            // Split syntax highlighter into separate chunk
+            'syntax-highlighter': ['react-syntax-highlighter']
+          }
+        }
+      },
+      // Increase chunk size warning limit (636 KB unminified, but only 230 KB gzipped)
+      chunkSizeWarningLimit: 700
     }
   }
 });
