@@ -224,7 +224,7 @@ const fullTitle = title.includes("MCP-Obsidian") ? title : `${title} | MCP-Obsid
     </style>
 
     <!-- JSON-LD Schema -->
-    <script type="application/ld+json" set:html={JSON.stringify({
+    <script is:inline type="application/ld+json" set:html={JSON.stringify({
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",
       "name": "MCP-Obsidian",
@@ -408,6 +408,6 @@ const fullTitle = title.includes("MCP-Obsidian") ? title : `${title} | MCP-Obsid
     </script>
 
     <!-- Counter.dev Analytics -->
-    <script defer src="https://cdn.counter.dev/script.js" data-id="56795b69-4872-4bfc-a640-4c0a9de06db8" data-utcoffset="1"></script>
+    <script is:inline defer src="https://cdn.counter.dev/script.js" data-id="56795b69-4872-4bfc-a640-4c0a9de06db8" data-utcoffset="1"></script>
   </body>
 </html>
