@@ -3,6 +3,7 @@ import { readdir, stat, readFile, writeFile, unlink, mkdir, access } from 'node:
 import { constants } from 'node:fs';
 import { FrontmatterHandler } from './frontmatter.js';
 import { PathFilter } from './pathfilter.js';
+import { generateObsidianUri } from './uri.js';
 export class FileSystemService {
     vaultPath;
     frontmatterHandler;
@@ -440,7 +441,10 @@ export class FileSystemService {
                 throw new Error(`Access denied: ${path}`);
             }
             const note = await this.readNote(path);
-            const result = { path };
+            const result = {
+                path,
+                obsidianUri: generateObsidianUri(this.vaultPath, path)
+            };
             if (includeFrontmatter) {
                 result.frontmatter = note.frontmatter;
             }
@@ -510,7 +514,8 @@ export class FileSystemService {
                 path,
                 size,
                 modified: lastModified,
-                hasFrontmatter
+                hasFrontmatter,
+                obsidianUri: generateObsidianUri(this.vaultPath, path)
             };
         }));
         // Return only successful results, filter out failed ones

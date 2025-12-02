@@ -67,6 +67,7 @@ export interface SearchResult {
   ex: string;       // excerpt
   mc: number;       // matchCount
   ln?: number;      // lineNumber
+  uri?: string;     // obsidianUri
 }
 
 // Move types
@@ -95,6 +96,7 @@ export interface BatchReadResult {
     path: string;
     frontmatter?: Record<string, any>;
     content?: string;
+    obsidianUri?: string;
   }>;
   failed: Array<{
     path: string;
@@ -115,6 +117,7 @@ export interface NoteInfo {
   size: number;
   modified: number; // timestamp
   hasFrontmatter: boolean;
+  obsidianUri?: string;
 }
 
 // Tag management types
