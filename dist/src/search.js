@@ -1,5 +1,6 @@
 import { join } from 'path';
 import { readFile, readdir } from 'node:fs/promises';
+import { generateObsidianUri } from './uri.js';
 export class SearchService {
     vaultPath;
     pathFilter;
@@ -70,7 +71,8 @@ export class SearchService {
                         t: title,
                         ex: excerpt,
                         mc: matchCount,
-                        ln: lineNumber
+                        ln: lineNumber,
+                        uri: generateObsidianUri(this.vaultPath, relativePath)
                     });
                 }
             }

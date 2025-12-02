@@ -3,6 +3,7 @@ import { readdir, stat, readFile, writeFile, unlink, mkdir, access } from 'node:
 import { constants } from 'node:fs';
 import { FrontmatterHandler } from './frontmatter.js';
 import { PathFilter } from './pathfilter.js';
+import { generateObsidianUri } from './uri.js';
 import type { ParsedNote, DirectoryListing, NoteWriteParams, DeleteNoteParams, DeleteResult, MoveNoteParams, MoveResult, BatchReadParams, BatchReadResult, UpdateFrontmatterParams, NoteInfo, TagManagementParams, TagManagementResult, PatchNoteParams, PatchNoteResult } from './types.js';
 
 export class FileSystemService {
@@ -506,7 +507,10 @@ export class FileSystemService {
         }
 
         const note = await this.readNote(path);
-        const result: any = { path };
+        const result: any = {
+          path,
+          obsidianUri: generateObsidianUri(this.vaultPath, path)
+        };
 
         if (includeFrontmatter) {
           result.frontmatter = note.frontmatter;
@@ -594,7 +598,8 @@ export class FileSystemService {
           path,
           size,
           modified: lastModified,
-          hasFrontmatter
+          hasFrontmatter,
+          obsidianUri: generateObsidianUri(this.vaultPath, path)
         };
       })
     );

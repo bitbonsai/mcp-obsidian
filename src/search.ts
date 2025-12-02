@@ -2,6 +2,7 @@ import { join } from 'path';
 import { readFile, readdir } from 'node:fs/promises';
 import type { PathFilter } from './pathfilter.js';
 import type { SearchParams, SearchResult } from './types.js';
+import { generateObsidianUri } from './uri.js';
 
 export class SearchService {
   constructor(
@@ -86,7 +87,8 @@ export class SearchService {
             t: title,
             ex: excerpt,
             mc: matchCount,
-            ln: lineNumber
+            ln: lineNumber,
+            uri: generateObsidianUri(this.vaultPath, relativePath)
           });
         }
       } catch (error) {
