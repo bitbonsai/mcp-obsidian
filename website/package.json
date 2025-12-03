@@ -9,12 +9,12 @@
     "preview": "astro preview"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.5",
-    "@astrojs/react": "^4.4.0",
+    "@astrojs/check": "^0.9.6",
+    "@astrojs/react": "^4.4.2",
     "@astrojs/tailwind": "^5.1.5",
     "@types/react-syntax-highlighter": "^15.5.13",
     "aria-query": "^5.3.2",
-    "astro": "^5.15.1",
+    "astro": "^5.16.3",
     "clsx": "latest",
     "lucide-react": "latest",
     "react": "^18.3.1",
@@ -25,7 +25,7 @@
     "tailwindcss": "^3.4.18"
   },
   "devDependencies": {
-    "@types/react": "^18.3.26",
+    "@types/react": "^18.3.27",
     "@types/react-dom": "^18.3.7",
     "prettier": "latest",
     "prettier-plugin-astro": "latest",
