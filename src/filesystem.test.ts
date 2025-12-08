@@ -1,20 +1,21 @@
 import { test, expect, beforeEach, afterEach } from "vitest";
 import { FileSystemService } from "./filesystem.js";
-import { writeFile, mkdir, rmdir } from "fs/promises";
+import { writeFile, mkdir, mkdtemp, rm } from "fs/promises";
 import { join } from "path";
+import { tmpdir } from "os";
 
-const testVaultPath = "/tmp/test-vault-filesystem";
+let testVaultPath: string;
 let fileSystem: FileSystemService;
 
 beforeEach(async () => {
-  await mkdir(testVaultPath, { recursive: true });
+  testVaultPath = await mkdtemp(join(tmpdir(), "mcp-obsidian-test-"));
   fileSystem = new FileSystemService(testVaultPath);
 });
 
 afterEach(async () => {
   try {
-    await rmdir(testVaultPath, { recursive: true });
-  } catch (error) {
+    await rm(testVaultPath, { recursive: true });
+  } catch {
     // Ignore cleanup errors
   }
 });
@@ -641,4 +642,185 @@ test("frontmatter validation with invalid data", async () => {
       invalidFunction: () => "not allowed"
     }
   })).rejects.toThrow(/Invalid frontmatter/);
+});
+
+// ============================================================================
+// NON-EXISTENT VAULT TESTS
+// ============================================================================
+
+test("read from non-existent vault throws error", async () => {
+  const nonExistentFs = new FileSystemService("/non/existent/vault/path");
+
+  await expect(nonExistentFs.readNote("test.md"))
+    .rejects.toThrow(/File not found|ENOENT/);
+});
+
+test("write to non-existent vault creates directories", async () => {
+  const tempVault = await mkdtemp(join(tmpdir(), "mcp-obsidian-new-vault-"));
+  const newFs = new FileSystemService(tempVault);
+
+  try {
+    await newFs.writeNote({
+      path: "new-folder/nested/note.md",
+      content: "Test content"
+    });
+
+    const note = await newFs.readNote("new-folder/nested/note.md");
+    expect(note.content).toContain("Test content");
+  } finally {
+    await rm(tempVault, { recursive: true });
+  }
+});
+
+test("list directory in non-existent vault", async () => {
+  const nonExistentFs = new FileSystemService("/non/existent/vault/path");
+
+  await expect(nonExistentFs.listDirectory("/"))
+    .rejects.toThrow();
+});
+
+// ============================================================================
+// PATH TRAVERSAL WITH SPECIAL CHARACTERS
+// ============================================================================
+
+test("path traversal attempt with encoded dots blocked", async () => {
+  // Path traversal should be blocked even with URL encoding
+  await expect(fileSystem.readNote("..%2F..%2Fetc%2Fpasswd"))
+    .rejects.toThrow(/Path traversal not allowed/);
+});
+
+test("path traversal with .. is blocked", async () => {
+  await expect(fileSystem.readNote("../outside.md"))
+    .rejects.toThrow(/Path traversal not allowed/);
+});
+
+test("path traversal with nested .. is blocked", async () => {
+  await expect(fileSystem.readNote("folder/../../outside.md"))
+    .rejects.toThrow(/Path traversal not allowed/);
+});
+
+test("path with regex special chars is treated literally", async () => {
+  const testPath = "folder (copy)/note [1].md";
+  const content = "# Test with special chars";
+
+  await mkdir(join(testVaultPath, "folder (copy)"), { recursive: true });
+  await writeFile(join(testVaultPath, testPath), content);
+
+  const note = await fileSystem.readNote(testPath);
+  expect(note.content).toContain("Test with special chars");
+});
+
+test("path with dollar sign works", async () => {
+  const testPath = "$special/price$100.md";
+  const content = "# Price note";
+
+  await mkdir(join(testVaultPath, "$special"), { recursive: true });
+  await writeFile(join(testVaultPath, testPath), content);
+
+  const note = await fileSystem.readNote(testPath);
+  expect(note.content).toContain("Price note");
+});
+
+test("path with plus sign works", async () => {
+  const testPath = "C++/notes.md";
+  const content = "# C++ notes";
+
+  await mkdir(join(testVaultPath, "C++"), { recursive: true });
+  await writeFile(join(testVaultPath, testPath), content);
+
+  const note = await fileSystem.readNote(testPath);
+  expect(note.content).toContain("C++ notes");
+});
+
+test("path with pipe character works", async () => {
+  const testPath = "choice|option.md";
+  const content = "# Choice note";
+
+  await writeFile(join(testVaultPath, testPath), content);
+
+  const note = await fileSystem.readNote(testPath);
+  expect(note.content).toContain("Choice note");
+});
+
+test("delete note with special chars in path", async () => {
+  const testPath = "folder (archive)/note [old].md";
+  const content = "# Old note";
+
+  await mkdir(join(testVaultPath, "folder (archive)"), { recursive: true });
+  await writeFile(join(testVaultPath, testPath), content);
+
+  const result = await fileSystem.deleteNote({
+    path: testPath,
+    confirmPath: testPath
+  });
+
+  expect(result.success).toBe(true);
+});
+
+test("move note with special chars in both paths", async () => {
+  const oldPath = "source (1)/note [a].md";
+  const newPath = "dest (2)/note [b].md";
+  const content = "# Moving note";
+
+  await mkdir(join(testVaultPath, "source (1)"), { recursive: true });
+  await mkdir(join(testVaultPath, "dest (2)"), { recursive: true });
+  await writeFile(join(testVaultPath, oldPath), content);
+
+  const result = await fileSystem.moveNote({
+    oldPath,
+    newPath
+  });
+
+  expect(result.success).toBe(true);
+
+  const note = await fileSystem.readNote(newPath);
+  expect(note.content).toContain("Moving note");
+});
+
+test("patch note with regex special chars in oldString", async () => {
+  const testPath = "regex-test.md";
+  const content = "Price: $10.50 (discount)";
+
+  await writeFile(join(testVaultPath, testPath), content);
+
+  const result = await fileSystem.patchNote({
+    path: testPath,
+    oldString: "$10.50 (discount)",
+    newString: "$15.00 (regular)",
+    replaceAll: false
+  });
+
+  expect(result.success).toBe(true);
+
+  const note = await fileSystem.readNote(testPath);
+  expect(note.content).toContain("$15.00 (regular)");
+});
+
+// Note: searchNotes is in SearchService, not FileSystemService
+// Search tests with regex special chars should be in search.test.ts
+
+// ============================================================================
+// UNICODE AND INTERNATIONAL PATHS
+// ============================================================================
+
+test("handles unicode in file paths", async () => {
+  const testPath = "日本語/ノート.md";
+  const content = "# Japanese note";
+
+  await mkdir(join(testVaultPath, "日本語"), { recursive: true });
+  await writeFile(join(testVaultPath, testPath), content);
+
+  const note = await fileSystem.readNote(testPath);
+  expect(note.content).toContain("Japanese note");
+});
+
+test("handles emoji in file paths", async () => {
+  const testPath = "📁/🎉.md";
+  const content = "# Emoji note";
+
+  await mkdir(join(testVaultPath, "📁"), { recursive: true });
+  await writeFile(join(testVaultPath, testPath), content);
+
+  const note = await fileSystem.readNote(testPath);
+  expect(note.content).toContain("Emoji note");
 });

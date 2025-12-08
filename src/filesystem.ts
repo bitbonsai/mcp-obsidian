@@ -59,24 +59,18 @@ export class FileSystemService {
     }
 
     try {
-      try {
-        await access(fullPath, constants.F_OK);
-      } catch {
-        throw new Error(`File not found: ${path}`);
-      }
-
       const content = await readFile(fullPath, 'utf-8');
       return this.frontmatterHandler.parse(content);
     } catch (error) {
-      if (error instanceof Error) {
-        if (error.message.includes('File not found')) {
-          throw error;
+      if (error instanceof Error && 'code' in error) {
+        if (error.code === 'ENOENT') {
+          throw new Error(`File not found: ${path}`);
         }
-        if (error.message.includes('permission') || error.message.includes('access')) {
+        if (error.code === 'EACCES') {
           throw new Error(`Permission denied: ${path}`);
         }
-        if (error.message.includes('Cannot read directory')) {
-          throw error;
+        if (error.code === 'EISDIR') {
+          throw new Error(`Cannot read directory as file: ${path}. Use list_directory tool instead.`);
         }
       }
       throw new Error(`Failed to read file: ${path} - ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -354,17 +348,6 @@ export class FileSystemService {
         };
       }
 
-      // Check if file exists
-      try {
-        await access(fullPath, constants.F_OK);
-      } catch {
-        return {
-          success: false,
-          path: path,
-          message: `File not found: ${path}`
-        };
-      }
-
       // Perform the deletion using Node.js native API
       await unlink(fullPath);
 
@@ -424,53 +407,43 @@ export class FileSystemService {
     const newFullPath = this.resolvePath(newPath);
 
     try {
-      // Check if source file exists
+      // Read source content (will throw ENOENT if not found)
+      let content: string;
       try {
-        await access(oldFullPath, constants.F_OK);
-      } catch {
-        return {
-          success: false,
-          oldPath,
-          newPath,
-          message: `Source file not found: ${oldPath}`
-        };
+        content = await readFile(oldFullPath, 'utf-8');
+      } catch (error) {
+        if (error instanceof Error && 'code' in error && error.code === 'ENOENT') {
+          return {
+            success: false,
+            oldPath,
+            newPath,
+            message: `Source file not found: ${oldPath}`
+          };
+        }
+        throw error;
       }
 
-      // Check if target already exists
-      let targetExists = false;
-      try {
-        await access(newFullPath, constants.F_OK);
-        targetExists = true;
-      } catch {
-        // Target doesn't exist, which is fine
-      }
-
-      if (targetExists && !overwrite) {
-        return {
-          success: false,
-          oldPath,
-          newPath,
-          message: `Target file already exists: ${newPath}. Use overwrite=true to replace it.`
-        };
-      }
-
-      // Read source content
-      const content = await readFile(oldFullPath, 'utf-8');
-
-      // Write to new location (create directories if they don't exist)
+      // Create directories if needed
       await mkdir(dirname(newFullPath), { recursive: true });
-      await writeFile(newFullPath, content, 'utf-8');
 
-      // Verify the write was successful
+      // Write to new location, checking for existing file atomically if !overwrite
       try {
-        await access(newFullPath, constants.F_OK);
-      } catch {
-        return {
-          success: false,
-          oldPath,
-          newPath,
-          message: `Failed to create target file: ${newPath}`
-        };
+        if (overwrite) {
+          await writeFile(newFullPath, content, 'utf-8');
+        } else {
+          // wx flag: write exclusive - fails if file exists
+          await writeFile(newFullPath, content, { encoding: 'utf-8', flag: 'wx' });
+        }
+      } catch (error) {
+        if (error instanceof Error && 'code' in error && error.code === 'EEXIST') {
+          return {
+            success: false,
+            oldPath,
+            newPath,
+            message: `Target file already exists: ${newPath}. Use overwrite=true to replace it.`
+          };
+        }
+        throw error;
       }
 
       // Delete the source file
@@ -579,13 +552,16 @@ export class FileSystemService {
 
         const fullPath = this.resolvePath(path);
 
+        let stats;
         try {
-          await access(fullPath, constants.F_OK);
-        } catch {
-          throw new Error(`File not found: ${path}`);
+          stats = await stat(fullPath);
+        } catch (error) {
+          if (error instanceof Error && 'code' in error && error.code === 'ENOENT') {
+            throw new Error(`File not found: ${path}`);
+          }
+          throw error;
         }
 
-        const stats = await stat(fullPath);
         const size = stats.size;
         const lastModified = stats.mtime.getTime();
 

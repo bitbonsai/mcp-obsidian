@@ -18,13 +18,14 @@ export class PathFilter {
         ];
     }
     simpleGlobMatch(pattern, path) {
-        // Convert glob pattern to regex
-        // Handle ** (any number of directories)
-        let regexPattern = pattern
-            .replace(/\*\*/g, '.*') // ** matches any number of directories
-            .replace(/\*/g, '[^/]*') // * matches anything except /
-            .replace(/\?/g, '[^/]') // ? matches single character except /
-            .replace(/\./g, '\\.'); // Escape dots
+        // Normalize pattern path separators (Windows compatibility)
+        const normalizedPattern = pattern.replace(/\\/g, '/');
+        // Convert glob pattern to regex, escaping special regex chars first
+        let regexPattern = normalizedPattern
+            .replace(/[\\^$.*+?()[\]{}|]/g, '\\$&') // Escape all regex special chars
+            .replace(/\\\*\\\*/g, '.*') // ** matches any number of directories (unescape)
+            .replace(/\\\*/g, '[^/]*') // * matches anything except / (unescape)
+            .replace(/\\\?/g, '[^/]'); // ? matches single character except / (unescape)
         // Ensure we match the full path
         regexPattern = '^' + regexPattern + '$';
         const regex = new RegExp(regexPattern);

@@ -1,0 +1,76 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18, 20, 22, 24]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build
+        run: npm run build
+
+  security:
+    name: Security audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Verify lockfile integrity
+        run: npm ci
+
+      # https://docs.npmjs.com/cli/v10/commands/npm-audit
+      - name: Run npm audit
+        run: npm audit --audit-level=moderate
+
+  lockfile-check:
+    name: Lockfile validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+
+      # https://blog.npmjs.org/post/626173315965468672/npm-v7-series-why-keep-package-lockjson
+      - name: Check lockfile is up to date
+        run: |
+          npm install --package-lock-only
+          git diff --exit-code package-lock.json || {
+            echo "::error::package-lock.json is out of sync with package.json"
+            echo "Run 'npm install' locally and commit the updated lockfile"
+            exit 1
+          }
