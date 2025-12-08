@@ -1,20 +1,21 @@
 import { test, expect, beforeEach, afterEach } from "vitest";
 import { FileSystemService } from "./filesystem.js";
-import { writeFile, mkdir, rmdir } from "fs/promises";
+import { writeFile, mkdir, mkdtemp, rm } from "fs/promises";
 import { join } from "path";
+import { tmpdir } from "os";
 
-const testVaultPath = "/tmp/test-vault-filesystem";
+let testVaultPath: string;
 let fileSystem: FileSystemService;
 
 beforeEach(async () => {
-  await mkdir(testVaultPath, { recursive: true });
+  testVaultPath = await mkdtemp(join(tmpdir(), "mcp-obsidian-test-"));
   fileSystem = new FileSystemService(testVaultPath);
 });
 
 afterEach(async () => {
   try {
-    await rmdir(testVaultPath, { recursive: true });
-  } catch (error) {
+    await rm(testVaultPath, { recursive: true });
+  } catch {
     // Ignore cleanup errors
   }
 });
