@@ -65,7 +65,29 @@ export class PathFilter {
   }
 
   private isFile(path: string): boolean {
-    return path.includes('.') && !path.endsWith('/');
+    // A path is a file if it has a file extension at the end
+    // Paths ending with '/' are always directories
+    if (path.endsWith('/')) {
+      return false;
+    }
+
+    // Get the last component of the path
+    const lastSlashIndex = path.lastIndexOf('/');
+    const lastComponent = lastSlashIndex === -1 ? path : path.substring(lastSlashIndex + 1);
+
+    // Check if the last component has a file extension
+    // A file extension is a dot followed by 1-10 alphanumeric characters at the end
+    // This distinguishes "file.md" (file) from "1. Project" (directory with dot in name)
+    const lastDotIndex = lastComponent.lastIndexOf('.');
+    if (lastDotIndex === -1 || lastDotIndex === 0) {
+      // No dot, or dot at the start (like .gitignore) - treat as no extension
+      return false;
+    }
+
+    const extension = lastComponent.substring(lastDotIndex + 1);
+    // Extension should be 1-10 characters and contain only alphanumeric characters
+    // This allows .md, .txt, .markdown but not ". Project" (space after dot)
+    return extension.length >= 1 && extension.length <= 10 && /^[a-zA-Z0-9]+$/.test(extension);
   }
 
   filterPaths(paths: string[]): string[] {
