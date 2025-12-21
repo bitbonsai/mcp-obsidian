@@ -115,7 +115,6 @@ MCP is an open protocol. You're not tied to any specific vendor or platform. You
 - ✅ **Optional pretty-printing**: Set `prettyPrint: true` for human-readable debugging
 - ✅ **Performance optimized**: No unnecessary token consumption, efficient for large vaults
 - ✅ **Zero dependencies**: No Obsidian plugins required, works with any vault structure
-- ✅ **Intelligent link handling**: Smart processing of internal links and references
 
 ## Prerequisites
 
