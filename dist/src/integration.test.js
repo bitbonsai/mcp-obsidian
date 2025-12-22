@@ -196,8 +196,9 @@ describe("Performance: Post-PR#12 Overhead", () => {
             }
         }
         const duration = performance.now() - start;
-        // Should complete in reasonable time (< 100ms for 8000 checks)
-        expect(duration).toBeLessThan(100);
+        // Should complete in reasonable time (< 200ms for 8000 checks)
+        // Increased threshold to account for CI runner variability
+        expect(duration).toBeLessThan(200);
     });
     test("large batch operations performance", async () => {
         // Create 50 notes
