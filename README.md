@@ -135,12 +135,16 @@ npx @mauricio.wolff/mcp-obsidian@latest /path/to/your/obsidian/vault
 ### For Developers
 
 1. Clone this repository
-2. Install dependencies with npm:
+2. Use the correct Node.js version:
 ```bash
-npm install
+nvm use  # Uses Node 24 from .nvmrc
+```
+3. Install dependencies with npm:
+```bash
+npm install  # Corepack automatically uses npm 10.9.0
 ```
 
-3. Test locally with MCP inspector:
+4. Test locally with MCP inspector:
 ```bash
 npx @modelcontextprotocol/inspector npm start /path/to/your/vault
 ```
