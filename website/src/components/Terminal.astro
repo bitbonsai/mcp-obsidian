@@ -45,6 +45,9 @@ import CodeBlock from "./CodeBlock";
               <button class="config-tab" data-tab="claude-code">
                 Claude Code
               </button>
+              <button class="config-tab" data-tab="gemini-cli">
+                Gemini CLI
+              </button>
               <button class="config-tab" data-tab="codex">
                 OpenAI Codex
               </button>
@@ -89,7 +92,7 @@ import CodeBlock from "./CodeBlock";
             <div class="config-content hidden" data-content="claude-code">
               <button
                 class="absolute top-4 right-4 p-2 hover:bg-card/50 rounded transition-colors copy-btn z-10"
-                data-copy='claude mcp add-json obsidian &apos;{"type":"stdio","command":"npx","args":["@mauricio.wolff/mcp-obsidian@latest","/path/to/your/vault"]}&apos;'
+                data-copy='claude mcp add-json obsidian --scope user &apos;{"type":"stdio","command":"npx","args":["@mauricio.wolff/mcp-obsidian@latest","/path/to/your/vault"]}&apos;'
                 title="Copy configuration"
                 aria-label="Copy configuration to clipboard"
               >
@@ -112,34 +115,124 @@ import CodeBlock from "./CodeBlock";
                 style="background: #1e1e2e77; padding: 1em; border-radius: 0.3em;"
               >
                 <pre
-                  style="margin: 0; color: #cdd6f4; line-height: 1.5; white-space: nowrap;"><span style="color: #cba6f7;">claude</span> <span style="color: #89b4fa;">mcp add-json</span> <span style="color: #a6e3a1;">obsidian</span> <span style="color: #f38ba8;">'&#123;"type":"stdio","command":"npx","args":["@mauricio.wolff/mcp-obsidian@latest","/path/to/your/vault"]&#125;'</span></pre>
+                  style="margin: 0; color: #cdd6f4; line-height: 1.5; white-space: nowrap;"><span style="color: #cba6f7;">claude</span> <span style="color: #89b4fa;">mcp add-json</span> <span style="color: #a6e3a1;">obsidian</span> <span style="color: #fab387;">--scope user</span> <span style="color: #f38ba8;">'&#123;"type":"stdio","command":"npx","args":["@mauricio.wolff/mcp-obsidian@latest","/path/to/your/vault"]&#125;'</span></pre>
               </div>
 
               <div
-                class="mt-4 p-3 bg-warning/10 rounded-lg border border-warning/30"
+                class="mt-4 p-3 bg-accent/10 rounded-lg border border-accent/30"
               >
                 <div class="flex items-start gap-2">
-                  <div class="text-warning text-lg mt-0.5">⚠️</div>
+                  <div class="text-accent text-lg mt-0.5">💡</div>
                   <div class="flex-1">
-                    <p class="text-sm font-semibold text-warning mb-2">
-                      Important: Per-Project Configuration Required
+                    <p class="text-sm font-semibold text-foreground mb-2">
+                      Configuration Scopes
+                    </p>
+                    <p class="text-xs text-muted-foreground leading-relaxed mb-2">
+                      Claude Code supports three configuration scopes:
+                    </p>
+                    <div class="space-y-2 text-xs">
+                      <div class="flex items-start gap-2">
+                        <code class="bg-background/50 px-1.5 py-0.5 rounded text-foreground whitespace-nowrap">--scope user</code>
+                        <span class="text-muted-foreground">Available across all your projects (recommended)</span>
+                      </div>
+                      <div class="flex items-start gap-2">
+                        <code class="bg-background/50 px-1.5 py-0.5 rounded text-foreground whitespace-nowrap">--scope project</code>
+                        <span class="text-muted-foreground">Team-shared via .mcp.json file</span>
+                      </div>
+                      <div class="flex items-start gap-2">
+                        <code class="bg-background/50 px-1.5 py-0.5 rounded text-foreground whitespace-nowrap">--scope local</code>
+                        <span class="text-muted-foreground">Current project only (private)</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                class="mt-4 p-3 bg-accent/10 rounded-lg border border-accent/30"
+              >
+                <div class="flex items-start gap-2">
+                  <div class="text-accent text-lg mt-0.5">💡</div>
+                  <div class="flex-1">
+                    <p class="text-sm font-semibold text-foreground mb-2">
+                      Usage Examples
                     </p>
                     <p class="text-xs text-muted-foreground leading-relaxed">
-                      Claude Code requires MCP servers to be configured <strong
-                        >per-project</strong
-                      >. You must run the <code
-                        class="bg-background/50 px-1 rounded text-foreground"
-                        >claude mcp add-json</code
-                      > command while inside each project directory where you want
-                      to use MCP-Obsidian.
+                      After configuration, Claude Code can access your vault:
                     </p>
-                    <p
-                      class="text-xs text-muted-foreground leading-relaxed mt-2"
-                    >
-                      If you configure it globally or in a different directory,
-                      individual projects will not have access to the MCP server
-                      configuration.
+                    <div class="mt-2 space-y-1">
+                      <code class="block bg-background/50 px-2 py-1 rounded text-foreground text-xs">
+                        Read my meeting notes from yesterday
+                      </code>
+                      <code class="block bg-background/50 px-2 py-1 rounded text-foreground text-xs">
+                        Search my vault for notes about machine learning
+                      </code>
+                      <code class="block bg-background/50 px-2 py-1 rounded text-foreground text-xs">
+                        Create a new note summarizing our discussion
+                      </code>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Gemini CLI config -->
+            <div class="config-content hidden" data-content="gemini-cli">
+              <button
+                class="absolute top-4 right-4 p-2 hover:bg-card/50 rounded transition-colors copy-btn z-10"
+                data-copy='{"mcpServers": {"obsidian": {"command": "npx", "args": ["@mauricio.wolff/mcp-obsidian@latest", "/path/to/your/vault"]}}}'
+                title="Copy configuration"
+                aria-label="Copy configuration to clipboard"
+              >
+                <svg
+                  class="w-4 h-4 text-muted-foreground hover:text-foreground"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                  ></path>
+                </svg>
+              </button>
+              <CodeBlock
+                client:only="react"
+                code={`{
+  "mcpServers": {
+    "obsidian": {
+      "command": "npx",
+      "args": ["@mauricio.wolff/mcp-obsidian@latest", "/path/to/your/vault"]
+    }
+  }
+}`}
+              />
+
+              <div
+                class="mt-4 p-3 bg-accent/10 rounded-lg border border-accent/30"
+              >
+                <div class="flex items-start gap-2">
+                  <div class="text-accent text-lg mt-0.5">💡</div>
+                  <div class="flex-1">
+                    <p class="text-sm font-semibold text-foreground mb-2">
+                      Usage Examples
                     </p>
+                    <p class="text-xs text-muted-foreground leading-relaxed">
+                      After configuration, use commands like:
+                    </p>
+                    <div class="mt-2 space-y-1">
+                      <code class="block bg-background/50 px-2 py-1 rounded text-foreground text-xs">
+                        @obsidian read my daily note
+                      </code>
+                      <code class="block bg-background/50 px-2 py-1 rounded text-foreground text-xs">
+                        @obsidian search for meeting notes
+                      </code>
+                      <code class="block bg-background/50 px-2 py-1 rounded text-foreground text-xs">
+                        @obsidian create a new note about project ideas
+                      </code>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -178,6 +271,33 @@ args = ["@mauricio.wolff/mcp-obsidian@latest", "/path/to/your/vault"]'
 <span style="color: #89b4fa;">command</span> <span style="color: #94e2d5;">=</span> <span style="color: #a6e3a1;">"npx"</span>
 <span style="color: #89b4fa;">args</span> <span style="color: #94e2d5;">=</span> <span style="color: #cdd6f4;">[</span><span style="color: #a6e3a1;">"@mauricio.wolff/mcp-obsidian@latest"</span><span style="color: #cdd6f4;">,</span> <span style="color: #a6e3a1;">"/path/to/your/vault"</span><span style="color: #cdd6f4;">]</span></pre>
               </div>
+
+              <div
+                class="mt-4 p-3 bg-accent/10 rounded-lg border border-accent/30"
+              >
+                <div class="flex items-start gap-2">
+                  <div class="text-accent text-lg mt-0.5">💡</div>
+                  <div class="flex-1">
+                    <p class="text-sm font-semibold text-foreground mb-2">
+                      Usage Examples
+                    </p>
+                    <p class="text-xs text-muted-foreground leading-relaxed">
+                      After configuration, interact with your vault naturally:
+                    </p>
+                    <div class="mt-2 space-y-1">
+                      <code class="block bg-background/50 px-2 py-1 rounded text-foreground text-xs">
+                        Show me my recent journal entries
+                      </code>
+                      <code class="block bg-background/50 px-2 py-1 rounded text-foreground text-xs">
+                        Find notes tagged with #project
+                      </code>
+                      <code class="block bg-background/50 px-2 py-1 rounded text-foreground text-xs">
+                        Update my todo list with new tasks
+                      </code>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -212,11 +332,15 @@ args = ["@mauricio.wolff/mcp-obsidian@latest", "/path/to/your/vault"]'
               </div>
               <div class="space-y-1 text-muted-foreground">
                 <div>
-                  <span class="text-warning">⚠️</span>
-                  <strong>Per-project only:</strong> Run <code
+                  User scope: <code
                     class="bg-background/50 px-1 rounded text-foreground"
-                    >claude mcp add-json obsidian '&#123;...&#125;'</code
-                  > inside your project directory
+                    >~/.claude.json</code
+                  >
+                </div>
+                <div class="text-xs">
+                  Use <code class="bg-background/50 px-1 rounded text-foreground"
+                    >claude mcp add-json --scope user</code
+                  > for global access
                 </div>
               </div>
             </div>
@@ -235,6 +359,19 @@ args = ["@mauricio.wolff/mcp-obsidian@latest", "/path/to/your/vault"]'
                   Windows: <code
                     class="bg-background/50 px-1 rounded text-foreground"
                     >%APPDATA%\ChatGPT\chatgpt_config.json</code
+                  >
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="font-semibold text-accent text-sm mb-2">
+                Gemini CLI (JSON)
+              </div>
+              <div class="space-y-1 text-muted-foreground">
+                <div>
+                  All platforms: <code
+                    class="bg-background/50 px-1 rounded text-foreground"
+                    >~/.gemini/settings.json</code
                   >
                 </div>
               </div>
@@ -404,7 +541,7 @@ args = ["@mauricio.wolff/mcp-obsidian@latest", "/path/to/your/vault"]'
           class="mb-4 p-4 bg-gradient-to-r from-accent/10 to-accent-2/10 rounded-lg border border-accent/20"
         >
           <p class="text-sm text-foreground text-center">
-            🌐 <strong>Works with all MCP-compatible platforms:</strong> Cursor IDE,
+            🌐 <strong>Works with all MCP-compatible platforms:</strong> Claude Desktop, ChatGPT+, Claude Code, Gemini CLI, Cursor IDE,
             Windsurf, and more coming soon!
             <br />Use the same configuration with your platform's MCP server
             settings.
