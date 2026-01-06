@@ -134,3 +134,66 @@ export interface TagManagementResult {
   success: boolean;
   message?: string;
 }
+
+// Base types for Obsidian Bases support
+
+export interface BaseFile {
+  filters?: FilterGroup;
+  views?: BaseView[];
+}
+
+export interface FilterGroup {
+  and?: FilterItem[];
+  or?: FilterItem[];
+}
+
+export type FilterItem = string | FilterGroup;
+
+export interface BaseView {
+  type: 'table' | 'cards';
+  name: string;
+  filters?: FilterGroup;
+  limit?: number;
+  sort?: SortSpec[];
+  order?: string[];  // column order (ignored for query)
+}
+
+export interface SortSpec {
+  property: string;
+  direction: 'ASC' | 'DESC';
+}
+
+export interface BaseQueryParams {
+  path: string;
+  view?: string;
+  limit?: number;
+  includeFrontmatter?: boolean;
+}
+
+export interface BaseQueryResult {
+  notes: BaseNoteResult[];
+  views: string[];
+  q: {
+    view: string | null;
+    limit: number;
+    filters: number;  // count of filters applied
+  };
+  w?: string[];  // warnings
+}
+
+export interface BaseNoteResult {
+  p: string;   // path
+  t: string;   // title
+  fm?: Record<string, any>;  // frontmatter (optional)
+}
+
+// Context for filter evaluation
+export interface NoteContext {
+  filePath: string;
+  fileName: string;
+  frontmatter: Record<string, any>;
+  content: string;
+  ctime: Date;
+  mtime: Date;
+  tags: string[];  // extracted from frontmatter + inline
+}

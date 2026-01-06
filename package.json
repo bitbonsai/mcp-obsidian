@@ -29,7 +29,8 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.20.0",
-    "gray-matter": "^4.0.3"
+    "gray-matter": "^4.0.3",
+    "yaml": "^2.8.2"
   },
   "devDependencies": {
     "@types/node": "^24.10.1",

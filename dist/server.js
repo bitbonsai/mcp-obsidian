@@ -6,6 +6,7 @@ import { FileSystemService } from "./src/filesystem.js";
 import { FrontmatterHandler } from "./src/frontmatter.js";
 import { PathFilter } from "./src/pathfilter.js";
 import { SearchService } from "./src/search.js";
+import { BasesService } from "./src/bases.js";
 import { readFileSync } from "fs";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
@@ -48,11 +49,11 @@ if (!vaultPath) {
     console.error("Run 'npx @mauricio.wolff/mcp-obsidian --help' for more information");
     process.exit(1);
 }
-// Initialize services
 const pathFilter = new PathFilter();
 const frontmatterHandler = new FrontmatterHandler();
 const fileSystem = new FileSystemService(vaultPath, pathFilter, frontmatterHandler);
 const searchService = new SearchService(vaultPath, pathFilter);
+const basesService = new BasesService(vaultPath, pathFilter, frontmatterHandler);
 const server = new Server({
     name: "mcp-obsidian",
     version: VERSION
@@ -353,6 +354,38 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
                     },
                     required: ["path", "operation"]
                 }
+            },
+            {
+                name: "read_base",
+                description: "Execute an Obsidian Base's filters and return matching notes. Bases are dynamic queries over vault notes. Can query the entire base or a specific named view.",
+                inputSchema: {
+                    type: "object",
+                    properties: {
+                        path: {
+                            type: "string",
+                            description: "Path to the .base file relative to vault root"
+                        },
+                        view: {
+                            type: "string",
+                            description: "Specific view name to query (applies view filters, sort, limit). Omit to use only global base filters."
+                        },
+                        limit: {
+                            type: "number",
+                            description: "Override result limit (default: view's limit or 50, max: 100)"
+                        },
+                        includeFrontmatter: {
+                            type: "boolean",
+                            description: "Include frontmatter in results (default: false)",
+                            default: false
+                        },
+                        prettyPrint: {
+                            type: "boolean",
+                            description: "Format JSON response with indentation (default: false)",
+                            default: false
+                        }
+                    },
+                    required: ["path"]
+                }
             }
         ]
     };
@@ -568,6 +601,23 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                         }
                     ],
                     isError: !result.success
+                };
+            }
+            case "read_base": {
+                const result = await basesService.queryBase({
+                    path: trimmedArgs.path,
+                    view: trimmedArgs.view,
+                    limit: trimmedArgs.limit,
+                    includeFrontmatter: trimmedArgs.includeFrontmatter
+                });
+                const indent = trimmedArgs.prettyPrint ? 2 : undefined;
+                return {
+                    content: [
+                        {
+                            type: "text",
+                            text: JSON.stringify(result, null, indent)
+                        }
+                    ]
                 };
             }
             default:

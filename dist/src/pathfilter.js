@@ -14,6 +14,7 @@ export class PathFilter {
             '.md',
             '.markdown',
             '.txt',
+            '.base',
             ...config?.allowedExtensions || []
         ];
     }
