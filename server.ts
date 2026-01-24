@@ -366,6 +366,25 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
           },
           required: ["path", "operation"]
         }
+      },
+      {
+        name: "get_vault_stats",
+        description: "Get vault statistics including total notes, folders, size, and recently modified files. Useful for understanding vault scope before batch operations.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            recentCount: {
+              type: "number",
+              description: "Number of recently modified files to return (default: 5, max: 20)",
+              default: 5
+            },
+            prettyPrint: {
+              type: "boolean",
+              description: "Format JSON response with indentation (default: false)",
+              default: false
+            }
+          }
+        }
       }
     ]
   };
@@ -600,6 +619,25 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
             }
           ],
           isError: !result.success
+        };
+      }
+
+      case "get_vault_stats": {
+        const recentCount = Math.min(trimmedArgs.recentCount || 5, 20);
+        const stats = await fileSystem.getVaultStats(recentCount);
+        const indent = trimmedArgs.prettyPrint ? 2 : undefined;
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify({
+                notes: stats.totalNotes,
+                folders: stats.totalFolders,
+                size: stats.totalSize,
+                recent: stats.recentlyModified
+              }, null, indent)
+            }
+          ]
         };
       }
 

@@ -824,3 +824,83 @@ test("handles emoji in file paths", async () => {
   const note = await fileSystem.readNote(testPath);
   expect(note.content).toContain("Emoji note");
 });
+
+// ============================================================================
+// VAULT STATS TESTS
+// ============================================================================
+
+test("get vault stats with empty vault", async () => {
+  const stats = await fileSystem.getVaultStats();
+
+  expect(stats.totalNotes).toBe(0);
+  expect(stats.totalFolders).toBe(0);
+  expect(stats.totalSize).toBe(0);
+  expect(stats.recentlyModified).toHaveLength(0);
+});
+
+test("get vault stats counts notes and folders", async () => {
+  await mkdir(join(testVaultPath, "folder1"), { recursive: true });
+  await mkdir(join(testVaultPath, "folder2/nested"), { recursive: true });
+  await writeFile(join(testVaultPath, "note1.md"), "# Note 1");
+  await writeFile(join(testVaultPath, "folder1/note2.md"), "# Note 2");
+  await writeFile(join(testVaultPath, "folder2/nested/note3.md"), "# Note 3");
+
+  const stats = await fileSystem.getVaultStats();
+
+  expect(stats.totalNotes).toBe(3);
+  expect(stats.totalFolders).toBe(3); // folder1, folder2, folder2/nested
+  expect(stats.totalSize).toBeGreaterThan(0);
+});
+
+test("get vault stats returns recently modified files in order", async () => {
+  // Create files with slight delays to ensure different modification times
+  await writeFile(join(testVaultPath, "old.md"), "# Old");
+  await new Promise(resolve => setTimeout(resolve, 10));
+  await writeFile(join(testVaultPath, "middle.md"), "# Middle");
+  await new Promise(resolve => setTimeout(resolve, 10));
+  await writeFile(join(testVaultPath, "recent.md"), "# Recent");
+
+  const stats = await fileSystem.getVaultStats(3);
+
+  expect(stats.recentlyModified).toHaveLength(3);
+  expect(stats.recentlyModified[0].path).toBe("recent.md");
+  expect(stats.recentlyModified[1].path).toBe("middle.md");
+  expect(stats.recentlyModified[2].path).toBe("old.md");
+});
+
+test("get vault stats respects recentCount limit", async () => {
+  await writeFile(join(testVaultPath, "note1.md"), "# Note 1");
+  await writeFile(join(testVaultPath, "note2.md"), "# Note 2");
+  await writeFile(join(testVaultPath, "note3.md"), "# Note 3");
+
+  const stats = await fileSystem.getVaultStats(2);
+
+  expect(stats.recentlyModified).toHaveLength(2);
+});
+
+test("get vault stats excludes filtered paths", async () => {
+  await mkdir(join(testVaultPath, ".obsidian"), { recursive: true });
+  await mkdir(join(testVaultPath, ".git"), { recursive: true });
+  await writeFile(join(testVaultPath, ".obsidian/config.json"), "{}");
+  await writeFile(join(testVaultPath, ".git/config"), "git config");
+  await writeFile(join(testVaultPath, "visible.md"), "# Visible");
+
+  const stats = await fileSystem.getVaultStats();
+
+  expect(stats.totalNotes).toBe(1);
+  expect(stats.totalFolders).toBe(0); // .obsidian and .git are filtered
+  expect(stats.recentlyModified.map(f => f.path)).toContain("visible.md");
+  expect(stats.recentlyModified.map(f => f.path)).not.toContain(".obsidian/config.json");
+});
+
+test("get vault stats calculates total size correctly", async () => {
+  const content1 = "# Note 1 with some content";
+  const content2 = "# Note 2 with more content here";
+  await writeFile(join(testVaultPath, "note1.md"), content1);
+  await writeFile(join(testVaultPath, "note2.md"), content2);
+
+  const stats = await fileSystem.getVaultStats();
+
+  const expectedSize = Buffer.byteLength(content1) + Buffer.byteLength(content2);
+  expect(stats.totalSize).toBe(expectedSize);
+});

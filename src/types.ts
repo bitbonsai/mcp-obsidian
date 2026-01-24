@@ -134,3 +134,14 @@ export interface TagManagementResult {
   success: boolean;
   message?: string;
 }
+
+// Vault statistics types
+export interface VaultStats {
+  totalNotes: number;
+  totalFolders: number;
+  totalSize: number;  // bytes
+  recentlyModified: Array<{
+    path: string;
+    modified: number;  // timestamp
+  }>;
+}

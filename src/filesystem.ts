@@ -4,7 +4,7 @@ import { constants } from 'node:fs';
 import { FrontmatterHandler } from './frontmatter.js';
 import { PathFilter } from './pathfilter.js';
 import { generateObsidianUri } from './uri.js';
-import type { ParsedNote, DirectoryListing, NoteWriteParams, DeleteNoteParams, DeleteResult, MoveNoteParams, MoveResult, BatchReadParams, BatchReadResult, UpdateFrontmatterParams, NoteInfo, TagManagementParams, TagManagementResult, PatchNoteParams, PatchNoteResult } from './types.js';
+import type { ParsedNote, DirectoryListing, NoteWriteParams, DeleteNoteParams, DeleteResult, MoveNoteParams, MoveResult, BatchReadParams, BatchReadResult, UpdateFrontmatterParams, NoteInfo, TagManagementParams, TagManagementResult, PatchNoteParams, PatchNoteResult, VaultStats } from './types.js';
 
 export class FileSystemService {
   private frontmatterHandler: FrontmatterHandler;
@@ -678,5 +678,60 @@ export class FileSystemService {
 
   getVaultPath(): string {
     return this.vaultPath;
+  }
+
+  async getVaultStats(recentCount: number = 5): Promise<VaultStats> {
+    let totalNotes = 0;
+    let totalFolders = 0;
+    let totalSize = 0;
+    const recentFiles: Array<{ path: string; modified: number }> = [];
+
+    const scanDirectory = async (dirPath: string, relativePath: string = ''): Promise<void> => {
+      const entries = await readdir(dirPath, { withFileTypes: true });
+
+      for (const entry of entries) {
+        const entryRelativePath = relativePath ? `${relativePath}/${entry.name}` : entry.name;
+
+        if (!this.pathFilter.isAllowed(entryRelativePath)) {
+          continue;
+        }
+
+        const fullEntryPath = join(dirPath, entry.name);
+
+        if (entry.isDirectory()) {
+          totalFolders++;
+          await scanDirectory(fullEntryPath, entryRelativePath);
+        } else if (entry.isFile()) {
+          totalNotes++;
+          const stats = await stat(fullEntryPath);
+          totalSize += stats.size;
+
+          // Track recent files
+          const fileInfo = { path: entryRelativePath, modified: stats.mtime.getTime() };
+
+          // Insert in sorted order (most recent first)
+          const insertIndex = recentFiles.findIndex(f => f.modified < fileInfo.modified);
+          if (insertIndex === -1) {
+            if (recentFiles.length < recentCount) {
+              recentFiles.push(fileInfo);
+            }
+          } else {
+            recentFiles.splice(insertIndex, 0, fileInfo);
+            if (recentFiles.length > recentCount) {
+              recentFiles.pop();
+            }
+          }
+        }
+      }
+    };
+
+    await scanDirectory(this.vaultPath);
+
+    return {
+      totalNotes,
+      totalFolders,
+      totalSize,
+      recentlyModified: recentFiles
+    };
   }
 }
