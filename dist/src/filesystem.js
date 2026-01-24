@@ -29,14 +29,14 @@ export class FileSystemService {
         // Security check: ensure path is within vault
         const relativeToVault = relative(this.vaultPath, fullPath);
         if (relativeToVault.startsWith('..')) {
-            throw new Error(`Path traversal not allowed: ${relativePath}`);
+            throw new Error(`Path traversal not allowed: ${relativePath}. Paths must be within the vault directory.`);
         }
         return fullPath;
     }
     async readNote(path) {
         const fullPath = this.resolvePath(path);
         if (!this.pathFilter.isAllowed(path)) {
-            throw new Error(`Access denied: ${path}`);
+            throw new Error(`Access denied: ${path}. This path is restricted (system files like .obsidian, .git, and dotfiles are not accessible).`);
         }
         // Check if the path is a directory first
         const isDir = await this.isDirectory(path);
@@ -50,10 +50,10 @@ export class FileSystemService {
         catch (error) {
             if (error instanceof Error && 'code' in error) {
                 if (error.code === 'ENOENT') {
-                    throw new Error(`File not found: ${path}`);
+                    throw new Error(`File not found: ${path}. Use list_directory to see available files, or check the path spelling.`);
                 }
                 if (error.code === 'EACCES') {
-                    throw new Error(`Permission denied: ${path}`);
+                    throw new Error(`Permission denied: ${path}. The file exists but cannot be read due to filesystem permissions.`);
                 }
                 if (error.code === 'EISDIR') {
                     throw new Error(`Cannot read directory as file: ${path}. Use list_directory tool instead.`);
@@ -66,7 +66,7 @@ export class FileSystemService {
         const { path, content, frontmatter, mode = 'overwrite' } = params;
         const fullPath = this.resolvePath(path);
         if (!this.pathFilter.isAllowed(path)) {
-            throw new Error(`Access denied: ${path}`);
+            throw new Error(`Access denied: ${path}. This path is restricted (system files like .obsidian, .git, and dotfiles are not accessible).`);
         }
         // Validate frontmatter if provided
         if (frontmatter) {
@@ -130,7 +130,7 @@ export class FileSystemService {
             return {
                 success: false,
                 path,
-                message: `Access denied: ${path}`
+                message: `Access denied: ${path}. This path is restricted (system files like .obsidian, .git, and dotfiles are not accessible).`
             };
         }
         // Validate that strings are not empty
@@ -231,13 +231,13 @@ export class FileSystemService {
         catch (error) {
             if (error instanceof Error) {
                 if (error.message.includes('not found') || error.message.includes('ENOENT')) {
-                    throw new Error(`Directory not found: ${path}`);
+                    throw new Error(`Directory not found: ${path}. Use list_directory with no path or '/' to see root folders.`);
                 }
                 if (error.message.includes('permission') || error.message.includes('access')) {
-                    throw new Error(`Permission denied: ${path}`);
+                    throw new Error(`Permission denied: ${path}. The directory exists but cannot be read due to filesystem permissions.`);
                 }
                 if (error.message.includes('not a directory') || error.message.includes('ENOTDIR')) {
-                    throw new Error(`Not a directory: ${path}`);
+                    throw new Error(`Not a directory: ${path}. This path points to a file, not a folder. Use read_note to read files.`);
                 }
             }
             throw new Error(`Failed to list directory: ${path} - ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -284,7 +284,7 @@ export class FileSystemService {
             return {
                 success: false,
                 path: path,
-                message: `Access denied: ${path}`
+                message: `Access denied: ${path}. This path is restricted (system files like .obsidian, .git, and dotfiles are not accessible).`
             };
         }
         try {
@@ -311,14 +311,14 @@ export class FileSystemService {
                     return {
                         success: false,
                         path: path,
-                        message: `File not found: ${path}`
+                        message: `File not found: ${path}. Use list_directory to see available files.`
                     };
                 }
                 if (error.code === 'EACCES') {
                     return {
                         success: false,
                         path: path,
-                        message: `Permission denied: ${path}`
+                        message: `Permission denied: ${path}. The file exists but cannot be deleted due to filesystem permissions.`
                     };
                 }
             }
@@ -336,7 +336,7 @@ export class FileSystemService {
                 success: false,
                 oldPath,
                 newPath,
-                message: `Access denied: ${oldPath}`
+                message: `Access denied: ${oldPath}. This path is restricted (system files like .obsidian, .git, and dotfiles are not accessible).`
             };
         }
         if (!this.pathFilter.isAllowed(newPath)) {
@@ -344,7 +344,7 @@ export class FileSystemService {
                 success: false,
                 oldPath,
                 newPath,
-                message: `Access denied: ${newPath}`
+                message: `Access denied: ${newPath}. This path is restricted (system files like .obsidian, .git, and dotfiles are not accessible).`
             };
         }
         const oldFullPath = this.resolvePath(oldPath);
@@ -361,7 +361,7 @@ export class FileSystemService {
                         success: false,
                         oldPath,
                         newPath,
-                        message: `Source file not found: ${oldPath}`
+                        message: `Source file not found: ${oldPath}. Use list_directory to see available files.`
                     };
                 }
                 throw error;
@@ -414,7 +414,7 @@ export class FileSystemService {
         }
         const results = await Promise.allSettled(paths.map(async (path) => {
             if (!this.pathFilter.isAllowed(path)) {
-                throw new Error(`Access denied: ${path}`);
+                throw new Error(`Access denied: ${path}. This path is restricted (system files like .obsidian, .git, and dotfiles are not accessible).`);
             }
             const note = await this.readNote(path);
             const result = {
@@ -447,7 +447,7 @@ export class FileSystemService {
     async updateFrontmatter(params) {
         const { path, frontmatter, merge = true } = params;
         if (!this.pathFilter.isAllowed(path)) {
-            throw new Error(`Access denied: ${path}`);
+            throw new Error(`Access denied: ${path}. This path is restricted (system files like .obsidian, .git, and dotfiles are not accessible).`);
         }
         // Read the existing note
         const note = await this.readNote(path);
@@ -470,7 +470,7 @@ export class FileSystemService {
     async getNotesInfo(paths) {
         const results = await Promise.allSettled(paths.map(async (path) => {
             if (!this.pathFilter.isAllowed(path)) {
-                throw new Error(`Access denied: ${path}`);
+                throw new Error(`Access denied: ${path}. This path is restricted (system files like .obsidian, .git, and dotfiles are not accessible).`);
             }
             const fullPath = this.resolvePath(path);
             let stats;
@@ -510,7 +510,7 @@ export class FileSystemService {
                 operation,
                 tags: [],
                 success: false,
-                message: `Access denied: ${path}`
+                message: `Access denied: ${path}. This path is restricted (system files like .obsidian, .git, and dotfiles are not accessible).`
             };
         }
         try {
@@ -585,5 +585,56 @@ export class FileSystemService {
     }
     getVaultPath() {
         return this.vaultPath;
+    }
+    async getVaultStats(recentCount = 5) {
+        let totalNotes = 0;
+        let totalFolders = 0;
+        let totalSize = 0;
+        const recentFiles = [];
+        const scanDirectory = async (dirPath, relativePath = '') => {
+            const entries = await readdir(dirPath, { withFileTypes: true });
+            for (const entry of entries) {
+                const entryRelativePath = relativePath ? `${relativePath}/${entry.name}` : entry.name;
+                if (!this.pathFilter.isAllowed(entryRelativePath)) {
+                    continue;
+                }
+                const fullEntryPath = join(dirPath, entry.name);
+                if (entry.isDirectory()) {
+                    // Also check if directory contents would be filtered (e.g., .obsidian/**)
+                    if (!this.pathFilter.isAllowed(`${entryRelativePath}/test.md`)) {
+                        continue;
+                    }
+                    totalFolders++;
+                    await scanDirectory(fullEntryPath, entryRelativePath);
+                }
+                else if (entry.isFile()) {
+                    totalNotes++;
+                    const stats = await stat(fullEntryPath);
+                    totalSize += stats.size;
+                    // Track recent files
+                    const fileInfo = { path: entryRelativePath, modified: stats.mtime.getTime() };
+                    // Insert in sorted order (most recent first)
+                    const insertIndex = recentFiles.findIndex(f => f.modified < fileInfo.modified);
+                    if (insertIndex === -1) {
+                        if (recentFiles.length < recentCount) {
+                            recentFiles.push(fileInfo);
+                        }
+                    }
+                    else {
+                        recentFiles.splice(insertIndex, 0, fileInfo);
+                        if (recentFiles.length > recentCount) {
+                            recentFiles.pop();
+                        }
+                    }
+                }
+            }
+        };
+        await scanDirectory(this.vaultPath);
+        return {
+            totalNotes,
+            totalFolders,
+            totalSize,
+            recentlyModified: recentFiles
+        };
     }
 }

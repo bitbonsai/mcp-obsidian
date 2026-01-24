@@ -699,6 +699,10 @@ export class FileSystemService {
         const fullEntryPath = join(dirPath, entry.name);
 
         if (entry.isDirectory()) {
+          // Also check if directory contents would be filtered (e.g., .obsidian/**)
+          if (!this.pathFilter.isAllowed(`${entryRelativePath}/test.md`)) {
+            continue;
+          }
           totalFolders++;
           await scanDirectory(fullEntryPath, entryRelativePath);
         } else if (entry.isFile()) {

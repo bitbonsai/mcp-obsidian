@@ -863,9 +863,9 @@ test("get vault stats returns recently modified files in order", async () => {
   const stats = await fileSystem.getVaultStats(3);
 
   expect(stats.recentlyModified).toHaveLength(3);
-  expect(stats.recentlyModified[0].path).toBe("recent.md");
-  expect(stats.recentlyModified[1].path).toBe("middle.md");
-  expect(stats.recentlyModified[2].path).toBe("old.md");
+  expect(stats.recentlyModified[0]?.path).toBe("recent.md");
+  expect(stats.recentlyModified[1]?.path).toBe("middle.md");
+  expect(stats.recentlyModified[2]?.path).toBe("old.md");
 });
 
 test("get vault stats respects recentCount limit", async () => {
