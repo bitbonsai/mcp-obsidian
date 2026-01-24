@@ -904,3 +904,22 @@ test("get vault stats calculates total size correctly", async () => {
   const expectedSize = Buffer.byteLength(content1) + Buffer.byteLength(content2);
   expect(stats.totalSize).toBe(expectedSize);
 });
+
+// ============================================================================
+// ERROR MESSAGE TESTS
+// ============================================================================
+
+test("error messages include remediation suggestions for file not found", async () => {
+  await expect(fileSystem.readNote("nonexistent.md"))
+    .rejects.toThrow(/list_directory/);
+});
+
+test("error messages include remediation suggestions for access denied", async () => {
+  await expect(fileSystem.readNote(".obsidian/config.json"))
+    .rejects.toThrow(/restricted/);
+});
+
+test("error messages include remediation suggestions for path traversal", async () => {
+  await expect(fileSystem.readNote("../outside.md"))
+    .rejects.toThrow(/within the vault/);
+});

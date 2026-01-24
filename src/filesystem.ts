@@ -39,7 +39,7 @@ export class FileSystemService {
     // Security check: ensure path is within vault
     const relativeToVault = relative(this.vaultPath, fullPath);
     if (relativeToVault.startsWith('..')) {
-      throw new Error(`Path traversal not allowed: ${relativePath}`);
+      throw new Error(`Path traversal not allowed: ${relativePath}. Paths must be within the vault directory.`);
     }
 
     return fullPath;
@@ -49,7 +49,7 @@ export class FileSystemService {
     const fullPath = this.resolvePath(path);
 
     if (!this.pathFilter.isAllowed(path)) {
-      throw new Error(`Access denied: ${path}`);
+      throw new Error(`Access denied: ${path}. This path is restricted (system files like .obsidian, .git, and dotfiles are not accessible).`);
     }
 
     // Check if the path is a directory first
@@ -64,10 +64,10 @@ export class FileSystemService {
     } catch (error) {
       if (error instanceof Error && 'code' in error) {
         if (error.code === 'ENOENT') {
-          throw new Error(`File not found: ${path}`);
+          throw new Error(`File not found: ${path}. Use list_directory to see available files, or check the path spelling.`);
         }
         if (error.code === 'EACCES') {
-          throw new Error(`Permission denied: ${path}`);
+          throw new Error(`Permission denied: ${path}. The file exists but cannot be read due to filesystem permissions.`);
         }
         if (error.code === 'EISDIR') {
           throw new Error(`Cannot read directory as file: ${path}. Use list_directory tool instead.`);
@@ -82,7 +82,7 @@ export class FileSystemService {
     const fullPath = this.resolvePath(path);
 
     if (!this.pathFilter.isAllowed(path)) {
-      throw new Error(`Access denied: ${path}`);
+      throw new Error(`Access denied: ${path}. This path is restricted (system files like .obsidian, .git, and dotfiles are not accessible).`);
     }
 
     // Validate frontmatter if provided
@@ -156,7 +156,7 @@ export class FileSystemService {
       return {
         success: false,
         path,
-        message: `Access denied: ${path}`
+        message: `Access denied: ${path}. This path is restricted (system files like .obsidian, .git, and dotfiles are not accessible).`
       };
     }
 
@@ -272,13 +272,13 @@ export class FileSystemService {
     } catch (error) {
       if (error instanceof Error) {
         if (error.message.includes('not found') || error.message.includes('ENOENT')) {
-          throw new Error(`Directory not found: ${path}`);
+          throw new Error(`Directory not found: ${path}. Use list_directory with no path or '/' to see root folders.`);
         }
         if (error.message.includes('permission') || error.message.includes('access')) {
-          throw new Error(`Permission denied: ${path}`);
+          throw new Error(`Permission denied: ${path}. The directory exists but cannot be read due to filesystem permissions.`);
         }
         if (error.message.includes('not a directory') || error.message.includes('ENOTDIR')) {
-          throw new Error(`Not a directory: ${path}`);
+          throw new Error(`Not a directory: ${path}. This path points to a file, not a folder. Use read_note to read files.`);
         }
       }
       throw new Error(`Failed to list directory: ${path} - ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -333,7 +333,7 @@ export class FileSystemService {
       return {
         success: false,
         path: path,
-        message: `Access denied: ${path}`
+        message: `Access denied: ${path}. This path is restricted (system files like .obsidian, .git, and dotfiles are not accessible).`
       };
     }
 
@@ -363,14 +363,14 @@ export class FileSystemService {
           return {
             success: false,
             path: path,
-            message: `File not found: ${path}`
+            message: `File not found: ${path}. Use list_directory to see available files.`
           };
         }
         if (error.code === 'EACCES') {
           return {
             success: false,
             path: path,
-            message: `Permission denied: ${path}`
+            message: `Permission denied: ${path}. The file exists but cannot be deleted due to filesystem permissions.`
           };
         }
       }
@@ -390,7 +390,7 @@ export class FileSystemService {
         success: false,
         oldPath,
         newPath,
-        message: `Access denied: ${oldPath}`
+        message: `Access denied: ${oldPath}. This path is restricted (system files like .obsidian, .git, and dotfiles are not accessible).`
       };
     }
 
@@ -399,7 +399,7 @@ export class FileSystemService {
         success: false,
         oldPath,
         newPath,
-        message: `Access denied: ${newPath}`
+        message: `Access denied: ${newPath}. This path is restricted (system files like .obsidian, .git, and dotfiles are not accessible).`
       };
     }
 
@@ -417,7 +417,7 @@ export class FileSystemService {
             success: false,
             oldPath,
             newPath,
-            message: `Source file not found: ${oldPath}`
+            message: `Source file not found: ${oldPath}. Use list_directory to see available files.`
           };
         }
         throw error;
@@ -476,7 +476,7 @@ export class FileSystemService {
     const results = await Promise.allSettled(
       paths.map(async (path) => {
         if (!this.pathFilter.isAllowed(path)) {
-          throw new Error(`Access denied: ${path}`);
+          throw new Error(`Access denied: ${path}. This path is restricted (system files like .obsidian, .git, and dotfiles are not accessible).`);
         }
 
         const note = await this.readNote(path);
@@ -518,7 +518,7 @@ export class FileSystemService {
     const { path, frontmatter, merge = true } = params;
 
     if (!this.pathFilter.isAllowed(path)) {
-      throw new Error(`Access denied: ${path}`);
+      throw new Error(`Access denied: ${path}. This path is restricted (system files like .obsidian, .git, and dotfiles are not accessible).`);
     }
 
     // Read the existing note
@@ -547,7 +547,7 @@ export class FileSystemService {
     const results = await Promise.allSettled(
       paths.map(async (path): Promise<NoteInfo> => {
         if (!this.pathFilter.isAllowed(path)) {
-          throw new Error(`Access denied: ${path}`);
+          throw new Error(`Access denied: ${path}. This path is restricted (system files like .obsidian, .git, and dotfiles are not accessible).`);
         }
 
         const fullPath = this.resolvePath(path);
@@ -595,7 +595,7 @@ export class FileSystemService {
         operation,
         tags: [],
         success: false,
-        message: `Access denied: ${path}`
+        message: `Access denied: ${path}. This path is restricted (system files like .obsidian, .git, and dotfiles are not accessible).`
       };
     }
 
