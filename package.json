@@ -6,7 +6,14 @@
   "license": "MIT",
   "type": "module",
   "packageManager": "npm@10.9.0+sha512.65a9c38a8172948f617a53619762cd77e12b9950fe1f9239debcb8d62c652f2081824b986fee7c0af6c0a7df615becebe4bf56e17ec27214a87aa29d9e038b4b",
-  "main": "dist/server.js",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/src/index.js",
+      "types": "./dist/src/index.d.ts"
+    }
+  },
   "bin": {
     "mcp-obsidian": "./dist/server.js",
     "@mauricio.wolff/mcp-obsidian": "./dist/server.js"
@@ -21,6 +28,7 @@
     "build": "tsc --project tsconfig.build.json",
     "test": "vitest run",
     "test:watch": "vitest",
+    "prepare": "npm run build",
     "prepublishOnly": "npm run build && npm test",
     "prepack": "npm install",
     "publish:dry": "npm publish --dry-run",
