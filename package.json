@@ -28,6 +28,7 @@
     "build": "tsc --project tsconfig.build.json",
     "test": "vitest run",
     "test:watch": "vitest",
+    "prepare": "npm run build",
     "prepublishOnly": "npm run build && npm test",
     "prepack": "npm install",
     "publish:dry": "npm publish --dry-run",
