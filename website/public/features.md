@@ -5,7 +5,7 @@ Designed for safety, performance, and developer experience. Every feature gives 
 ## Core Features
 
 ### Powerful Search
-Fast search across your entire vault. AI can locate notes by content, tags, or metadata instantly. Returns token-optimized results with minified field names.
+Fast search across your entire vault. AI can locate notes by name, content, tags, or metadata instantly. Returns token-optimized results with minified field names.
 
 ### Safe Frontmatter Handling
 YAML parser validates and preserves formatting, ensuring safe atomic updates to note metadata.
@@ -32,7 +32,7 @@ MIT licensed and community driven.
 13 MCP tools for vault management: read/write/patch files, search content, manage tags, update frontmatter, vault stats, and more. Built for AI assistant integration.
 
 ### Multi-Platform
-Works with Claude Desktop, ChatGPT+ Desktop, Cursor IDE, and other MCP-compatible AI platforms.
+Works with Claude Desktop, ChatGPT+ Desktop, OpenCode, Cursor IDE, and other MCP-compatible AI platforms.
 
 ## Comparison with Alternatives
 

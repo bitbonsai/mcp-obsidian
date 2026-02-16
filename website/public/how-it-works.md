@@ -47,7 +47,7 @@ Practical prompts you can try with your AI assistant and MCP-Obsidian.
 | patch_note | Efficient partial update via find-and-replace |
 | list_directory | List files and folders in the vault |
 | delete_note | Delete a note (requires path confirmation) |
-| search_notes | Full-text search across vault content |
+| search_notes | Search by note name or content across the vault |
 | move_note | Move or rename a note |
 | read_multiple_notes | Batch read up to 10 notes |
 | update_frontmatter | Safely update YAML frontmatter |
