@@ -1,70 +1,13 @@
 ---
 import Layout from '@layouts/Layout.astro';
+import Nav from '@components/Nav.astro';
 import Hero from '@components/Hero.astro';
 import UpdateCallout from '@components/UpdateCallout.astro';
-import Terminal from '@components/Terminal.astro';
-import FeatureGrid from '@components/FeatureGrid.astro';
-import InteractiveDemo from '@components/InteractiveDemo';
-import ComparisonTable from '@components/ComparisonTable.astro';
-import HowItWorks from '@components/HowItWorks.astro';
+import Footer from '@components/Footer.astro';
 ---
 
 <Layout>
-  <!-- Navigation -->
-  <nav class="fixed top-4 z-50 nav-glass">
-    <div class="w-full px-6 py-3">
-      <div class="flex items-center justify-between">
-        <!-- Logo -->
-        <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-lg overflow-hidden flex items-center justify-center">
-            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <g clip-path="url(#clip0_logo)">
-                <path d="M25.75 0H6.25C2.79822 0 0 2.79822 0 6.25V25.75C0 29.2018 2.79822 32 6.25 32H25.75C29.2018 32 32 29.2018 32 25.75V6.25C32 2.79822 29.2018 0 25.75 0Z" fill="#262626"/>
-                <g clip-path="url(#clip1_logo)">
-                  <path fill-rule="evenodd" clip-rule="evenodd" d="M19.5538 6.69535C19.0883 6.24225 18.4643 5.98873 17.8146 5.98873C17.165 5.98873 16.541 6.24225 16.0754 6.69535L6.80039 15.7912C6.64518 15.942 6.43727 16.0264 6.22082 16.0264C6.00438 16.0264 5.79646 15.942 5.64125 15.7912C5.56526 15.7173 5.50486 15.6289 5.46362 15.5313C5.42237 15.4336 5.40112 15.3287 5.40112 15.2227C5.40112 15.1167 5.42237 15.0118 5.46362 14.9141C5.50486 14.8165 5.56526 14.7281 5.64125 14.6542L14.9163 5.55837C15.6922 4.80333 16.732 4.38086 17.8146 4.38086C18.8972 4.38086 19.9371 4.80333 20.713 5.55837C21.1619 5.99495 21.5011 6.53164 21.7027 7.1245C21.9043 7.71736 21.9627 8.34954 21.8731 8.9693C22.5011 8.87999 23.1412 8.93605 23.7441 9.13318C24.347 9.3303 24.8966 9.66322 25.3505 10.1063L25.3987 10.1545C25.7786 10.524 26.0806 10.9659 26.2868 11.4541C26.4931 11.9423 26.5993 12.4669 26.5993 12.9969C26.5993 13.5269 26.4931 14.0515 26.2868 14.5397C26.0806 15.0279 25.7786 15.4699 25.3987 15.8394L17.0101 24.0651C16.9848 24.0897 16.9646 24.1192 16.9509 24.1517C16.9371 24.1842 16.9301 24.2191 16.9301 24.2544C16.9301 24.2898 16.9371 24.3247 16.9509 24.3572C16.9646 24.3897 16.9848 24.4192 17.0101 24.4438L18.7329 26.1338C18.8089 26.2077 18.8693 26.2961 18.9105 26.3938C18.9518 26.4914 18.973 26.5963 18.973 26.7023C18.973 26.8083 18.9518 26.9132 18.9105 27.0109C18.8693 27.1085 18.8089 27.1969 18.7329 27.2708C18.5777 27.4217 18.3698 27.5061 18.1533 27.5061C17.9369 27.5061 17.729 27.4217 17.5738 27.2708L15.8509 25.5817C15.6735 25.4093 15.5324 25.203 15.4361 24.9751C15.3398 24.7472 15.2902 24.5023 15.2902 24.2549C15.2902 24.0075 15.3398 23.7626 15.4361 23.5347C15.5324 23.3068 15.6735 23.1006 15.8509 22.9281L24.2395 14.7014C24.4674 14.4796 24.6485 14.2145 24.7721 13.9216C24.8958 13.6286 24.9595 13.3139 24.9595 12.9959C24.9595 12.678 24.8958 12.3633 24.7721 12.0703C24.6485 11.7774 24.4674 11.5122 24.2395 11.2905L24.1914 11.2433C23.7263 10.7906 23.1031 10.5371 22.4542 10.5366C21.8053 10.5361 21.1817 10.7885 20.7159 11.2404L13.8053 18.0179L13.8034 18.0199L13.709 18.1133C13.5537 18.2645 13.3456 18.349 13.1289 18.349C12.9123 18.349 12.7041 18.2645 12.5489 18.1133C12.4729 18.0394 12.4125 17.951 12.3712 17.8534C12.33 17.7557 12.3088 17.6508 12.3088 17.5448C12.3088 17.4388 12.33 17.3339 12.3712 17.2363C12.4125 17.1386 12.4729 17.0502 12.5489 16.9763L19.5567 10.1034C19.7839 9.88148 19.9644 9.61633 20.0876 9.32357C20.2107 9.03081 20.274 8.71636 20.2738 8.39876C20.2735 8.08115 20.2097 7.76682 20.086 7.47427C19.9624 7.18172 19.7814 6.91687 19.5538 6.69535Z" fill="#9064EA"/>
-                  <path fill-rule="evenodd" clip-rule="evenodd" d="M18.3945 8.96889C18.4705 8.89499 18.5309 8.80661 18.5722 8.70897C18.6134 8.61132 18.6346 8.5064 18.6346 8.4004C18.6346 8.29441 18.6134 8.18949 18.5722 8.09184C18.5309 7.9942 18.4705 7.90582 18.3945 7.83192C18.2393 7.68077 18.0311 7.59619 17.8145 7.59619C17.5978 7.59619 17.3897 7.68077 17.2344 7.83192L10.375 14.5594C9.99502 14.9289 9.69301 15.3708 9.48679 15.859C9.28057 16.3472 9.17432 16.8718 9.17432 17.4018C9.17432 17.9318 9.28057 18.4564 9.48679 18.9446C9.69301 19.4328 9.99502 19.8748 10.375 20.2443C11.1509 20.9991 12.1908 21.4214 13.2733 21.4214C14.3558 21.4214 15.3957 20.9991 16.1716 20.2443L23.032 13.5168C23.108 13.4429 23.1684 13.3545 23.2097 13.2569C23.2509 13.1592 23.2722 13.0543 23.2722 12.9483C23.2722 12.8423 23.2509 12.7374 23.2097 12.6398C23.1684 12.5421 23.108 12.4537 23.032 12.3798C22.8768 12.2287 22.6687 12.1441 22.452 12.1441C22.2353 12.1441 22.0272 12.2287 21.8719 12.3798L15.0125 19.1073C14.5469 19.5604 13.9229 19.8139 13.2733 19.8139C12.6237 19.8139 11.9997 19.5604 11.5341 19.1073C11.3063 18.8855 11.1252 18.6203 11.0015 18.3274C10.8778 18.0345 10.8141 17.7198 10.8141 17.4018C10.8141 17.0839 10.8778 16.7691 11.0015 16.4762C11.1252 16.1833 11.3063 15.9181 11.5341 15.6963L18.3945 8.96889Z" fill="#9064EA"/>
-                </g>
-              </g>
-              <defs>
-                <clipPath id="clip0_logo">
-                  <rect width="32" height="32" fill="white"/>
-                </clipPath>
-                <clipPath id="clip1_logo">
-                  <rect width="23.125" height="23.125" fill="white" transform="translate(4.4375 4.4375)"/>
-                </clipPath>
-              </defs>
-            </svg>
-          </div>
-          <span class="text-xl font-bold text-foreground">MCP-Obsidian</span>
-        </div>
-
-        <!-- Navigation links -->
-        <div class="hidden md:flex items-center gap-8">
-          <a href="#install" class="nav-link">Install</a>
-          <a href="#features" class="nav-link">Features</a>
-          <a href="#demo" class="nav-link">Demo</a>
-          <a href="https://github.com/bitbonsai/mcp-obsidian" target="_blank" rel="noopener noreferrer" class="nav-link">GitHub</a>
-        </div>
-
-        <!-- Mobile menu button -->
-        <button class="md:hidden nav-link p-2" id="mobile-menu-button" aria-label="Toggle mobile menu">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-          </svg>
-        </button>
-      </div>
-    </div>
-
-    <!-- Mobile menu dropdown -->
-    <div class="md:hidden mobile-menu hidden fixed top-[80px] left-0 right-0 bottom-0 z-[9998]" id="mobile-menu">
-      <div class="p-8 space-y-6 h-auto" style="background: rgba(0, 0, 0, 0.85);">
-        <a href="#install" class="block nav-link text-center text-lg">Install</a>
-        <a href="#features" class="block nav-link text-center text-lg">Features</a>
-        <a href="#demo" class="block nav-link text-center text-lg">Demo</a>
-        <a href="https://github.com/bitbonsai/mcp-obsidian" target="_blank" rel="noopener noreferrer" class="block nav-link text-center text-lg">GitHub</a>
-      </div>
-    </div>
-  </nav>
+  <Nav />
 
   <!-- Main content -->
   <main>
@@ -74,204 +17,16 @@ import HowItWorks from '@components/HowItWorks.astro';
     <!-- What's New Callout -->
     <UpdateCallout />
 
-    <!-- Installation Section -->
-    <Terminal />
-
-    <!-- Features Section -->
-    <div id="features">
-      <FeatureGrid />
-    </div>
-
-    <!-- Interactive Demo Section -->
-    <div id="demo">
-      <InteractiveDemo client:visible />
-    </div>
-
-    <!-- How It Works Section -->
-    <HowItWorks />
-
-    <!-- Comparison Table Section -->
-    <ComparisonTable />
-
     <!-- Footer -->
-    <footer class="relative py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-t from-card/20 to-background border-t border-border/50">
-      <div class="max-w-6xl mx-auto">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <!-- Brand -->
-          <div class="md:col-span-2">
-            <div class="flex items-center gap-3 mb-4">
-              <div class="w-8 h-8 rounded-lg overflow-hidden flex items-center justify-center">
-                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <g clip-path="url(#clip0_footer)">
-                    <path d="M25.75 0H6.25C2.79822 0 0 2.79822 0 6.25V25.75C0 29.2018 2.79822 32 6.25 32H25.75C29.2018 32 32 29.2018 32 25.75V6.25C32 2.79822 29.2018 0 25.75 0Z" fill="#262626"/>
-                    <g clip-path="url(#clip1_footer)">
-                      <path fill-rule="evenodd" clip-rule="evenodd" d="M19.5538 6.69535C19.0883 6.24225 18.4643 5.98873 17.8146 5.98873C17.165 5.98873 16.541 6.24225 16.0754 6.69535L6.80039 15.7912C6.64518 15.942 6.43727 16.0264 6.22082 16.0264C6.00438 16.0264 5.79646 15.942 5.64125 15.7912C5.56526 15.7173 5.50486 15.6289 5.46362 15.5313C5.42237 15.4336 5.40112 15.3287 5.40112 15.2227C5.40112 15.1167 5.42237 15.0118 5.46362 14.9141C5.50486 14.8165 5.56526 14.7281 5.64125 14.6542L14.9163 5.55837C15.6922 4.80333 16.732 4.38086 17.8146 4.38086C18.8972 4.38086 19.9371 4.80333 20.713 5.55837C21.1619 5.99495 21.5011 6.53164 21.7027 7.1245C21.9043 7.71736 21.9627 8.34954 21.8731 8.9693C22.5011 8.87999 23.1412 8.93605 23.7441 9.13318C24.347 9.3303 24.8966 9.66322 25.3505 10.1063L25.3987 10.1545C25.7786 10.524 26.0806 10.9659 26.2868 11.4541C26.4931 11.9423 26.5993 12.4669 26.5993 12.9969C26.5993 13.5269 26.4931 14.0515 26.2868 14.5397C26.0806 15.0279 25.7786 15.4699 25.3987 15.8394L17.0101 24.0651C16.9848 24.0897 16.9646 24.1192 16.9509 24.1517C16.9371 24.1842 16.9301 24.2191 16.9301 24.2544C16.9301 24.2898 16.9371 24.3247 16.9509 24.3572C16.9646 24.3897 16.9848 24.4192 17.0101 24.4438L18.7329 26.1338C18.8089 26.2077 18.8693 26.2961 18.9105 26.3938C18.9518 26.4914 18.973 26.5963 18.973 26.7023C18.973 26.8083 18.9518 26.9132 18.9105 27.0109C18.8693 27.1085 18.8089 27.1969 18.7329 27.2708C18.5777 27.4217 18.3698 27.5061 18.1533 27.5061C17.9369 27.5061 17.729 27.4217 17.5738 27.2708L15.8509 25.5817C15.6735 25.4093 15.5324 25.203 15.4361 24.9751C15.3398 24.7472 15.2902 24.5023 15.2902 24.2549C15.2902 24.0075 15.3398 23.7626 15.4361 23.5347C15.5324 23.3068 15.6735 23.1006 15.8509 22.9281L24.2395 14.7014C24.4674 14.4796 24.6485 14.2145 24.7721 13.9216C24.8958 13.6286 24.9595 13.3139 24.9595 12.9959C24.9595 12.678 24.8958 12.3633 24.7721 12.0703C24.6485 11.7774 24.4674 11.5122 24.2395 11.2905L24.1914 11.2433C23.7263 10.7906 23.1031 10.5371 22.4542 10.5366C21.8053 10.5361 21.1817 10.7885 20.7159 11.2404L13.8053 18.0179L13.8034 18.0199L13.709 18.1133C13.5537 18.2645 13.3456 18.349 13.1289 18.349C12.9123 18.349 12.7041 18.2645 12.5489 18.1133C12.4729 18.0394 12.4125 17.951 12.3712 17.8534C12.33 17.7557 12.3088 17.6508 12.3088 17.5448C12.3088 17.4388 12.33 17.3339 12.3712 17.2363C12.4125 17.1386 12.4729 17.0502 12.5489 16.9763L19.5567 10.1034C19.7839 9.88148 19.9644 9.61633 20.0876 9.32357C20.2107 9.03081 20.274 8.71636 20.2738 8.39876C20.2735 8.08115 20.2097 7.76682 20.086 7.47427C19.9624 7.18172 19.7814 6.91687 19.5538 6.69535Z" fill="#9064EA"/>
-                      <path fill-rule="evenodd" clip-rule="evenodd" d="M18.3945 8.96889C18.4705 8.89499 18.5309 8.80661 18.5722 8.70897C18.6134 8.61132 18.6346 8.5064 18.6346 8.4004C18.6346 8.29441 18.6134 8.18949 18.5722 8.09184C18.5309 7.9942 18.4705 7.90582 18.3945 7.83192C18.2393 7.68077 18.0311 7.59619 17.8145 7.59619C17.5978 7.59619 17.3897 7.68077 17.2344 7.83192L10.375 14.5594C9.99502 14.9289 9.69301 15.3708 9.48679 15.859C9.28057 16.3472 9.17432 16.8718 9.17432 17.4018C9.17432 17.9318 9.28057 18.4564 9.48679 18.9446C9.69301 19.4328 9.99502 19.8748 10.375 20.2443C11.1509 20.9991 12.1908 21.4214 13.2733 21.4214C14.3558 21.4214 15.3957 20.9991 16.1716 20.2443L23.032 13.5168C23.108 13.4429 23.1684 13.3545 23.2097 13.2569C23.2509 13.1592 23.2722 13.0543 23.2722 12.9483C23.2722 12.8423 23.2509 12.7374 23.2097 12.6398C23.1684 12.5421 23.108 12.4537 23.032 12.3798C22.8768 12.2287 22.6687 12.1441 22.452 12.1441C22.2353 12.1441 22.0272 12.2287 21.8719 12.3798L15.0125 19.1073C14.5469 19.5604 13.9229 19.8139 13.2733 19.8139C12.6237 19.8139 11.9997 19.5604 11.5341 19.1073C11.3063 18.8855 11.1252 18.6203 11.0015 18.3274C10.8778 18.0345 10.8141 17.7198 10.8141 17.4018C10.8141 17.0839 10.8778 16.7691 11.0015 16.4762C11.1252 16.1833 11.3063 15.9181 11.5341 15.6963L18.3945 8.96889Z" fill="#9064EA"/>
-                    </g>
-                  </g>
-                  <defs>
-                    <clipPath id="clip0_footer">
-                      <rect width="32" height="32" fill="white"/>
-                    </clipPath>
-                    <clipPath id="clip1_footer">
-                      <rect width="23.125" height="23.125" fill="white" transform="translate(4.4375 4.4375)"/>
-                    </clipPath>
-                  </defs>
-                </svg>
-              </div>
-              <span class="text-xl font-bold text-foreground">MCP-Obsidian</span>
-            </div>
-            <p class="text-muted-foreground max-w-md mb-6">
-              Give AI safe, intelligent access to your Obsidian vault.
-              Purpose-built for seamless AI-powered note management.
-            </p>
-            <div class="flex items-center gap-4">
-              <a
-                href="https://github.com/bitbonsai/mcp-obsidian"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                </svg>
-                <span class="text-sm">GitHub Repository</span>
-              </a>
-              <a
-                href="https://www.npmjs.com/package/@mauricio.wolff/mcp-obsidian"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M0 7.334v8h6.666v1.332H12v-1.332h12v-8H0zm6.666 6.664H5.334v-4H3.999v4H1.335V8.667h5.331v5.331zm4 0v1.336H8.001V8.667h2.665v5.331zm12 0h-1.334v-4h-1.332v4h-1.336v-4h-1.332v4H12V8.667h10.666v5.331z"/>
-                </svg>
-                <span class="text-sm">npm package</span>
-              </a>
-            </div>
-          </div>
-
-          <!-- Quick Links -->
-          <div>
-            <h3 class="text-sm font-semibold text-foreground uppercase tracking-wider mb-4">Quick Links</h3>
-            <div class="space-y-2">
-              <a href="#install" class="block text-muted-foreground hover:text-foreground transition-colors text-sm">Installation</a>
-              <a href="#demo" class="block text-muted-foreground hover:text-foreground transition-colors text-sm">Demo</a>
-              <a href="#features" class="block text-muted-foreground hover:text-foreground transition-colors text-sm">Features</a>
-              <a href="https://github.com/bitbonsai/mcp-obsidian/blob/main/README.md" target="_blank" rel="noopener noreferrer" class="block text-muted-foreground hover:text-foreground transition-colors text-sm">Documentation</a>
-            </div>
-          </div>
-
-          <!-- Community -->
-          <div>
-            <h3 class="text-sm font-semibold text-foreground uppercase tracking-wider mb-4">Community</h3>
-            <div class="space-y-2">
-              <a href="https://github.com/bitbonsai/mcp-obsidian/issues" target="_blank" rel="noopener noreferrer" class="block text-muted-foreground hover:text-foreground transition-colors text-sm">Issues & Support</a>
-              <a href="https://github.com/bitbonsai/mcp-obsidian/discussions" target="_blank" rel="noopener noreferrer" class="block text-muted-foreground hover:text-foreground transition-colors text-sm">Discussions</a>
-              <a href="https://github.com/bitbonsai/mcp-obsidian/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer" class="block text-muted-foreground hover:text-foreground transition-colors text-sm">Contributing</a>
-              <a href="https://github.com/bitbonsai" target="_blank" rel="noopener noreferrer" class="block text-muted-foreground hover:text-foreground transition-colors text-sm">bitbonsai</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Bottom bar -->
-        <div class="border-t border-border/50 mt-12 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p class="text-muted-foreground text-sm">
-            © 2025 bitbonsai. Released under the MIT License.
-          </p>
-          <div class="flex items-center gap-4 text-sm text-muted-foreground">
-            <span>Made with ❤️ for the Obsidian community</span>
-          </div>
-        </div>
-      </div>
-    </footer>
+    <Footer />
   </main>
 </Layout>
 
 <style>
-  /* Floating dark glass navigation */
-  .nav-glass {
-    background: rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 16px;
-    box-shadow:
-      0 8px 32px rgba(0, 0, 0, 0.3),
-      0 2px 8px rgba(0, 0, 0, 0.2),
-      inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    position: fixed;
-    width: calc(100vw - 2rem);
-    max-width: 1152px;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-
-  .nav-glass::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.05) 0%,
-      rgba(255, 255, 255, 0.02) 50%,
-      rgba(255, 255, 255, 0.01) 100%
-    );
-    border-radius: 16px;
-    pointer-events: none;
-    z-index: -1;
-  }
-
-  /* Navigation link glow effects */
-  .nav-link {
-    color: rgba(255, 255, 255, 0.7);
-    text-decoration: none;
-    padding: 8px 16px;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-    position: relative;
-    font-weight: 500;
-  }
-
-  .nav-link:hover {
-    color: rgba(255, 255, 255, 1);
-    text-shadow: 0 0 8px rgba(139, 92, 246, 0.6);
-    box-shadow:
-      0 0 20px rgba(139, 92, 246, 0.3),
-      inset 0 0 20px rgba(139, 92, 246, 0.1);
-    background: rgba(139, 92, 246, 0.1);
-    transform: translateY(-1px);
-  }
-
-  .nav-link::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(45deg, transparent, rgba(139, 92, 246, 0.1), transparent);
-    border-radius: 8px;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-
-  .nav-link:hover::before {
-    opacity: 1;
-  }
-
   /* Prevent horizontal overflow */
   html, body {
     overflow-x: hidden;
     width: 100%;
-  }
-
-  /* Navigation improvements */
-  nav {
-    z-index: 9999;
   }
 
   /* Smooth scroll behavior */
@@ -386,20 +141,6 @@ import HowItWorks from '@components/HowItWorks.astro';
       padding-top: 0;
     }
 
-    .nav-glass {
-      top: 8px;
-      border-radius: 12px;
-      width: calc(100vw - 1rem);
-      max-width: none;
-    }
-
-    .mobile-menu {
-      animation: slideDown 0.3s ease-out;
-      background: rgba(0, 0, 0, 0.85) !important;
-      backdrop-filter: blur(40px) !important;
-      -webkit-backdrop-filter: blur(40px) !important;
-    }
-
     /* General spacing fixes */
     .px-4, .px-6, .px-8 {
       padding-left: 1rem !important;
@@ -425,15 +166,15 @@ import HowItWorks from '@components/HowItWorks.astro';
     }
 
     /* Grid responsive fixes */
-    .grid-cols-1.md\\:grid-cols-2 {
+    .grid-cols-1.md\:grid-cols-2 {
       grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
     }
 
-    .grid-cols-1.md\\:grid-cols-3 {
+    .grid-cols-1.md\:grid-cols-3 {
       grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
     }
 
-    .grid-cols-1.md\\:grid-cols-4 {
+    .grid-cols-1.md\:grid-cols-4 {
       grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
     }
 
@@ -470,7 +211,7 @@ import HowItWorks from '@components/HowItWorks.astro';
     }
 
     /* Button responsive fixes */
-    .flex-col.sm\\:flex-row {
+    .flex-col.sm\:flex-row {
       flex-direction: column !important;
       gap: 0.75rem !important;
     }
@@ -500,61 +241,5 @@ import HowItWorks from '@components/HowItWorks.astro';
     .max-w-6xl, .max-w-4xl, .max-w-3xl {
       max-width: 95% !important;
     }
-
-    .nav-glass {
-      width: calc(100vw - 0.5rem);
-      top: 4px;
-    }
-  }
-
-  /* Mobile menu animations */
-  @keyframes slideDown {
-    from {
-      opacity: 0;
-      transform: translateY(-10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .mobile-menu.hidden {
-    display: none;
   }
 </style>
-
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const mobileMenuButton = document.getElementById('mobile-menu-button');
-    const mobileMenu = document.getElementById('mobile-menu');
-
-    if (mobileMenuButton && mobileMenu) {
-      mobileMenuButton.addEventListener('click', function() {
-        // Use requestAnimationFrame to prevent forced reflow
-        requestAnimationFrame(() => {
-          mobileMenu.classList.toggle('hidden');
-        });
-      });
-
-      // Close menu when clicking on links
-      const menuLinks = mobileMenu.querySelectorAll('a');
-      menuLinks.forEach(link => {
-        link.addEventListener('click', function() {
-          requestAnimationFrame(() => {
-            mobileMenu.classList.add('hidden');
-          });
-        });
-      });
-
-      // Close menu when clicking outside
-      document.addEventListener('click', function(event) {
-        if (!mobileMenuButton.contains(event.target as Node) && !mobileMenu.contains(event.target as Node)) {
-          requestAnimationFrame(() => {
-            mobileMenu.classList.add('hidden');
-          });
-        }
-      });
-    }
-  });
-</script>

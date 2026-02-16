@@ -1,40 +1,19 @@
-# LLM.txt - MCP-Obsidian
+# MCP-Obsidian
 
-## Project Description
-MCP-Obsidian is an open-source Model Context Protocol (MCP) server that provides AI assistants with safe, intelligent access to Obsidian vaults. It enables natural language interaction with personal knowledge bases through secure, structured protocols.
+> Universal AI Bridge for Obsidian Vaults
 
-## Key Features
-- **Secure Vault Access**: AI-safe interface to Obsidian knowledge bases
-- **Natural Language Queries**: Search and interact with notes using conversational language
-- **Note Management**: Create, edit, and organize notes through AI assistants
-- **Link Analysis**: Understand and navigate knowledge connections
-- **Template Support**: Automated note creation with predefined structures
-- **Tag Management**: Organize and filter content by topics
-- **Attachment Handling**: Process and reference embedded media files
+MCP-Obsidian is an open-source Model Context Protocol (MCP) server that gives AI assistants safe, intelligent access to Obsidian vaults. Works with Claude, ChatGPT, Gemini CLI, and any MCP-compatible platform. No plugins required, no Obsidian running needed.
 
-## Technical Stack
-- **Protocol**: Model Context Protocol (MCP)
-- **Runtime**: Node.js/Bun
-- **Language**: TypeScript
-- **Platform**: Cross-platform (macOS, Windows, Linux)
-- **Integration**: Claude Desktop, ChatGPT, and other MCP-compatible AI platforms
+## Docs
 
-## Use Cases
-- **Personal Knowledge Management**: AI-powered note organization and retrieval
-- **Research Assistance**: Intelligent analysis of research notes and references
-- **Writing Support**: Context-aware content generation from existing knowledge
-- **Learning**: Interactive exploration of interconnected concepts
-- **Project Management**: AI-assisted task and project note coordination
+- [Home](https://mcp-obsidian.org/index.md): Project overview, version info, recent updates
+- [Install](https://mcp-obsidian.org/install.md): Configuration for Claude Desktop, ChatGPT+, Claude Code, Gemini CLI, OpenAI Codex, with config file paths per platform
+- [Features](https://mcp-obsidian.org/features.md): Core features (search, frontmatter safety, security, token optimization) and comparison table vs alternatives
+- [Demo](https://mcp-obsidian.org/demo.md): Real request/response examples for patch_note, write_note, read_multiple_notes, update_frontmatter, search_notes
+- [How It Works](https://mcp-obsidian.org/how-it-works.md): End-to-end usage flows and full list of 13 MCP tools with descriptions
 
-## Installation
-Available via npm: `@mauricio.wolff/mcp-obsidian`
-Configuration through AI platform MCP settings (Claude Desktop, etc.)
+## Optional
 
-## Repository
-Source code and documentation available at: https://github.com/bitbonsai/mcp-obsidian
-
-## License
-MIT License - Open source and free to use
-
-## Keywords
-MCP, Model Context Protocol, Obsidian, AI, knowledge management, Claude Desktop, ChatGPT, note-taking, personal knowledge base, TypeScript, npm package
+- [GitHub README](https://github.com/bitbonsai/mcp-obsidian/blob/main/README.md): Full developer documentation
+- [npm Package](https://www.npmjs.com/package/@mauricio.wolff/mcp-obsidian): Package info and install instructions
+- [CONTRIBUTING](https://github.com/bitbonsai/mcp-obsidian/blob/main/CONTRIBUTING.md): How to contribute

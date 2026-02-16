@@ -1,0 +1,21 @@
+---
+import Layout from '@layouts/Layout.astro';
+import Nav from '@components/Nav.astro';
+import FeatureGrid from '@components/FeatureGrid.astro';
+import ComparisonTable from '@components/ComparisonTable.astro';
+import Footer from '@components/Footer.astro';
+---
+
+<Layout
+  title="Features"
+  description="Intelligent search, safe frontmatter handling, security-first design, and more. See how MCP-Obsidian compares to alternatives."
+  canonical="https://mcp-obsidian.org/features"
+>
+  <Nav />
+
+  <main>
+    <FeatureGrid />
+    <ComparisonTable />
+    <Footer />
+  </main>
+</Layout>

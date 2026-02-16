@@ -90,8 +90,7 @@ Request:
 {
   "path": "Physics/Relativity.md",
   "oldString": "## Energy and Mass",
-  "newString": "## Energy and Mass\\n\\nE = mc²",
-  "prettyPrint": true
+  "newString": "## Energy and Mass\\n\\nE = mc²"
 }
 \`\`\`
 
@@ -99,6 +98,7 @@ Response:
 \`\`\`json
 {
   "success": true,
+  "path": "Physics/Relativity.md",
   "message": "Successfully replaced 1 occurrence",
   "matchCount": 1
 }
@@ -111,7 +111,7 @@ Only the specific section was updated - no full file rewrite needed.`,
       'Multi-line text replacement performed atomically',
       'Frontmatter and formatting preserved perfectly',
       '10x faster than rewriting entire file',
-      'prettyPrint defaults to false for minimal token usage'
+      'replaceAll defaults to false — fails safely if multiple matches found'
     ]
   },
   {
@@ -125,8 +125,7 @@ Request:
 \`\`\`json
 {
   "path": "Meetings/Team Sync.md",
-  "content": "# Team Sync\\n\\n- Discussed Q1 goals\\n- Action items assigned",
-  "prettyPrint": true
+  "content": "# Team Sync\\n\\n- Discussed Q1 goals\\n- Action items assigned"
 }
 \`\`\`
 
@@ -139,7 +138,7 @@ Successfully wrote note: Meetings/Team Sync.md (mode: overwrite)
       'AI generated the structured content',
       'File created atomically with proper formatting',
       'Ready to open and edit in Obsidian',
-      'prettyPrint defaults to false for minimal token usage'
+      'Supports overwrite, append, and prepend modes'
     ]
   },
   {
@@ -178,8 +177,8 @@ Response:
 ✅ I've read all 3 notes. Here's a summary:
 Common themes across these books: systems thinking, habit formation, and focus. All emphasize the importance of intentional work practices and continuous improvement.`,
     details: [
-      'MCP server read multiple files in one request',
-      'Returns complete content from all notes',
+      'MCP server read multiple files in one request (max 10)',
+      'Returns ok (successful) and err (failed) arrays',
       'AI analyzes across multiple documents',
       'More efficient than reading files one-by-one',
       'prettyPrint defaults to false for minimal token usage'
@@ -205,8 +204,7 @@ Request:
     "status": "in-progress",
     "created": "2025-01-15",
     "updated": "2025-01-20"
-  },
-  "prettyPrint": true
+  }
 }
 \`\`\`
 
@@ -216,10 +214,10 @@ Successfully updated frontmatter for: Projects/Website Redesign.md
 ✅ Done! I've updated the frontmatter with the new status and tags.`,
     details: [
       'MCP server safely updated YAML frontmatter',
-      'Preserves existing frontmatter fields',
+      'Merges with existing frontmatter by default (merge: true)',
       'Updates are performed atomically',
       'Note content remains untouched',
-      'prettyPrint defaults to false for minimal token usage'
+      'YAML is validated before writing to prevent corruption'
     ]
   },
   {
@@ -261,7 +259,7 @@ Response:
 ✅ Found 2 notes with 11 total matches across your vault.`,
     details: [
       'MCP server performed full-text search across vault',
-      'Token-optimized response with minified field names',
+      'Token-optimized response: p=path, t=title, ex=excerpt, mc=matchCount, ln=lineNumber',
       'Returns 21-char context excerpts around matches',
       'AI can then read specific files for more details',
       'prettyPrint defaults to false for minimal token usage'
@@ -436,7 +434,7 @@ export default function InteractiveDemo() {
             Ready to experience this level of AI-powered note management?
           </p>
           <a
-            href="#install"
+            href="/install"
             className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-accent hover:bg-accent/90 text-white font-semibold text-lg transition-all duration-300 hover:shadow-[0_0_20px_rgba(139,92,246,0.6)] hover:-translate-y-1 hover:scale-105"
           >
             <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">

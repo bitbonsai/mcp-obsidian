@@ -1,0 +1,19 @@
+---
+import Layout from '@layouts/Layout.astro';
+import Nav from '@components/Nav.astro';
+import InteractiveDemo from '@components/InteractiveDemo';
+import Footer from '@components/Footer.astro';
+---
+
+<Layout
+  title="Demo"
+  description="See MCP-Obsidian in action. Interactive examples showing how AI assistants read, write, search, and manage your Obsidian vault."
+  canonical="https://mcp-obsidian.org/demo"
+>
+  <Nav />
+
+  <main>
+    <InteractiveDemo client:visible />
+    <Footer />
+  </main>
+</Layout>
