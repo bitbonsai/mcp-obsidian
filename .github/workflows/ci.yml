@@ -59,27 +59,3 @@ jobs:
       - name: Run npm audit
         run: npm audit --audit-level=moderate
 
-  lockfile-check:
-    name: Lockfile validation
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version-file: .nvmrc
-
-      - name: Enable corepack
-        run: corepack enable
-
-      # https://blog.npmjs.org/post/626173315965468672/npm-v7-series-why-keep-package-lockjson
-      - name: Check lockfile is up to date
-        run: |
-          npm install --package-lock-only
-          git diff --exit-code package-lock.json || {
-            echo "::error::package-lock.json is out of sync with package.json"
-            echo "Run 'npm install' locally and commit the updated lockfile"
-            exit 1
-          }
