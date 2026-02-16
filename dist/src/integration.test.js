@@ -134,6 +134,37 @@ Pattern: backup.2024/**/*.md`;
         await expect(fileSystem.readNote(".git/config"))
             .rejects.toThrow(/Access denied/);
     });
+    test("search matches note filename even without content match", async () => {
+        // Issue #30: notes without a heading that rely on filename for discovery
+        await fileSystem.writeNote({
+            path: "Yard.md",
+            content: "Some info about lawn care and gardening tips."
+        });
+        await fileSystem.writeNote({
+            path: "Kitchen.md",
+            content: "Recipes and kitchen organization."
+        });
+        // Search for "yard" — should match Yard.md by filename
+        const results = await searchService.search({
+            query: "yard",
+            searchContent: true,
+            limit: 10
+        });
+        expect(results.length).toBeGreaterThanOrEqual(1);
+        expect(results.some(r => r.p === "Yard.md")).toBe(true);
+        // Verify filename-only match has reasonable fields
+        const yardResult = results.find(r => r.p === "Yard.md");
+        expect(yardResult.t).toBe("Yard");
+        expect(yardResult.mc).toBeGreaterThanOrEqual(1);
+        // Search for "kitchen" — should match Kitchen.md by filename
+        const kitchenResults = await searchService.search({
+            query: "kitchen",
+            searchContent: true,
+            limit: 10
+        });
+        // Should match both filename AND content (content contains "kitchen")
+        expect(kitchenResults.some(r => r.p === "Kitchen.md")).toBe(true);
+    });
     test("multi-step workflow: search, read multiple, update frontmatter", async () => {
         // Create several notes
         for (let i = 1; i <= 3; i++) {

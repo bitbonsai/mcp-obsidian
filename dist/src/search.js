@@ -43,29 +43,48 @@ export class SearchService {
                 }
                 const searchIn = caseSensitive ? searchableText : searchableText.toLowerCase();
                 const searchQuery = caseSensitive ? query : query.toLowerCase();
+                // Extract title from filename
+                const title = relativePath.split('/').pop()?.replace(/\.md$/, '') || relativePath;
+                // Check filename match
+                const filenameToSearch = caseSensitive ? title : title.toLowerCase();
+                const filenameMatch = filenameToSearch.includes(searchQuery);
+                // Check content match
                 const index = searchIn.indexOf(searchQuery);
-                if (index !== -1) {
-                    // Extract excerpt around first match
-                    const excerptStart = Math.max(0, index - 21);
-                    const excerptEnd = Math.min(searchableText.length, index + searchQuery.length + 21);
-                    let excerpt = searchableText.slice(excerptStart, excerptEnd).trim();
-                    // Add ellipsis if excerpt is truncated
-                    if (excerptStart > 0)
-                        excerpt = '...' + excerpt;
-                    if (excerptEnd < searchableText.length)
-                        excerpt = excerpt + '...';
-                    // Count total matches
+                if (index !== -1 || filenameMatch) {
+                    let excerpt;
                     let matchCount = 0;
-                    let searchIndex = 0;
-                    while ((searchIndex = searchIn.indexOf(searchQuery, searchIndex)) !== -1) {
-                        matchCount++;
-                        searchIndex += searchQuery.length;
+                    let lineNumber = 0;
+                    if (index !== -1) {
+                        // Extract excerpt around first content match
+                        const excerptStart = Math.max(0, index - 21);
+                        const excerptEnd = Math.min(searchableText.length, index + searchQuery.length + 21);
+                        excerpt = searchableText.slice(excerptStart, excerptEnd).trim();
+                        // Add ellipsis if excerpt is truncated
+                        if (excerptStart > 0)
+                            excerpt = '...' + excerpt;
+                        if (excerptEnd < searchableText.length)
+                            excerpt = excerpt + '...';
+                        // Count total content matches
+                        let searchIndex = 0;
+                        while ((searchIndex = searchIn.indexOf(searchQuery, searchIndex)) !== -1) {
+                            matchCount++;
+                            searchIndex += searchQuery.length;
+                        }
+                        // Find line number of first match
+                        const lines = searchableText.slice(0, index).split('\n');
+                        lineNumber = lines.length;
                     }
-                    // Find line number of first match
-                    const lines = searchableText.slice(0, index).split('\n');
-                    const lineNumber = lines.length;
-                    // Extract title from filename
-                    const title = relativePath.split('/').pop()?.replace(/\.md$/, '') || relativePath;
+                    else {
+                        // Filename-only match: use beginning of content as excerpt
+                        excerpt = searchableText.slice(0, 50).trim();
+                        if (searchableText.length > 50)
+                            excerpt = excerpt + '...';
+                        matchCount = 0;
+                        lineNumber = 0;
+                    }
+                    // Add filename match to count
+                    if (filenameMatch)
+                        matchCount++;
                     results.push({
                         p: relativePath,
                         t: title,
