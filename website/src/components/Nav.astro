@@ -89,6 +89,38 @@ function isActive(href: string) {
   </div>
 </nav>
 
+<script>
+  document.addEventListener('astro:page-load', function() {
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    if (mobileMenuButton && mobileMenu) {
+      mobileMenuButton.addEventListener('click', function() {
+        requestAnimationFrame(() => {
+          mobileMenu.classList.toggle('hidden');
+        });
+      });
+
+      const menuLinks = mobileMenu.querySelectorAll('a');
+      menuLinks.forEach(link => {
+        link.addEventListener('click', function() {
+          requestAnimationFrame(() => {
+            mobileMenu.classList.add('hidden');
+          });
+        });
+      });
+
+      document.addEventListener('click', function(event) {
+        if (!mobileMenuButton.contains(event.target as Node) && !mobileMenu.contains(event.target as Node)) {
+          requestAnimationFrame(() => {
+            mobileMenu.classList.add('hidden');
+          });
+        }
+      });
+    }
+  });
+</script>
+
 <style>
   /* Floating dark glass navigation */
   .nav-glass {
@@ -225,37 +257,3 @@ function isActive(href: string) {
     display: none;
   }
 </style>
-
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const mobileMenuButton = document.getElementById('mobile-menu-button');
-    const mobileMenu = document.getElementById('mobile-menu');
-
-    if (mobileMenuButton && mobileMenu) {
-      mobileMenuButton.addEventListener('click', function() {
-        requestAnimationFrame(() => {
-          mobileMenu.classList.toggle('hidden');
-        });
-      });
-
-      // Close menu when clicking on links
-      const menuLinks = mobileMenu.querySelectorAll('a');
-      menuLinks.forEach(link => {
-        link.addEventListener('click', function() {
-          requestAnimationFrame(() => {
-            mobileMenu.classList.add('hidden');
-          });
-        });
-      });
-
-      // Close menu when clicking outside
-      document.addEventListener('click', function(event) {
-        if (!mobileMenuButton.contains(event.target as Node) && !mobileMenu.contains(event.target as Node)) {
-          requestAnimationFrame(() => {
-            mobileMenu.classList.add('hidden');
-          });
-        }
-      });
-    }
-  });
-</script>
