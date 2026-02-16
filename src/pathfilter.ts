@@ -6,8 +6,11 @@ export class PathFilter {
 
   constructor(config?: Partial<PathFilterConfig>) {
     this.ignoredPatterns = [
+      '.obsidian',
       '.obsidian/**',
+      '.git',
       '.git/**',
+      'node_modules',
       'node_modules/**',
       '.DS_Store',
       'Thumbs.db',

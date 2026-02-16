@@ -15,18 +15,21 @@ describe("PathFilter", () => {
 
   test("blocks .obsidian directory", () => {
     const filter = new PathFilter();
+    expect(filter.isAllowed(".obsidian")).toBe(false);
     expect(filter.isAllowed(".obsidian/app.json")).toBe(false);
     expect(filter.isAllowed(".obsidian/plugins/plugin/main.js")).toBe(false);
   });
 
   test("blocks .git directory", () => {
     const filter = new PathFilter();
+    expect(filter.isAllowed(".git")).toBe(false);
     expect(filter.isAllowed(".git/config")).toBe(false);
     expect(filter.isAllowed(".git/objects/abc123")).toBe(false);
   });
 
   test("blocks node_modules", () => {
     const filter = new PathFilter();
+    expect(filter.isAllowed("node_modules")).toBe(false);
     expect(filter.isAllowed("node_modules/package/index.js")).toBe(false);
   });
 
