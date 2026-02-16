@@ -30,6 +30,22 @@ claude mcp add-json obsidian --scope user '{"type":"stdio","command":"npx","args
 - `--scope project` - Team-shared via .mcp.json file
 - `--scope local` - Current project only (private)
 
+### OpenCode
+
+Add to your `opencode.json` (project root) or `~/.config/opencode/opencode.json` (global):
+
+```json
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "obsidian": {
+      "type": "local",
+      "command": ["npx", "-y", "@mauricio.wolff/mcp-obsidian@latest", "/path/to/your/vault"]
+    }
+  }
+}
+```
+
 ### Gemini CLI
 
 ```json
@@ -48,7 +64,7 @@ claude mcp add-json obsidian --scope user '{"type":"stdio","command":"npx","args
 ```toml
 [mcp_servers.obsidian]
 command = "npx"
-args = ["@mauricio.wolff/mcp-obsidian@latest", "/path/to/your/vault"]
+args = ["-y", "@mauricio.wolff/mcp-obsidian@latest", "/path/to/your/vault"]
 ```
 
 ## Config File Locations
@@ -61,6 +77,8 @@ args = ["@mauricio.wolff/mcp-obsidian@latest", "/path/to/your/vault"]
 | ChatGPT+ (macOS) | ~/Library/Application Support/ChatGPT/chatgpt_config.json |
 | ChatGPT+ (Windows) | %APPDATA%\ChatGPT\chatgpt_config.json |
 | Gemini CLI | ~/.gemini/settings.json |
+| OpenCode (per project) | opencode.json |
+| OpenCode (global) | ~/.config/opencode/opencode.json |
 | OpenAI Codex (macOS/Linux) | ~/.codex/config.toml |
 | OpenAI Codex (Windows) | %USERPROFILE%\.codex\config.toml |
 
@@ -77,7 +95,7 @@ Opens interactive web interface at http://localhost:5173 for testing all MCP met
 
 ## Platform Compatibility
 
-Works with all MCP-compatible platforms: Claude Desktop, ChatGPT+, Claude Code, Gemini CLI, Cursor IDE, Windsurf, and more.
+Works with all MCP-compatible platforms: Claude Desktop, ChatGPT+, Claude Code, OpenCode, Gemini CLI, Cursor IDE, Windsurf, and more.
 
 ## Privacy
 

@@ -48,6 +48,9 @@ import CodeBlock from "./CodeBlock";
               <button class="config-tab" data-tab="gemini-cli">
                 Gemini CLI
               </button>
+              <button class="config-tab" data-tab="opencode">
+                OpenCode
+              </button>
               <button class="config-tab" data-tab="codex">
                 OpenAI Codex
               </button>
@@ -176,6 +179,95 @@ import CodeBlock from "./CodeBlock";
               </div>
             </div>
 
+            <!-- OpenCode config -->
+            <div class="config-content hidden" data-content="opencode">
+              <button
+                class="absolute top-4 right-4 p-2 hover:bg-card/50 rounded transition-colors copy-btn z-10"
+                data-copy='{"$schema": "https://opencode.ai/config.json", "mcp": {"obsidian": {"type": "local", "command": ["npx", "-y", "@mauricio.wolff/mcp-obsidian@latest", "/path/to/your/vault"]}}}'
+                title="Copy configuration"
+                aria-label="Copy configuration to clipboard"
+              >
+                <svg
+                  class="w-4 h-4 text-muted-foreground hover:text-foreground"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                  ></path>
+                </svg>
+              </button>
+              <CodeBlock
+                client:only="react"
+                code={`{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "obsidian": {
+      "type": "local",
+      "command": ["npx", "-y", "@mauricio.wolff/mcp-obsidian@latest", "/path/to/your/vault"]
+    }
+  }
+}`}
+              />
+
+              <div
+                class="mt-4 p-3 bg-accent/10 rounded-lg border border-accent/30"
+              >
+                <div class="flex items-start gap-2">
+                  <div class="text-accent text-lg mt-0.5">💡</div>
+                  <div class="flex-1">
+                    <p class="text-sm font-semibold text-foreground mb-2">
+                      Configuration Scopes
+                    </p>
+                    <p class="text-xs text-muted-foreground leading-relaxed mb-2">
+                      OpenCode supports multiple config locations:
+                    </p>
+                    <div class="space-y-2 text-xs">
+                      <div class="flex items-start gap-2">
+                        <code class="bg-background/50 px-1.5 py-0.5 rounded text-foreground whitespace-nowrap">opencode.json</code>
+                        <span class="text-muted-foreground">In your project root for per-project config (recommended)</span>
+                      </div>
+                      <div class="flex items-start gap-2">
+                        <code class="bg-background/50 px-1.5 py-0.5 rounded text-foreground whitespace-nowrap">~/.config/opencode/opencode.json</code>
+                        <span class="text-muted-foreground">Global config for all projects</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                class="mt-4 p-3 bg-accent/10 rounded-lg border border-accent/30"
+              >
+                <div class="flex items-start gap-2">
+                  <div class="text-accent text-lg mt-0.5">💡</div>
+                  <div class="flex-1">
+                    <p class="text-sm font-semibold text-foreground mb-2">
+                      Usage Examples
+                    </p>
+                    <p class="text-xs text-muted-foreground leading-relaxed">
+                      After configuration, OpenCode can access your vault:
+                    </p>
+                    <div class="mt-2 space-y-1">
+                      <code class="block bg-background/50 px-2 py-1 rounded text-foreground text-xs">
+                        Read my meeting notes from yesterday
+                      </code>
+                      <code class="block bg-background/50 px-2 py-1 rounded text-foreground text-xs">
+                        Search my vault for notes about machine learning
+                      </code>
+                      <code class="block bg-background/50 px-2 py-1 rounded text-foreground text-xs">
+                        Create a new note summarizing our discussion
+                      </code>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <!-- Gemini CLI config -->
             <div class="config-content hidden" data-content="gemini-cli">
               <button
@@ -244,7 +336,7 @@ import CodeBlock from "./CodeBlock";
                 class="absolute top-4 right-4 p-2 hover:bg-card/50 rounded transition-colors copy-btn z-10"
                 data-copy='[mcp_servers.obsidian]
 command = "npx"
-args = ["@mauricio.wolff/mcp-obsidian@latest", "/path/to/your/vault"]'
+args = ["-y", "@mauricio.wolff/mcp-obsidian@latest", "/path/to/your/vault"]'
                 title="Copy configuration"
                 aria-label="Copy configuration to clipboard"
               >
@@ -269,7 +361,7 @@ args = ["@mauricio.wolff/mcp-obsidian@latest", "/path/to/your/vault"]'
                 <pre
                   style="margin: 0; color: #cdd6f4; line-height: 1.5;"><span style="color: #cba6f7;">[mcp_servers.obsidian]</span>
 <span style="color: #89b4fa;">command</span> <span style="color: #94e2d5;">=</span> <span style="color: #a6e3a1;">"npx"</span>
-<span style="color: #89b4fa;">args</span> <span style="color: #94e2d5;">=</span> <span style="color: #cdd6f4;">[</span><span style="color: #a6e3a1;">"@mauricio.wolff/mcp-obsidian@latest"</span><span style="color: #cdd6f4;">,</span> <span style="color: #a6e3a1;">"/path/to/your/vault"</span><span style="color: #cdd6f4;">]</span></pre>
+<span style="color: #89b4fa;">args</span> <span style="color: #94e2d5;">=</span> <span style="color: #cdd6f4;">[</span><span style="color: #a6e3a1;">"-y"</span><span style="color: #cdd6f4;">,</span> <span style="color: #a6e3a1;">"@mauricio.wolff/mcp-obsidian@latest"</span><span style="color: #cdd6f4;">,</span> <span style="color: #a6e3a1;">"/path/to/your/vault"</span><span style="color: #cdd6f4;">]</span></pre>
               </div>
 
               <div
@@ -372,6 +464,25 @@ args = ["@mauricio.wolff/mcp-obsidian@latest", "/path/to/your/vault"]'
                   All platforms: <code
                     class="bg-background/50 px-1 rounded text-foreground"
                     >~/.gemini/settings.json</code
+                  >
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="font-semibold text-accent text-sm mb-2">
+                OpenCode (JSON)
+              </div>
+              <div class="space-y-1 text-muted-foreground">
+                <div>
+                  Per project: <code
+                    class="bg-background/50 px-1 rounded text-foreground"
+                    >opencode.json</code
+                  >
+                </div>
+                <div>
+                  Global: <code
+                    class="bg-background/50 px-1 rounded text-foreground"
+                    >~/.config/opencode/opencode.json</code
                   >
                 </div>
               </div>
@@ -541,7 +652,7 @@ args = ["@mauricio.wolff/mcp-obsidian@latest", "/path/to/your/vault"]'
           class="mb-4 p-4 bg-gradient-to-r from-accent/10 to-accent-2/10 rounded-lg border border-accent/20"
         >
           <p class="text-sm text-foreground text-center">
-            🌐 <strong>Works with all MCP-compatible platforms:</strong> Claude Desktop, ChatGPT+, Claude Code, Gemini CLI, Cursor IDE,
+            🌐 <strong>Works with all MCP-compatible platforms:</strong> Claude Desktop, ChatGPT+, Claude Code, OpenCode, Gemini CLI, Cursor IDE,
             Windsurf, and more coming soon!
             <br />Use the same configuration with your platform's MCP server
             settings.
