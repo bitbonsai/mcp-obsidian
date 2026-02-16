@@ -90,7 +90,23 @@ function isActive(href: string) {
 </nav>
 
 <script>
+  function updateActiveNav() {
+    const currentPath = window.location.pathname.replace(/\/$/, '') || '/';
+    const navLinks = document.querySelectorAll('nav a[href^="/"]');
+    navLinks.forEach(link => {
+      const href = link.getAttribute('href');
+      if (!href || href === '/') return;
+      if (currentPath === href) {
+        link.classList.add('nav-link-active');
+      } else {
+        link.classList.remove('nav-link-active');
+      }
+    });
+  }
+
   document.addEventListener('astro:page-load', function() {
+    updateActiveNav();
+
     const mobileMenuButton = document.getElementById('mobile-menu-button');
     const mobileMenu = document.getElementById('mobile-menu');
 
