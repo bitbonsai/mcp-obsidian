@@ -85,6 +85,11 @@ export class FileSystemService {
       throw new Error(`Access denied: ${path}. This path is restricted (system files like .obsidian, .git, and dotfiles are not accessible).`);
     }
 
+    // Validate content is a defined string to prevent writing literal "undefined"
+    if (content === undefined || content === null) {
+      throw new Error(`Content is required for writing a note: ${path}. The content parameter must be a string.`);
+    }
+
     // Validate frontmatter if provided
     if (frontmatter) {
       const validation = this.frontmatterHandler.validate(frontmatter);
@@ -169,7 +174,7 @@ export class FileSystemService {
       };
     }
 
-    if (newString === '') {
+    if (!newString) {
       return {
         success: false,
         path,
