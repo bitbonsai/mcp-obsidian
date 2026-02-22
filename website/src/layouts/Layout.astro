@@ -423,7 +423,7 @@ const fullTitle = title.includes("MCP-Obsidian") ? title : `${title} | MCP-Obsid
       };
 
       // Initialize animations after DOM load
-      document.addEventListener('DOMContentLoaded', observeElements);
+      document.addEventListener('astro:page-load', observeElements);
     </script>
 
     <!-- Counter.dev Analytics -->

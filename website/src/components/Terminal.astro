@@ -745,7 +745,7 @@ args = ["-y", "@mauricio.wolff/mcp-obsidian@latest", "/path/to/your/vault"]'
 
 <script>
   // Copy to clipboard functionality
-  document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("astro:page-load", () => {
     const copyButtons = document.querySelectorAll(".copy-btn");
 
     copyButtons.forEach((button) => {
