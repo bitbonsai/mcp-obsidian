@@ -32,6 +32,7 @@ export class SearchService {
     const candidates: RankCandidate[] = [];
     const searchQuery = caseSensitive ? query : query.toLowerCase();
     const terms = searchQuery.split(/\s+/).filter(t => t.length > 0);
+    const scoringTerms = terms.length > 1 ? [...terms, searchQuery] : terms;
 
     // Recursively find all .md files
     const markdownFiles = await this.findMarkdownFiles(this.vaultPath);
@@ -65,7 +66,7 @@ export class SearchService {
         const docLength = searchIn.split(/\s+/).filter(w => w.length > 0).length;
         totalDocLength += docLength;
         docCount++;
-        for (const term of terms) {
+        for (const term of scoringTerms) {
           if (searchIn.includes(term)) {
             termDocFreq.set(term, (termDocFreq.get(term) || 0) + 1);
           }
@@ -107,7 +108,7 @@ export class SearchService {
             if (excerptEnd < searchableText.length) excerpt = excerpt + '...';
 
             // Count total content matches across all terms
-            for (const term of terms) {
+            for (const term of scoringTerms) {
               let count = 0;
               let searchIndex = 0;
               while ((searchIndex = searchIn.indexOf(term, searchIndex)) !== -1) {
@@ -151,7 +152,7 @@ export class SearchService {
       }
     }
 
-    const results: SearchResult[] = this.rerank(candidates, terms, termDocFreq, docCount, totalDocLength, maxLimit);
+    const results: SearchResult[] = this.rerank(candidates, scoringTerms, termDocFreq, docCount, totalDocLength, maxLimit);
     return results;
   }
 
