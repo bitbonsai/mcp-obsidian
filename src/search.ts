@@ -55,41 +55,52 @@ export class SearchService {
 
         const searchIn = caseSensitive ? searchableText : searchableText.toLowerCase();
         const searchQuery = caseSensitive ? query : query.toLowerCase();
+        const terms = searchQuery.split(/\s+/).filter(t => t.length > 0);
 
         // Extract title from filename
         const title = relativePath.split('/').pop()?.replace(/\.md$/, '') || relativePath;
 
-        // Check filename match
+        // Check filename match (any term)
         const filenameToSearch = caseSensitive ? title : title.toLowerCase();
-        const filenameMatch = filenameToSearch.includes(searchQuery);
+        const filenameMatch = terms.some(term => filenameToSearch.includes(term));
 
-        // Check content match
-        const index = searchIn.indexOf(searchQuery);
+        // Check content match (any term)
+        const termIndices = terms.map(term => searchIn.indexOf(term));
+        const anyTermFound = termIndices.some(idx => idx !== -1);
+        const firstIndex = anyTermFound
+          ? Math.min(...termIndices.filter(idx => idx !== -1))
+          : -1;
 
-        if (index !== -1 || filenameMatch) {
+        if (firstIndex !== -1 || filenameMatch) {
           let excerpt: string;
           let matchCount = 0;
           let lineNumber = 0;
 
-          if (index !== -1) {
+          if (firstIndex !== -1) {
+            // Find the term that matched first for excerpt
+            const firstTermIdx = termIndices.indexOf(firstIndex);
+            const firstTerm = terms[firstTermIdx]!;
+
             // Extract excerpt around first content match
-            const excerptStart = Math.max(0, index - 21);
-            const excerptEnd = Math.min(searchableText.length, index + searchQuery.length + 21);
+            const excerptStart = Math.max(0, firstIndex - 21);
+            const excerptEnd = Math.min(searchableText.length, firstIndex + firstTerm.length + 21);
             excerpt = searchableText.slice(excerptStart, excerptEnd).trim();
 
             // Add ellipsis if excerpt is truncated
             if (excerptStart > 0) excerpt = '...' + excerpt;
             if (excerptEnd < searchableText.length) excerpt = excerpt + '...';
 
-            // Count total content matches
-            let searchIndex = 0;
-            while ((searchIndex = searchIn.indexOf(searchQuery, searchIndex)) !== -1) {
-              matchCount++;
-              searchIndex += searchQuery.length;
+            // Count total content matches across all terms
+            for (const term of terms) {
+              let searchIndex = 0;
+              while ((searchIndex = searchIn.indexOf(term, searchIndex)) !== -1) {
+                matchCount++;
+                searchIndex += term.length;
+              }
             }
 
             // Find line number of first match
-            const lines = searchableText.slice(0, index).split('\n');
+            const lines = searchableText.slice(0, firstIndex).split('\n');
             lineNumber = lines.length;
           } else {
             // Filename-only match: use beginning of content as excerpt
