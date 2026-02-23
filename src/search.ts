@@ -1,7 +1,7 @@
 import { join } from 'path';
 import { readFile, readdir } from 'node:fs/promises';
 import type { PathFilter } from './pathfilter.js';
-import type { SearchParams, SearchResult } from './types.js';
+import type { RankCandidate, SearchParams, SearchResult } from './types.js';
 import { generateObsidianUri } from './uri.js';
 
 export class SearchService {
@@ -23,8 +23,15 @@ export class SearchService {
       throw new Error('Search query cannot be empty');
     }
 
-    const results: SearchResult[] = [];
     const maxLimit = Math.min(limit, 20);
+
+    // Corpus stats for reranking
+    let totalDocLength = 0;
+    let docCount = 0;
+    const termDocFreq = new Map<string, number>();
+    const candidates: RankCandidate[] = [];
+    const searchQuery = caseSensitive ? query : query.toLowerCase();
+    const terms = searchQuery.split(/\s+/).filter(t => t.length > 0);
 
     // Recursively find all .md files
     const markdownFiles = await this.findMarkdownFiles(this.vaultPath);
@@ -34,7 +41,6 @@ export class SearchService {
       const relativePath = fullPath.substring(this.vaultPath.length + 1).replace(/\\/g, '/');
 
       if (!this.pathFilter.isAllowed(relativePath)) continue;
-      if (results.length >= maxLimit) break;
 
       try {
         const content = await readFile(fullPath, 'utf-8');
@@ -54,8 +60,16 @@ export class SearchService {
         }
 
         const searchIn = caseSensitive ? searchableText : searchableText.toLowerCase();
-        const searchQuery = caseSensitive ? query : query.toLowerCase();
-        const terms = searchQuery.split(/\s+/).filter(t => t.length > 0);
+
+        // Collect corpus stats for reranking
+        const docLength = searchIn.split(/\s+/).filter(w => w.length > 0).length;
+        totalDocLength += docLength;
+        docCount++;
+        for (const term of terms) {
+          if (searchIn.includes(term)) {
+            termDocFreq.set(term, (termDocFreq.get(term) || 0) + 1);
+          }
+        }
 
         // Extract title from filename
         const title = relativePath.split('/').pop()?.replace(/\.md$/, '') || relativePath;
@@ -76,6 +90,8 @@ export class SearchService {
           let matchCount = 0;
           let lineNumber = 0;
 
+          const termFreqs = new Map<string, number>();
+
           if (firstIndex !== -1) {
             // Find the term that matched first for excerpt
             const firstTermIdx = termIndices.indexOf(firstIndex);
@@ -92,11 +108,14 @@ export class SearchService {
 
             // Count total content matches across all terms
             for (const term of terms) {
+              let count = 0;
               let searchIndex = 0;
               while ((searchIndex = searchIn.indexOf(term, searchIndex)) !== -1) {
-                matchCount++;
+                count++;
                 searchIndex += term.length;
               }
+              termFreqs.set(term, count);
+              matchCount += count;
             }
 
             // Find line number of first match
@@ -113,13 +132,17 @@ export class SearchService {
           // Add filename match to count
           if (filenameMatch) matchCount++;
 
-          results.push({
-            p: relativePath,
-            t: title,
-            ex: excerpt,
-            mc: matchCount,
-            ln: lineNumber,
-            uri: generateObsidianUri(this.vaultPath, relativePath)
+          candidates.push({
+            result: {
+              p: relativePath,
+              t: title,
+              ex: excerpt,
+              mc: matchCount,
+              ln: lineNumber,
+              uri: generateObsidianUri(this.vaultPath, relativePath)
+            },
+            termFreqs,
+            docLength
           });
         }
       } catch (error) {
@@ -128,6 +151,7 @@ export class SearchService {
       }
     }
 
+    const results: SearchResult[] = this.rerank(candidates, terms, termDocFreq, docCount, totalDocLength, maxLimit);
     return results;
   }
 
@@ -153,5 +177,32 @@ export class SearchService {
     }
 
     return markdownFiles;
+  }
+
+  private rerank(
+    candidates: RankCandidate[],
+    terms: string[],
+    termDocFreq: Map<string, number>,
+    docCount: number,
+    totalDocLength: number,
+    maxLimit: number
+  ): SearchResult[] {
+    const avgdl = docCount > 0 ? totalDocLength / docCount : 1;
+    const k1 = 1.2;
+    const b = 0.75;
+
+    const scored = candidates.map(c => {
+      let score = 0;
+      for (const term of terms) {
+        const tf = c.termFreqs.get(term) || 0;
+        const df = termDocFreq.get(term) || 0;
+        const idf = Math.log(1 + (docCount - df + 0.5) / (df + 0.5));
+        score += idf * (tf * (k1 + 1)) / (tf + k1 * (1 - b + b * c.docLength / avgdl));
+      }
+      return { score, result: c.result };
+    });
+
+    scored.sort((a, b) => b.score - a.score);
+    return scored.slice(0, maxLimit).map(s => s.result);
   }
 }
