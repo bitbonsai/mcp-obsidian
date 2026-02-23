@@ -37,14 +37,29 @@ export class SearchService {
     // Recursively find all .md files
     const markdownFiles = await this.findMarkdownFiles(this.vaultPath);
 
+    // Pre-filter by pathFilter before I/O
+    const prefixLen = this.vaultPath.length + 1;
+    const allowedFiles: { fullPath: string; relativePath: string }[] = [];
     for (const fullPath of markdownFiles) {
-      // Convert absolute path back to relative path
-      const relativePath = fullPath.substring(this.vaultPath.length + 1).replace(/\\/g, '/');
+      const relativePath = fullPath.substring(prefixLen).replace(/\\/g, '/');
+      if (this.pathFilter.isAllowed(relativePath)) {
+        allowedFiles.push({ fullPath, relativePath });
+      }
+    }
 
-      if (!this.pathFilter.isAllowed(relativePath)) continue;
+    // Read files in parallel batches
+    const BATCH_SIZE = 5;
+    for (let start = 0; start < allowedFiles.length; start += BATCH_SIZE) {
+      const batch = allowedFiles.slice(start, start + BATCH_SIZE);
+      const contents = await Promise.all(
+        batch.map(f => readFile(f.fullPath, 'utf-8').catch(() => null))
+      );
 
-      try {
-        const content = await readFile(fullPath, 'utf-8');
+      for (let i = 0; i < batch.length; i++) {
+        const content = contents[i];
+        if (content === null || content === undefined) continue;
+
+        const { relativePath } = batch[i]!;
         let searchableText = '';
 
         // Prepare search text based on options
@@ -146,9 +161,6 @@ export class SearchService {
             docLength
           });
         }
-      } catch (error) {
-        // Skip files that can't be read
-        continue;
       }
     }
 
