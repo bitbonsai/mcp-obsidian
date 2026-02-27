@@ -184,6 +184,68 @@ test("patch note fails with empty newString", async () => {
     expect(result.success).toBe(false);
     expect(result.message).toMatch(/empty|filled|required/i);
 });
+test("patch note fails with undefined newString", async () => {
+    const testPath = "test-note.md";
+    const content = "# Test Note\n\nSome content.";
+    await writeFile(join(testVaultPath, testPath), content);
+    const result = await fileSystem.patchNote({
+        path: testPath,
+        oldString: "content",
+        newString: undefined,
+        replaceAll: false
+    });
+    expect(result.success).toBe(false);
+    expect(result.message).toMatch(/empty|filled|required/i);
+    // Verify the note was NOT corrupted
+    const note = await fileSystem.readNote(testPath);
+    expect(note.content).not.toContain("undefined");
+    expect(note.content).toContain("Some content.");
+});
+test("patch note fails with null newString", async () => {
+    const testPath = "test-note.md";
+    const content = "# Test Note\n\nSome content.";
+    await writeFile(join(testVaultPath, testPath), content);
+    const result = await fileSystem.patchNote({
+        path: testPath,
+        oldString: "content",
+        newString: null,
+        replaceAll: false
+    });
+    expect(result.success).toBe(false);
+    expect(result.message).toMatch(/empty|filled|required/i);
+    // Verify the note was NOT corrupted
+    const note = await fileSystem.readNote(testPath);
+    expect(note.content).not.toContain("null");
+    expect(note.content).toContain("Some content.");
+});
+test("writeNote rejects undefined content", async () => {
+    const testPath = "test-note.md";
+    await expect(fileSystem.writeNote({
+        path: testPath,
+        content: undefined
+    })).rejects.toThrow(/Content is required/);
+});
+test("writeNote rejects null content", async () => {
+    const testPath = "test-note.md";
+    await expect(fileSystem.writeNote({
+        path: testPath,
+        content: null
+    })).rejects.toThrow(/Content is required/);
+});
+test("writeNote append with undefined content does not corrupt note", async () => {
+    const testPath = "test-note.md";
+    const content = "# Test Note\n\nOriginal content.";
+    await writeFile(join(testVaultPath, testPath), content);
+    await expect(fileSystem.writeNote({
+        path: testPath,
+        content: undefined,
+        mode: 'append'
+    })).rejects.toThrow(/Content is required/);
+    // Verify the note was NOT corrupted
+    const note = await fileSystem.readNote(testPath);
+    expect(note.content).not.toContain("undefined");
+    expect(note.content).toContain("Original content.");
+});
 test("patch note handles regex special characters literally", async () => {
     const testPath = "test-note.md";
     const content = "Price: $10.50 (special)";
@@ -198,6 +260,34 @@ test("patch note handles regex special characters literally", async () => {
     const updatedNote = await fileSystem.readNote(testPath);
     expect(updatedNote.content).toContain("$15.75");
     expect(updatedNote.content).not.toContain("$10.50");
+});
+test("patch note works with fenced code blocks", async () => {
+    const testPath = "code-fence-test.md";
+    const content = "# Example\n\n```rust\nfn main() {\n    println!(\"hello\");\n}\n```\n";
+    await writeFile(join(testVaultPath, testPath), content);
+    const result = await fileSystem.patchNote({
+        path: testPath,
+        oldString: "println!(\"hello\");",
+        newString: "println!(\"hello world\");",
+        replaceAll: false
+    });
+    expect(result.success).toBe(true);
+    const updatedNote = await fileSystem.readNote(testPath);
+    expect(updatedNote.originalContent).toContain("println!(\"hello world\");");
+});
+test("patch note works with markdown tables", async () => {
+    const testPath = "table-test.md";
+    const content = "| Tool | Status |\n|---|---|\n| patch_note | flaky |\n";
+    await writeFile(join(testVaultPath, testPath), content);
+    const result = await fileSystem.patchNote({
+        path: testPath,
+        oldString: "| patch_note | flaky |",
+        newString: "| patch_note | stable |",
+        replaceAll: false
+    });
+    expect(result.success).toBe(true);
+    const updatedNote = await fileSystem.readNote(testPath);
+    expect(updatedNote.originalContent).toContain("| patch_note | stable |");
 });
 test("patch note preserves tabs and spaces", async () => {
     const testPath = "test-note.md";
@@ -513,6 +603,14 @@ test("frontmatter validation with invalid data", async () => {
             invalidFunction: () => "not allowed"
         }
     })).rejects.toThrow(/Invalid frontmatter/);
+});
+test("listDirectory includes non-note files but readNote still blocks them", async () => {
+    const imagePath = "assets/diagram.png";
+    await mkdir(join(testVaultPath, "assets"), { recursive: true });
+    await writeFile(join(testVaultPath, imagePath), "fake-png-content");
+    const listing = await fileSystem.listDirectory("assets");
+    expect(listing.files).toContain("diagram.png");
+    await expect(fileSystem.readNote(imagePath)).rejects.toThrow(/Access denied/);
 });
 // ============================================================================
 // NON-EXISTENT VAULT TESTS

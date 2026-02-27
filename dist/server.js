@@ -15,12 +15,13 @@ const __dirname = dirname(__filename);
 const packageJson = JSON.parse(readFileSync(join(__dirname, "../package.json"), "utf-8"));
 const VERSION = packageJson.version;
 // Handle --version and --help flags
-const arg = process.argv[2];
-if (arg === "--version" || arg === "-v") {
+const cliArgs = process.argv.slice(2);
+const firstArg = cliArgs[0];
+if (firstArg === "--version" || firstArg === "-v") {
     console.log(VERSION);
     process.exit(0);
 }
-if (arg === "--help" || arg === "-h") {
+if (firstArg === "--help" || firstArg === "-h") {
     console.log(`
 @mauricio.wolff/mcp-obsidian v${VERSION}
 
@@ -39,10 +40,12 @@ Options:
 Examples:
   npx @mauricio.wolff/mcp-obsidian ~/Documents/MyVault
   npx @mauricio.wolff/mcp-obsidian /path/to/obsidian/vault
+  npx @mauricio.wolff/mcp-obsidian "/path/with spaces/Obsidian Vault"
 `);
     process.exit(0);
 }
-const vaultPath = arg;
+// Join all trailing args to support vault paths with spaces
+const vaultPath = cliArgs.join(' ').trim();
 if (!vaultPath) {
     console.error("Usage: npx @mauricio.wolff/mcp-obsidian /path/to/vault");
     console.error("Run 'npx @mauricio.wolff/mcp-obsidian --help' for more information");
@@ -140,7 +143,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
             },
             {
                 name: "list_directory",
-                description: "List files and directories in the vault",
+                description: "List files and directories in the vault (includes non-note filenames, while read/write tools remain note-only)",
                 inputSchema: {
                     type: "object",
                     properties: {

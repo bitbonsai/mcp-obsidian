@@ -68,6 +68,10 @@ export class FileSystemService {
         if (!this.pathFilter.isAllowed(path)) {
             throw new Error(`Access denied: ${path}. This path is restricted (system files like .obsidian, .git, and dotfiles are not accessible).`);
         }
+        // Validate content is a defined string to prevent writing literal "undefined"
+        if (content === undefined || content === null) {
+            throw new Error(`Content is required for writing a note: ${path}. The content parameter must be a string.`);
+        }
         // Validate frontmatter if provided
         if (frontmatter) {
             const validation = this.frontmatterHandler.validate(frontmatter);
@@ -141,7 +145,7 @@ export class FileSystemService {
                 message: 'oldString cannot be empty'
             };
         }
-        if (newString === '') {
+        if (!newString) {
             return {
                 success: false,
                 path,
@@ -212,7 +216,7 @@ export class FileSystemService {
             const directories = [];
             for (const entry of entries) {
                 const entryPath = normalizedPath ? `${normalizedPath}/${entry.name}` : entry.name;
-                if (!this.pathFilter.isAllowed(entryPath)) {
+                if (!this.pathFilter.isAllowedForListing(entryPath)) {
                     continue;
                 }
                 if (entry.isDirectory()) {
