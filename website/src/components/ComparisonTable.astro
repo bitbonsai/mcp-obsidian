@@ -31,21 +31,21 @@ const features = [
   },
   {
     name: 'Built-in Search',
-    mcpObsidian: { status: 'success', text: 'Advanced', description: 'Semantic + full-text search with rankings' },
+    mcpObsidian: { status: 'success', text: 'Advanced', description: 'Full-text search with BM25 relevance ranking' },
     otherMcpObsidian: { status: 'success', text: 'Good', description: 'Uses Obsidian\'s search via API' },
     genericFs: { status: 'error', text: 'None', description: 'Must manually search directories' },
     directAccess: { status: 'error', text: 'None', description: 'Basic grep at best' }
   },
   {
     name: 'Performance',
-    mcpObsidian: { status: 'success', text: 'Fast', description: 'Optimized for large vaults with caching' },
+    mcpObsidian: { status: 'success', text: 'Fast', description: 'Optimized for large vaults with batch I/O' },
     otherMcpObsidian: { status: 'warning', text: 'API overhead', description: 'HTTP API calls add latency' },
     genericFs: { status: 'warning', text: 'Slow', description: 'No vault-specific optimizations' },
     directAccess: { status: 'warning', text: 'Variable', description: 'Depends on system capabilities' }
   },
   {
     name: 'Link Handling',
-    mcpObsidian: { status: 'success', text: 'Intelligent', description: 'Preserves and updates internal links' },
+    mcpObsidian: { status: 'success', text: 'Safe', description: 'Preserves note content and frontmatter during moves' },
     otherMcpObsidian: { status: 'success', text: 'Good', description: 'Leverages Obsidian\'s link management' },
     genericFs: { status: 'error', text: 'Breaks links', description: 'No understanding of Obsidian format' },
     directAccess: { status: 'error', text: 'Breaks links', description: 'Can corrupt references' }

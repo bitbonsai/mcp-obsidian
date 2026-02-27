@@ -334,6 +334,44 @@ test("patch note handles regex special characters literally", async () => {
   expect(updatedNote.content).not.toContain("$10.50");
 });
 
+test("patch note works with fenced code blocks", async () => {
+  const testPath = "code-fence-test.md";
+  const content = "# Example\n\n```rust\nfn main() {\n    println!(\"hello\");\n}\n```\n";
+
+  await writeFile(join(testVaultPath, testPath), content);
+
+  const result = await fileSystem.patchNote({
+    path: testPath,
+    oldString: "println!(\"hello\");",
+    newString: "println!(\"hello world\");",
+    replaceAll: false
+  });
+
+  expect(result.success).toBe(true);
+
+  const updatedNote = await fileSystem.readNote(testPath);
+  expect(updatedNote.originalContent).toContain("println!(\"hello world\");");
+});
+
+test("patch note works with markdown tables", async () => {
+  const testPath = "table-test.md";
+  const content = "| Tool | Status |\n|---|---|\n| patch_note | flaky |\n";
+
+  await writeFile(join(testVaultPath, testPath), content);
+
+  const result = await fileSystem.patchNote({
+    path: testPath,
+    oldString: "| patch_note | flaky |",
+    newString: "| patch_note | stable |",
+    replaceAll: false
+  });
+
+  expect(result.success).toBe(true);
+
+  const updatedNote = await fileSystem.readNote(testPath);
+  expect(updatedNote.originalContent).toContain("| patch_note | stable |");
+});
+
 test("patch note preserves tabs and spaces", async () => {
   const testPath = "test-note.md";
   const content = "Line with\ttabs\n  Line with spaces\n\tTabbed line";
@@ -722,6 +760,17 @@ test("frontmatter validation with invalid data", async () => {
       invalidFunction: () => "not allowed"
     }
   })).rejects.toThrow(/Invalid frontmatter/);
+});
+
+test("listDirectory includes non-note files but readNote still blocks them", async () => {
+  const imagePath = "assets/diagram.png";
+  await mkdir(join(testVaultPath, "assets"), { recursive: true });
+  await writeFile(join(testVaultPath, imagePath), "fake-png-content");
+
+  const listing = await fileSystem.listDirectory("assets");
+  expect(listing.files).toContain("diagram.png");
+
+  await expect(fileSystem.readNote(imagePath)).rejects.toThrow(/Access denied/);
 });
 
 // ============================================================================

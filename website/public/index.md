@@ -11,6 +11,7 @@ This MCP server lets Claude, ChatGPT+, and other assistants access your vault. L
 
 ## Recent Updates
 
+- **v0.8.1:** Multi-word BM25 search relevance improvements ([PR #38](https://github.com/bitbonsai/mcp-obsidian/pull/38)), patch_note undefined/null validation hardening ([PR #37](https://github.com/bitbonsai/mcp-obsidian/pull/37)), binary filenames now visible in directory listings ([#21](https://github.com/bitbonsai/mcp-obsidian/issues/21))
 - **v0.7.5:** Search now matches note filenames ([#30](https://github.com/bitbonsai/mcp-obsidian/issues/30)), hidden directories filtered from listings ([#33](https://github.com/bitbonsai/mcp-obsidian/issues/33)), OpenCode install docs ([#35](https://github.com/bitbonsai/mcp-obsidian/issues/35))
 - **v0.7.4:** New get_vault_stats tool + improved error messages with remediation suggestions
 - **v0.7.3:** Bug fix for folder detection with dots in names + dependency updates ([PR #15](https://github.com/bitbonsai/mcp-obsidian/pull/15))

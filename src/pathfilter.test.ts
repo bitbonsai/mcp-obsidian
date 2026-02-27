@@ -46,6 +46,21 @@ describe("PathFilter", () => {
     expect(filter.isAllowed("image.png")).toBe(false);
   });
 
+  test("allows non-note files for directory listing", () => {
+    const filter = new PathFilter();
+    expect(filter.isAllowedForListing("image.png")).toBe(true);
+    expect(filter.isAllowedForListing("docs/report.pdf")).toBe(true);
+    expect(filter.isAllowedForListing("archive/data.json")).toBe(true);
+  });
+
+  test("blocks restricted paths in directory listing", () => {
+    const filter = new PathFilter();
+    expect(filter.isAllowedForListing(".obsidian/app.json")).toBe(false);
+    expect(filter.isAllowedForListing(".git/config")).toBe(false);
+    expect(filter.isAllowedForListing("node_modules/pkg/index.js")).toBe(false);
+    expect(filter.isAllowedForListing(".DS_Store")).toBe(false);
+  });
+
   // ============================================================================
   // REGEX SPECIAL CHARACTERS - SECURITY TESTS
   // ============================================================================

@@ -8,7 +8,7 @@ MCP-Obsidian is an open-source Model Context Protocol (MCP) server that gives AI
 
 - [Home](https://mcp-obsidian.org/index.md): Project overview, version info, recent updates
 - [Install](https://mcp-obsidian.org/install.md): Configuration for Claude Desktop, ChatGPT+, Claude Code, OpenCode, Gemini CLI, OpenAI Codex, with config file paths per platform
-- [Features](https://mcp-obsidian.org/features.md): Core features (search, frontmatter safety, security, token optimization) and comparison table vs alternatives
+- [Features](https://mcp-obsidian.org/features.md): Core features (BM25-ranked full-text search, frontmatter safety, security, token optimization), comparison table, and FAQ
 - [Demo](https://mcp-obsidian.org/demo.md): Real request/response examples for patch_note, write_note, read_multiple_notes, update_frontmatter, search_notes
 - [How It Works](https://mcp-obsidian.org/how-it-works.md): End-to-end usage flows and full list of 13 MCP tools with descriptions
 

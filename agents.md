@@ -23,7 +23,7 @@ npm run publish:beta    # Publish with beta tag
 npm run publish:latest  # Publish as latest
 
 # Website
-npm run website         # Start Astro dev server (http://localhost:4321)
+npm run website         # Start Astro dev server with Bun (http://localhost:4321)
 
 # MCP Inspector
 npx @modelcontextprotocol/inspector npm start /path/to/vault
@@ -54,9 +54,9 @@ website/               # Astro 5 website (separate package, see website/agents.m
 
 **FrontmatterHandler** (`src/frontmatter.ts`) — Parses/stringifies YAML frontmatter via `gray-matter`. Validates structure (blocks functions, symbols, invalid types). Preserves original content.
 
-**PathFilter** (`src/pathfilter.ts`) — Blocks `.obsidian/`, `.git/`, `node_modules/`, system files, dot files. Allows `.md`, `.markdown`, `.txt`. Checks path components independently.
+**PathFilter** (`src/pathfilter.ts`) — Blocks `.obsidian/`, `.git/`, `node_modules/`, system files, dot files. Note tools allow `.md`, `.markdown`, `.txt`; directory listings may include other file types by filename. Checks path components independently.
 
-**SearchService** (`src/search.ts`) — Content and frontmatter search. Returns token-optimized results with minified field names: `{p, t, ex, mc, ln, uri}`. Max 20 results.
+**SearchService** (`src/search.ts`) — Content and frontmatter search with multi-word matching and BM25 relevance reranking. Returns token-optimized results with minified field names: `{p, t, ex, mc, ln, uri}`. Max 20 results.
 
 ### 13 MCP Tools
 

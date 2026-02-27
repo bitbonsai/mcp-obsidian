@@ -25,7 +25,7 @@ A universal AI bridge for Obsidian vaults using the Model Context Protocol (MCP)
 
 ## Universal Compatibility
 
-Works with any MCP-compatible AI assistant including Claude Desktop, Claude Code, ChatGPT Desktop (Enterprise+), IntelliJ IDEA 2025.1+, Cursor IDE, Windsurf IDE, and future AI platforms that adopt the MCP standard.
+Works with any MCP-compatible AI assistant including Claude Desktop, Claude Code, ChatGPT Desktop (Enterprise+), OpenCode, Gemini CLI, OpenAI Codex, IntelliJ IDEA 2025.1+, Cursor IDE, Windsurf IDE, and future AI platforms that adopt the MCP standard.
 
 https://github.com/user-attachments/assets/657ac4c6-1cd2-4cc3-829f-fd095a32f71c
 
@@ -78,16 +78,18 @@ https://github.com/user-attachments/assets/657ac4c6-1cd2-4cc3-829f-fd095a32f71c
    **OpenCode** - Copy this to `~/.config/opencode/opencode.json`
 
    ```json
-   "mcp": {
-    "obsidian": {
-      "type": "local",
-      "command": [
-        "npx",
-        "@mauricio.wolff/mcp-obsidian@latest",
-        "/path/to/your/vault/"
-      ],
-      "enabled": true
-    }
+   {
+     "mcp": {
+       "obsidian": {
+         "type": "local",
+         "command": [
+           "npx",
+           "@mauricio.wolff/mcp-obsidian@latest",
+           "/path/to/your/vault/"
+         ],
+         "enabled": true
+       }
+     }
    }
    ```
 
@@ -120,12 +122,12 @@ MCP is an open protocol. You're not tied to any specific vendor or platform. You
 
 - ✅ Safe frontmatter parsing and validation using gray-matter
 - ✅ Path filtering to exclude `.obsidian` directory and other system files
-- ✅ **Complete MCP toolkit**: 11 methods covering all vault operations
-  - File operations: `read_note`, `write_note`, `delete_note`, `move_note`
+- ✅ **Complete MCP toolkit**: 13 methods covering all vault operations
+  - File operations: `read_note`, `write_note`, `patch_note`, `delete_note`, `move_note`
   - Directory operations: `list_directory`
   - Batch operations: `read_multiple_notes`
-  - Search: `search_notes` with content and frontmatter support
-  - Metadata: `get_frontmatter`, `update_frontmatter`, `get_notes_info`
+  - Search: `search_notes` with multi-word matching and BM25 relevance reranking
+  - Metadata: `get_frontmatter`, `update_frontmatter`, `get_notes_info`, `get_vault_stats`
   - Tag management: `manage_tags` (add, remove, list)
 - ✅ Write modes: `overwrite`, `append`, `prepend` for flexible content editing
 - ✅ Tag management: add, remove, and list tags in notes
@@ -507,9 +509,51 @@ Write a note to the vault with optional frontmatter and write mode.
 }
 ```
 
+### `patch_note`
+
+Efficiently replace an exact string inside an existing note without rewriting the full file.
+
+**Request:**
+
+```json
+{
+  "name": "patch_note",
+  "arguments": {
+    "path": "meeting-notes.md",
+    "oldString": "- Next milestones",
+    "newString": "- Next milestones (owner: Alex)",
+    "replaceAll": false
+  }
+}
+```
+
+**Response (success):**
+
+```json
+{
+  "success": true,
+  "path": "meeting-notes.md",
+  "message": "Successfully replaced 1 occurrence",
+  "matchCount": 1
+}
+```
+
+**Response (multiple matches with replaceAll=false):**
+
+```json
+{
+  "success": false,
+  "path": "meeting-notes.md",
+  "message": "Found 3 occurrences of the string. Use replaceAll=true to replace all occurrences, or provide a more specific string to match exactly one occurrence.",
+  "matchCount": 3
+}
+```
+
 ### `list_directory`
 
 List files and directories in the vault.
+
+Note: this includes non-note filenames (for example `pdf`, `png`, `jpg`) so AI assistants can see vault structure, but note tools like `read_note` and `write_note` still operate on note files only (`.md`, `.markdown`, `.txt`).
 
 **Request:**
 
@@ -652,7 +696,7 @@ Add, remove, or list tags in a note. Tags are managed in the frontmatter and inl
 
 ### `search_notes`
 
-Search for notes in the vault by content or frontmatter.
+Search for notes in the vault by content or frontmatter with multi-word matching and BM25 relevance reranking.
 
 **Request:**
 
@@ -679,7 +723,8 @@ Search for notes in the vault by content or frontmatter.
     "t": "AI Research Notes",
     "ex": "...machine learning...",
     "mc": 2,
-    "ln": 15
+    "ln": 15,
+    "uri": "obsidian://open?vault=MyVault&file=ai-research.md"
   }
 ]
 ```
@@ -691,6 +736,7 @@ Search for notes in the vault by content or frontmatter.
 - `ex` = excerpt (21 chars context)
 - `mc` = match count
 - `ln` = line number
+- `uri` = Obsidian deep link for quick opening
 
 ### `move_note`
 
@@ -815,6 +861,39 @@ Get metadata for notes without reading full content.
 ]
 ```
 
+### `get_vault_stats`
+
+Get high-level vault statistics without reading note contents.
+
+**Request:**
+
+```json
+{
+  "name": "get_vault_stats",
+  "arguments": {
+    "recentCount": 5,
+    "prettyPrint": false
+  }
+}
+```
+
+**Response (optimized):**
+
+```json
+{
+  "notes": 1248,
+  "folders": 76,
+  "size": 18349210,
+  "recent": [
+    {
+      "path": "Daily/2026-02-27.md",
+      "modified": 1772188800000,
+      "size": 2814
+    }
+  ]
+}
+```
+
 ## Security Considerations
 
 This MCP server implements several security measures to protect your Obsidian vault:
@@ -859,6 +938,7 @@ This MCP server implements several security measures to protect your Obsidian va
 - `src/filesystem.ts` - Safe file operations with path validation
 - `src/pathfilter.ts` - Directory and file filtering
 - `src/search.ts` - Note search functionality with content and frontmatter support
+- `src/uri.ts` - Obsidian URI generation for deep links
 - `src/types.ts` - TypeScript type definitions
 
 ## Contributing

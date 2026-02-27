@@ -9,7 +9,7 @@ Practical prompts you can try with your AI assistant and MCP-Obsidian.
 **What happens:**
 
 1. AI calls `search_notes` with query "productivity", limit 5
-2. Returns matching notes with paths and match counts
+2. Returns BM25-ranked matching notes with paths and match counts
 3. AI calls `read_multiple_notes` with the found paths
 4. AI analyzes the content and provides a summary
 
@@ -45,7 +45,7 @@ Practical prompts you can try with your AI assistant and MCP-Obsidian.
 | read_note | Read a single note with frontmatter |
 | write_note | Create or overwrite a note (supports overwrite, append, prepend modes) |
 | patch_note | Efficient partial update via find-and-replace |
-| list_directory | List files and folders in the vault |
+| list_directory | List files and folders in the vault (includes non-note filenames) |
 | delete_note | Delete a note (requires path confirmation) |
 | search_notes | Search by note name or content across the vault |
 | move_note | Move or rename a note |

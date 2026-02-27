@@ -5,7 +5,7 @@ Designed for safety, performance, and developer experience. Every feature gives 
 ## Core Features
 
 ### Powerful Search
-Fast search across your entire vault. AI can locate notes by name, content, tags, or metadata instantly. Returns token-optimized results with minified field names.
+Fast full-text search across your entire vault with multi-word matching and BM25 relevance ranking. AI can locate notes by name, content, tags, or metadata instantly.
 
 ### Safe Frontmatter Handling
 YAML parser validates and preserves formatting, ensuring safe atomic updates to note metadata.
@@ -32,7 +32,7 @@ MIT licensed and community driven.
 13 MCP tools for vault management: read/write/patch files, search content, manage tags, update frontmatter, vault stats, and more. Built for AI assistant integration.
 
 ### Multi-Platform
-Works with Claude Desktop, ChatGPT+ Desktop, OpenCode, Cursor IDE, and other MCP-compatible AI platforms.
+Works with Claude Desktop, ChatGPT+ Desktop, OpenCode, Gemini CLI, OpenAI Codex, Cursor IDE, Windsurf IDE, IntelliJ IDEA, and other MCP-compatible AI platforms.
 
 ## Comparison with Alternatives
 
@@ -42,9 +42,29 @@ Works with Claude Desktop, ChatGPT+ Desktop, OpenCode, Cursor IDE, and other MCP
 | Obsidian Running Required | No | Yes | No | No |
 | Plugin Dependencies | None | Required (Local REST API plugin) | None | None |
 | Frontmatter Safety | Protected (advanced YAML parsing) | API-dependent | Can corrupt | Can corrupt |
-| Built-in Search | Advanced | Good (via Obsidian API) | None | None |
-| Performance | Fast (optimized for large vaults) | API overhead | Slow | Variable |
-| Link Handling | Intelligent | Good | Breaks links | Breaks links |
+| Built-in Search | Advanced (full-text + BM25 ranking) | Good (via Obsidian API) | None | None |
+| Performance | Fast (optimized with batch I/O) | API overhead | Slow | Variable |
+| Link Handling | Safe (preserves content/frontmatter on move) | Good | Breaks links | Breaks links |
 | Reliability | High (direct file access) | Plugin-dependent | Basic | Variable |
 
 **Summary:** 8/8 features with clear advantage. Zero plugin dependencies. Instant setup time.
+
+## FAQ
+
+### Does my data leave my computer?
+Vault files stay local. MCP-Obsidian reads and writes files on your machine. Your AI provider only sees content your client sends.
+
+### Does Obsidian need to be running?
+No. MCP-Obsidian works via filesystem access, so Obsidian can be closed.
+
+### Can I use multiple vaults?
+Yes. Configure multiple MCP server entries, one per vault path.
+
+### What file types are supported?
+Read/write tools support `.md`, `.markdown`, and `.txt` notes. `list_directory` may show other filenames (like `.png` or `.pdf`), but non-note files are not read as notes.
+
+### Is search semantic?
+No. Search is lexical full-text matching with BM25 ranking, not embedding/vector semantic retrieval.
+
+### What if the AI makes a mistake?
+Use backups or version control. Deletions require explicit path confirmation and all operations stay inside your configured vault.

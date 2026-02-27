@@ -258,7 +258,7 @@ export class FileSystemService {
       for (const entry of entries) {
         const entryPath = normalizedPath ? `${normalizedPath}/${entry.name}` : entry.name;
 
-        if (!this.pathFilter.isAllowed(entryPath)) {
+        if (!this.pathFilter.isAllowedForListing(entryPath)) {
           continue;
         }
 

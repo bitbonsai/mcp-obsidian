@@ -1,6 +1,6 @@
 {
   "name": "@mauricio.wolff/mcp-obsidian",
-  "version": "0.7.5",
+  "version": "0.8.1",
   "description": "Universal AI bridge for Obsidian vaults - connect any MCP-compatible assistant",
   "author": "bitbonsai",
   "license": "MIT",
