@@ -241,6 +241,37 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
                 }
             },
             {
+                name: "move_file",
+                description: "Move or rename any file in the vault (binary-safe, file-only, requires confirmation)",
+                inputSchema: {
+                    type: "object",
+                    properties: {
+                        oldPath: {
+                            type: "string",
+                            description: "Current path of the file"
+                        },
+                        newPath: {
+                            type: "string",
+                            description: "New path for the file"
+                        },
+                        confirmOldPath: {
+                            type: "string",
+                            description: "Confirmation: must exactly match oldPath"
+                        },
+                        confirmNewPath: {
+                            type: "string",
+                            description: "Confirmation: must exactly match newPath"
+                        },
+                        overwrite: {
+                            type: "boolean",
+                            description: "Allow overwriting existing file (default: false)",
+                            default: false
+                        }
+                    },
+                    required: ["oldPath", "newPath", "confirmOldPath", "confirmNewPath"]
+                }
+            },
+            {
                 name: "read_multiple_notes",
                 description: "Read multiple notes in a batch (max 10 files)",
                 inputSchema: {
@@ -395,6 +426,12 @@ function trimPaths(args) {
     if (trimmed.confirmPath && typeof trimmed.confirmPath === 'string') {
         trimmed.confirmPath = trimmed.confirmPath.trim();
     }
+    if (trimmed.confirmOldPath && typeof trimmed.confirmOldPath === 'string') {
+        trimmed.confirmOldPath = trimmed.confirmOldPath.trim();
+    }
+    if (trimmed.confirmNewPath && typeof trimmed.confirmNewPath === 'string') {
+        trimmed.confirmNewPath = trimmed.confirmNewPath.trim();
+    }
     // Trim path arrays
     if (trimmed.paths && Array.isArray(trimmed.paths)) {
         trimmed.paths = trimmed.paths.map((p) => typeof p === 'string' ? p.trim() : p);
@@ -506,6 +543,24 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                 const result = await fileSystem.moveNote({
                     oldPath: trimmedArgs.oldPath,
                     newPath: trimmedArgs.newPath,
+                    overwrite: trimmedArgs.overwrite
+                });
+                return {
+                    content: [
+                        {
+                            type: "text",
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ],
+                    isError: !result.success
+                };
+            }
+            case "move_file": {
+                const result = await fileSystem.moveFile({
+                    oldPath: trimmedArgs.oldPath,
+                    newPath: trimmedArgs.newPath,
+                    confirmOldPath: trimmedArgs.confirmOldPath,
+                    confirmNewPath: trimmedArgs.confirmNewPath,
                     overwrite: trimmedArgs.overwrite
                 });
                 return {

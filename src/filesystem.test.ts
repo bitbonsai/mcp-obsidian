@@ -1,6 +1,6 @@
 import { test, expect, beforeEach, afterEach } from "vitest";
 import { FileSystemService } from "./filesystem.js";
-import { writeFile, mkdir, mkdtemp, rm } from "fs/promises";
+import { writeFile, readFile, mkdir, mkdtemp, rm } from "fs/promises";
 import { join } from "path";
 import { tmpdir } from "os";
 
@@ -904,6 +904,118 @@ test("move note with special chars in both paths", async () => {
 
   const note = await fileSystem.readNote(newPath);
   expect(note.content).toContain("Moving note");
+});
+
+test("move_file moves binary files without corruption", async () => {
+  const oldPath = "attachments/original image.png";
+  const newPath = "assets/original image.png";
+  const binaryContent = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x00, 0xff, 0x10, 0x42]);
+
+  await mkdir(join(testVaultPath, "attachments"), { recursive: true });
+  await writeFile(join(testVaultPath, oldPath), binaryContent);
+
+  const result = await fileSystem.moveFile({
+    oldPath,
+    newPath,
+    confirmOldPath: oldPath,
+    confirmNewPath: newPath
+  });
+  expect(result.success).toBe(true);
+
+  const moved = await readFile(join(testVaultPath, newPath));
+  expect(Buffer.compare(moved, binaryContent)).toBe(0);
+
+  await expect(readFile(join(testVaultPath, oldPath))).rejects.toMatchObject({ code: "ENOENT" });
+});
+
+test("move_file respects overwrite=false", async () => {
+  const oldPath = "attachments/image.png";
+  const newPath = "assets/image.png";
+
+  await mkdir(join(testVaultPath, "attachments"), { recursive: true });
+  await mkdir(join(testVaultPath, "assets"), { recursive: true });
+  await writeFile(join(testVaultPath, oldPath), Buffer.from([0x01, 0x02, 0x03]));
+  await writeFile(join(testVaultPath, newPath), Buffer.from([0xaa, 0xbb]));
+
+  const result = await fileSystem.moveFile({
+    oldPath,
+    newPath,
+    confirmOldPath: oldPath,
+    confirmNewPath: newPath,
+    overwrite: false
+  });
+  expect(result.success).toBe(false);
+  expect(result.message).toContain("Target file already exists");
+});
+
+test("move_file overwrites existing file when overwrite=true", async () => {
+  const oldPath = "attachments/image.png";
+  const newPath = "assets/image.png";
+  const replacement = Buffer.from([0xde, 0xad, 0xbe, 0xef]);
+
+  await mkdir(join(testVaultPath, "attachments"), { recursive: true });
+  await mkdir(join(testVaultPath, "assets"), { recursive: true });
+  await writeFile(join(testVaultPath, oldPath), replacement);
+  await writeFile(join(testVaultPath, newPath), Buffer.from([0x00]));
+
+  const result = await fileSystem.moveFile({
+    oldPath,
+    newPath,
+    confirmOldPath: oldPath,
+    confirmNewPath: newPath,
+    overwrite: true
+  });
+  expect(result.success).toBe(true);
+
+  const moved = await readFile(join(testVaultPath, newPath));
+  expect(Buffer.compare(moved, replacement)).toBe(0);
+});
+
+test("move_file rejects directory sources", async () => {
+  await mkdir(join(testVaultPath, "attachments/folder"), { recursive: true });
+
+  const result = await fileSystem.moveFile({
+    oldPath: "attachments/folder",
+    newPath: "assets/folder",
+    confirmOldPath: "attachments/folder",
+    confirmNewPath: "assets/folder"
+  });
+
+  expect(result.success).toBe(false);
+  expect(result.message).toContain("supports files only");
+});
+
+test("move_file blocks restricted system paths", async () => {
+  const result = await fileSystem.moveFile({
+    oldPath: ".obsidian/plugins/data.json",
+    newPath: "assets/data.json",
+    confirmOldPath: ".obsidian/plugins/data.json",
+    confirmNewPath: "assets/data.json"
+  });
+
+  expect(result.success).toBe(false);
+  expect(result.message).toContain("Access denied");
+});
+
+test("move_file requires matching confirmation paths", async () => {
+  const oldPath = "attachments/check.png";
+  const newPath = "assets/check.png";
+
+  await mkdir(join(testVaultPath, "attachments"), { recursive: true });
+  await writeFile(join(testVaultPath, oldPath), Buffer.from([0x11, 0x22]));
+
+  const result = await fileSystem.moveFile({
+    oldPath,
+    newPath,
+    confirmOldPath: "attachments/other.png",
+    confirmNewPath: newPath
+  });
+
+  expect(result.success).toBe(false);
+  expect(result.message).toContain("confirmation paths do not match");
+
+  const stillExists = await readFile(join(testVaultPath, oldPath));
+  expect(Buffer.compare(stillExists, Buffer.from([0x11, 0x22]))).toBe(0);
 });
 
 test("patch note with regex special chars in oldString", async () => {

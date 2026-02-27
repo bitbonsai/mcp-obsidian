@@ -1,5 +1,5 @@
 import { join, resolve, relative, dirname } from 'path';
-import { readdir, stat, readFile, writeFile, unlink, mkdir, access } from 'node:fs/promises';
+import { readdir, stat, readFile, writeFile, unlink, mkdir, access, rename, copyFile } from 'node:fs/promises';
 import { constants } from 'node:fs';
 import { FrontmatterHandler } from './frontmatter.js';
 import { PathFilter } from './pathfilter.js';
@@ -408,6 +408,126 @@ export class FileSystemService {
                 oldPath,
                 newPath,
                 message: `Failed to move note: ${error instanceof Error ? error.message : 'Unknown error'}`
+            };
+        }
+    }
+    async moveFile(params) {
+        const { oldPath, newPath, confirmOldPath, confirmNewPath, overwrite = false } = params;
+        if (oldPath !== confirmOldPath || newPath !== confirmNewPath) {
+            return {
+                success: false,
+                oldPath,
+                newPath,
+                message: "Move cancelled: confirmation paths do not match. For safety, oldPath must equal confirmOldPath and newPath must equal confirmNewPath."
+            };
+        }
+        if (!this.pathFilter.isAllowedForListing(oldPath)) {
+            return {
+                success: false,
+                oldPath,
+                newPath,
+                message: `Access denied: ${oldPath}. This path is restricted (system files like .obsidian, .git, and dotfiles are not accessible).`
+            };
+        }
+        if (!this.pathFilter.isAllowedForListing(newPath)) {
+            return {
+                success: false,
+                oldPath,
+                newPath,
+                message: `Access denied: ${newPath}. This path is restricted (system files like .obsidian, .git, and dotfiles are not accessible).`
+            };
+        }
+        const oldFullPath = this.resolvePath(oldPath);
+        const newFullPath = this.resolvePath(newPath);
+        try {
+            const sourceStat = await stat(oldFullPath);
+            if (sourceStat.isDirectory()) {
+                return {
+                    success: false,
+                    oldPath,
+                    newPath,
+                    message: `Source path is a directory: ${oldPath}. move_file currently supports files only.`
+                };
+            }
+        }
+        catch (error) {
+            if (error instanceof Error && 'code' in error && error.code === 'ENOENT') {
+                return {
+                    success: false,
+                    oldPath,
+                    newPath,
+                    message: `Source file not found: ${oldPath}. Use list_directory to see available files.`
+                };
+            }
+            return {
+                success: false,
+                oldPath,
+                newPath,
+                message: `Failed to inspect source file: ${error instanceof Error ? error.message : 'Unknown error'}`
+            };
+        }
+        try {
+            if (!overwrite) {
+                try {
+                    await access(newFullPath, constants.F_OK);
+                    return {
+                        success: false,
+                        oldPath,
+                        newPath,
+                        message: `Target file already exists: ${newPath}. Use overwrite=true to replace it.`
+                    };
+                }
+                catch (error) {
+                    if (!(error instanceof Error) || !('code' in error) || error.code !== 'ENOENT') {
+                        throw error;
+                    }
+                }
+            }
+            await mkdir(dirname(newFullPath), { recursive: true });
+            if (overwrite) {
+                try {
+                    const targetStat = await stat(newFullPath);
+                    if (targetStat.isDirectory()) {
+                        return {
+                            success: false,
+                            oldPath,
+                            newPath,
+                            message: `Target path is a directory: ${newPath}. Please provide a file path.`
+                        };
+                    }
+                    await unlink(newFullPath);
+                }
+                catch (error) {
+                    if (!(error instanceof Error) || !('code' in error) || error.code !== 'ENOENT') {
+                        throw error;
+                    }
+                }
+            }
+            try {
+                await rename(oldFullPath, newFullPath);
+            }
+            catch (error) {
+                if (error instanceof Error && 'code' in error && error.code === 'EXDEV') {
+                    await copyFile(oldFullPath, newFullPath);
+                    await unlink(oldFullPath);
+                }
+                else {
+                    throw error;
+                }
+            }
+            return {
+                success: true,
+                oldPath,
+                newPath,
+                message: `Successfully moved file from ${oldPath} to ${newPath}`
+            };
+        }
+        catch (error) {
+            return {
+                success: false,
+                oldPath,
+                newPath,
+                message: `Failed to move file: ${error instanceof Error ? error.message : 'Unknown error'}`
             };
         }
     }

@@ -83,6 +83,14 @@ export interface MoveNoteParams {
   overwrite?: boolean;
 }
 
+export interface MoveFileParams {
+  oldPath: string;
+  newPath: string;
+  confirmOldPath: string;
+  confirmNewPath: string;
+  overwrite?: boolean;
+}
+
 export interface MoveResult {
   success: boolean;
   oldPath: string;
