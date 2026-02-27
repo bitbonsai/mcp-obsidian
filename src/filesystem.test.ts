@@ -234,6 +234,86 @@ test("patch note fails with empty newString", async () => {
   expect(result.message).toMatch(/empty|filled|required/i);
 });
 
+test("patch note fails with undefined newString", async () => {
+  const testPath = "test-note.md";
+  const content = "# Test Note\n\nSome content.";
+
+  await writeFile(join(testVaultPath, testPath), content);
+
+  const result = await fileSystem.patchNote({
+    path: testPath,
+    oldString: "content",
+    newString: undefined as any,
+    replaceAll: false
+  });
+
+  expect(result.success).toBe(false);
+  expect(result.message).toMatch(/empty|filled|required/i);
+
+  // Verify the note was NOT corrupted
+  const note = await fileSystem.readNote(testPath);
+  expect(note.content).not.toContain("undefined");
+  expect(note.content).toContain("Some content.");
+});
+
+test("patch note fails with null newString", async () => {
+  const testPath = "test-note.md";
+  const content = "# Test Note\n\nSome content.";
+
+  await writeFile(join(testVaultPath, testPath), content);
+
+  const result = await fileSystem.patchNote({
+    path: testPath,
+    oldString: "content",
+    newString: null as any,
+    replaceAll: false
+  });
+
+  expect(result.success).toBe(false);
+  expect(result.message).toMatch(/empty|filled|required/i);
+
+  // Verify the note was NOT corrupted
+  const note = await fileSystem.readNote(testPath);
+  expect(note.content).not.toContain("null");
+  expect(note.content).toContain("Some content.");
+});
+
+test("writeNote rejects undefined content", async () => {
+  const testPath = "test-note.md";
+
+  await expect(fileSystem.writeNote({
+    path: testPath,
+    content: undefined as any
+  })).rejects.toThrow(/Content is required/);
+});
+
+test("writeNote rejects null content", async () => {
+  const testPath = "test-note.md";
+
+  await expect(fileSystem.writeNote({
+    path: testPath,
+    content: null as any
+  })).rejects.toThrow(/Content is required/);
+});
+
+test("writeNote append with undefined content does not corrupt note", async () => {
+  const testPath = "test-note.md";
+  const content = "# Test Note\n\nOriginal content.";
+
+  await writeFile(join(testVaultPath, testPath), content);
+
+  await expect(fileSystem.writeNote({
+    path: testPath,
+    content: undefined as any,
+    mode: 'append'
+  })).rejects.toThrow(/Content is required/);
+
+  // Verify the note was NOT corrupted
+  const note = await fileSystem.readNote(testPath);
+  expect(note.content).not.toContain("undefined");
+  expect(note.content).toContain("Original content.");
+});
+
 test("patch note handles regex special characters literally", async () => {
   const testPath = "test-note.md";
   const content = "Price: $10.50 (special)";
