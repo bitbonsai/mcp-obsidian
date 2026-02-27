@@ -48,7 +48,7 @@ website/               # Astro 5 website (separate package, see website/agents.m
 
 ### Core Components
 
-**server.ts** — Entry point. Registers 13 MCP tools, handles CLI args (--help, --version, vault path), initializes services, routes tool calls. Auto-trims whitespace from all path arguments.
+**server.ts** — Entry point. Registers 14 MCP tools, handles CLI args (--help, --version, vault path), initializes services, routes tool calls. Auto-trims whitespace from all path arguments.
 
 **FileSystemService** (`src/filesystem.ts`) — Orchestrates file ops with security. Path resolution and traversal prevention. Implements: read, write, patch, delete, move, list, batch read, frontmatter update, tag management, vault stats. Uses native `fs/promises`.
 
@@ -58,7 +58,7 @@ website/               # Astro 5 website (separate package, see website/agents.m
 
 **SearchService** (`src/search.ts`) — Content and frontmatter search with multi-word matching and BM25 relevance reranking. Returns token-optimized results with minified field names: `{p, t, ex, mc, ln, uri}`. Max 20 results.
 
-### 13 MCP Tools
+### 14 MCP Tools
 
 | Tool | Description |
 |------|-------------|
@@ -69,6 +69,7 @@ website/               # Astro 5 website (separate package, see website/agents.m
 | delete_note | Delete a note (requires path confirmation) |
 | search_notes | Full-text search across vault content |
 | move_note | Move or rename a note |
+| move_file | Move or rename any file (binary-safe, file-only, requires path confirmation) |
 | read_multiple_notes | Batch read up to 10 notes |
 | update_frontmatter | Safely update YAML frontmatter |
 | get_notes_info | Get metadata without reading content |

@@ -122,8 +122,8 @@ MCP is an open protocol. You're not tied to any specific vendor or platform. You
 
 - ✅ Safe frontmatter parsing and validation using gray-matter
 - ✅ Path filtering to exclude `.obsidian` directory and other system files
-- ✅ **Complete MCP toolkit**: 13 methods covering all vault operations
-  - File operations: `read_note`, `write_note`, `patch_note`, `delete_note`, `move_note`
+- ✅ **Complete MCP toolkit**: 14 methods covering all vault operations
+  - File operations: `read_note`, `write_note`, `patch_note`, `delete_note`, `move_note`, `move_file`
   - Directory operations: `list_directory`
   - Batch operations: `read_multiple_notes`
   - Search: `search_notes` with multi-word matching and BM25 relevance reranking
@@ -740,7 +740,7 @@ Search for notes in the vault by content or frontmatter with multi-word matching
 
 ### `move_note`
 
-Move or rename a note in the vault.
+Move or rename a note in the vault (`.md`, `.markdown`, `.txt`).
 
 **Request:**
 
@@ -765,6 +765,38 @@ Move or rename a note in the vault.
   "message": "Successfully moved note from drafts/article.md to published/article.md"
 }
 ```
+
+### `move_file`
+
+Move or rename any file in the vault with binary-safe file operations (file-only; not recursive directory moves). For safety, this tool requires confirmation of both source and destination paths.
+
+**Request:**
+
+```json
+{
+  "name": "move_file",
+  "arguments": {
+    "oldPath": "Miro/attachments/Pasted image 20250812140124.png",
+    "newPath": "assets/images/Pasted image 20250812140124.png",
+    "confirmOldPath": "Miro/attachments/Pasted image 20250812140124.png",
+    "confirmNewPath": "assets/images/Pasted image 20250812140124.png",
+    "overwrite": false
+  }
+}
+```
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "oldPath": "Miro/attachments/Pasted image 20250812140124.png",
+  "newPath": "assets/images/Pasted image 20250812140124.png",
+  "message": "Successfully moved file from Miro/attachments/Pasted image 20250812140124.png to assets/images/Pasted image 20250812140124.png"
+}
+```
+
+**Safety Note:** `confirmOldPath` must exactly match `oldPath`, and `confirmNewPath` must exactly match `newPath`, otherwise the move is rejected.
 
 ### `read_multiple_notes`
 

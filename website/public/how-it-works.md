@@ -49,6 +49,7 @@ Practical prompts you can try with your AI assistant and MCP-Obsidian.
 | delete_note | Delete a note (requires path confirmation) |
 | search_notes | Search by note name or content across the vault |
 | move_note | Move or rename a note |
+| move_file | Move or rename any file (binary-safe, file-only, requires path confirmation) |
 | read_multiple_notes | Batch read up to 10 notes |
 | update_frontmatter | Safely update YAML frontmatter |
 | get_notes_info | Get metadata without reading content |

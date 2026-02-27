@@ -47,7 +47,7 @@ The demo examples in `InteractiveDemo.tsx` and `HowItWorks.astro` show actual MC
 
 - Tool parameter names and types must match `server.ts` `ListToolsRequestSchema`
 - Response formats must match the `CallToolRequestSchema` handler output
-- The server currently has **13 tools** — this count appears in `FeatureGrid.astro`, `public/features.md`, `public/llm.txt`, and `public/how-it-works.md`
+- The server currently has **14 tools** — this count appears in `FeatureGrid.astro`, `public/features.md`, `public/llm.txt`, and `public/how-it-works.md`
 
 ## Commands
 

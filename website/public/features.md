@@ -29,7 +29,7 @@ Fully typed for excellent developer experience.
 MIT licensed and community driven.
 
 ### Complete Toolkit
-13 MCP tools for vault management: read/write/patch files, search content, manage tags, update frontmatter, vault stats, and more. Built for AI assistant integration.
+14 MCP tools for vault management: read/write/patch/move files, search content, manage tags, update frontmatter, vault stats, and more. Built for AI assistant integration.
 
 ### Multi-Platform
 Works with Claude Desktop, ChatGPT+ Desktop, OpenCode, Gemini CLI, OpenAI Codex, Cursor IDE, Windsurf IDE, IntelliJ IDEA, and other MCP-compatible AI platforms.
