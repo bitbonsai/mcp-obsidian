@@ -1134,6 +1134,20 @@ test("get vault stats excludes filtered paths", async () => {
   expect(stats.recentlyModified.map(f => f.path)).not.toContain(".obsidian/config.json");
 });
 
+test("get vault stats includes notes inside directories that contain dots", async () => {
+  await mkdir(join(testVaultPath, "2026.03"), { recursive: true });
+  await writeFile(join(testVaultPath, "2026.03/nested.md"), "# Nested");
+  await writeFile(join(testVaultPath, "root.md"), "# Root");
+
+  const stats = await fileSystem.getVaultStats(10);
+  const recentPaths = stats.recentlyModified.map(file => file.path);
+
+  expect(stats.totalNotes).toBe(2);
+  expect(stats.totalFolders).toBe(1);
+  expect(recentPaths).toContain("2026.03/nested.md");
+  expect(recentPaths).toContain("root.md");
+});
+
 test("get vault stats calculates total size correctly", async () => {
   const content1 = "# Note 1 with some content";
   const content2 = "# Note 2 with more content here";
