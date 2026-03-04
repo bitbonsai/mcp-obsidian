@@ -32,6 +32,16 @@ claude mcp add-json obsidian --scope user '{"type":"stdio","command":"npx","args
 
 ### OpenCode
 
+**Option 1: CLI (interactive)**
+
+```bash
+opencode mcp add
+```
+
+Select **local**, then enter the command: `npx -y @mauricio.wolff/mcp-obsidian@latest /path/to/your/vault`
+
+**Option 2: Config file**
+
 Add to your `opencode.json` (project root) or `~/.config/opencode/opencode.json` (global):
 
 ```json
@@ -47,6 +57,16 @@ Add to your `opencode.json` (project root) or `~/.config/opencode/opencode.json`
 ```
 
 ### Gemini CLI
+
+**Option 1: CLI**
+
+```bash
+gemini mcp add obsidian -- npx @mauricio.wolff/mcp-obsidian@latest /path/to/your/vault
+```
+
+**Option 2: Config file**
+
+Add to `~/.gemini/settings.json`:
 
 ```json
 {
