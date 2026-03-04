@@ -114,11 +114,22 @@ import CodeBlock from "./CodeBlock";
                 </svg>
               </button>
               <div
-                class="font-mono text-sm code-scroll"
-                style="background: #1e1e2e77; padding: 1em; border-radius: 0.3em;"
+                class="p-3 bg-card/30 rounded-lg border border-border/50 mb-4"
               >
-                <pre
-                  style="margin: 0; color: #cdd6f4; line-height: 1.5; white-space: nowrap;"><span style="color: #cba6f7;">claude</span> <span style="color: #89b4fa;">mcp add-json</span> <span style="color: #a6e3a1;">obsidian</span> <span style="color: #fab387;">--scope user</span> <span style="color: #f38ba8;">'&#123;"type":"stdio","command":"npx","args":["@mauricio.wolff/mcp-obsidian@latest","/path/to/your/vault"]&#125;'</span></pre>
+                <div class="flex items-start gap-2">
+                  <div class="text-accent text-lg mt-0.5">⚡</div>
+                  <div class="flex-1">
+                    <p class="text-sm font-semibold text-foreground mb-2">
+                      Use the CLI
+                    </p>
+                    <div
+                      class="font-mono text-sm code-scroll bg-background/50 rounded px-3 py-2"
+                    >
+                      <pre
+                        style="margin: 0; color: #cdd6f4; line-height: 1.5; white-space: nowrap;"><span style="color: #cba6f7;">claude</span> <span style="color: #89b4fa;">mcp add-json</span> <span style="color: #a6e3a1;">obsidian</span> <span style="color: #fab387;">--scope user</span> <span style="color: #f38ba8;">'&#123;"type":"stdio","command":"npx","args":["@mauricio.wolff/mcp-obsidian@latest","/path/to/your/vault"]&#125;'</span></pre>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <div
@@ -181,6 +192,26 @@ import CodeBlock from "./CodeBlock";
 
             <!-- OpenCode config -->
             <div class="config-content hidden" data-content="opencode">
+              <div
+                class="p-3 bg-card/30 rounded-lg border border-border/50"
+              >
+                <div class="flex items-start gap-2">
+                  <div class="text-accent text-lg mt-0.5">⚡</div>
+                  <div class="flex-1">
+                    <p class="text-sm font-semibold text-foreground mb-2">
+                      Use the CLI
+                    </p>
+                    <code class="block bg-background/50 px-3 py-2 rounded text-foreground text-sm font-mono">
+                      opencode mcp add
+                    </code>
+                    <p class="text-xs text-muted-foreground mt-2">
+                      Interactive wizard — select <strong class="text-foreground">local</strong>, then enter the command: <code class="text-foreground">npx -y @mauricio.wolff/mcp-obsidian@latest /path/to/your/vault</code>
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <p class="text-xs text-muted-foreground mt-4 mb-3">Or configure manually:</p>
               <button
                 class="absolute top-4 right-4 p-2 hover:bg-card/50 rounded transition-colors copy-btn z-10"
                 data-copy='{"$schema": "https://opencode.ai/config.json", "mcp": {"obsidian": {"type": "local", "command": ["npx", "-y", "@mauricio.wolff/mcp-obsidian@latest", "/path/to/your/vault"]}}}'
@@ -270,6 +301,23 @@ import CodeBlock from "./CodeBlock";
 
             <!-- Gemini CLI config -->
             <div class="config-content hidden" data-content="gemini-cli">
+              <div
+                class="p-3 bg-card/30 rounded-lg border border-border/50 mb-4"
+              >
+                <div class="flex items-start gap-2">
+                  <div class="text-accent text-lg mt-0.5">⚡</div>
+                  <div class="flex-1">
+                    <p class="text-sm font-semibold text-foreground mb-2">
+                      Use the CLI
+                    </p>
+                    <code class="block bg-background/50 px-3 py-2 rounded text-foreground text-sm font-mono">
+                      gemini mcp add obsidian -- npx @mauricio.wolff/mcp-obsidian@latest /path/to/your/vault
+                    </code>
+                  </div>
+                </div>
+              </div>
+
+              <p class="text-xs text-muted-foreground mb-3">Or configure manually in <code class="text-foreground">~/.gemini/settings.json</code>:</p>
               <button
                 class="absolute top-4 right-4 p-2 hover:bg-card/50 rounded transition-colors copy-btn z-10"
                 data-copy='{"mcpServers": {"obsidian": {"command": "npx", "args": ["@mauricio.wolff/mcp-obsidian@latest", "/path/to/your/vault"]}}}'
