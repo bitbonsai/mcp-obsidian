@@ -23,6 +23,7 @@ This MCP server lets Claude, ChatGPT+, and other assistants access your vault. L
 - [Features](/features.md) - Core features and comparison with alternatives
 - [Demo](/demo.md) - Interactive examples of vault operations
 - [How It Works](/how-it-works.md) - Usage examples with real AI conversations
+- [Skill](/skill.md) - Obsidian skill routing and workflow patterns
 
 ## Links
 

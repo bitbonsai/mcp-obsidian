@@ -8,6 +8,7 @@ const navLinks = [
   { href: '/features', label: 'Features' },
   { href: '/demo', label: 'Demo' },
   { href: '/how-it-works', label: 'How It Works' },
+  { href: '/skill', label: 'Skill' },
 ];
 
 function isActive(href: string) {
@@ -140,9 +141,9 @@ function isActive(href: string) {
 <style>
   /* Floating dark glass navigation */
   .nav-glass {
-    background: rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(24px) saturate(1.2);
+    -webkit-backdrop-filter: blur(24px) saturate(1.2);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 16px;
     box-shadow:
