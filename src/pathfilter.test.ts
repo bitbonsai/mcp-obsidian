@@ -207,6 +207,12 @@ describe("PathFilter", () => {
     });
   });
 
+  test("allows Obsidian first-party file types", () => {
+    const filter = new PathFilter();
+    expect(filter.isAllowed("_Bases/daily-notes.base")).toBe(true);
+    expect(filter.isAllowed("canvas/mindmap.canvas")).toBe(true);
+  });
+
   // ============================================================================
   // FILTER PATHS BATCH OPERATION
   // ============================================================================
