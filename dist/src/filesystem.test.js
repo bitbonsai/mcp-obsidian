@@ -1,5 +1,6 @@
 import { test, expect, beforeEach, afterEach } from "vitest";
 import { FileSystemService } from "./filesystem.js";
+import { PathFilter } from "./pathfilter.js";
 import { writeFile, readFile, mkdir, mkdtemp, rm } from "fs/promises";
 import { join } from "path";
 import { tmpdir } from "os";
@@ -890,6 +891,34 @@ test("get vault stats excludes filtered paths", async () => {
     expect(stats.totalFolders).toBe(0); // .obsidian and .git are filtered
     expect(stats.recentlyModified.map(f => f.path)).toContain("visible.md");
     expect(stats.recentlyModified.map(f => f.path)).not.toContain(".obsidian/config.json");
+});
+test("get vault stats excludes files matched by custom ** ignored patterns", async () => {
+    const customFilter = new PathFilter({
+        ignoredPatterns: ["ignored/**"]
+    });
+    const customFileSystem = new FileSystemService(testVaultPath, customFilter);
+    await mkdir(join(testVaultPath, "ignored"), { recursive: true });
+    await mkdir(join(testVaultPath, "ignored/nested"), { recursive: true });
+    await writeFile(join(testVaultPath, "ignored/something.md"), "# Disallowed 1");
+    await writeFile(join(testVaultPath, "ignored/nested/something.md"), "# Disallowed 2");
+    await writeFile(join(testVaultPath, "visible.md"), "# Visible");
+    const stats = await customFileSystem.getVaultStats(10);
+    const recentPaths = stats.recentlyModified.map(file => file.path);
+    expect(stats.totalNotes).toBe(1);
+    expect(recentPaths).toContain("visible.md");
+    expect(recentPaths).not.toContain("ignored/something.md");
+    expect(recentPaths).not.toContain("ignored/nested/something.md");
+});
+test("get vault stats includes notes inside directories that contain dots", async () => {
+    await mkdir(join(testVaultPath, "2026.03"), { recursive: true });
+    await writeFile(join(testVaultPath, "2026.03/nested.md"), "# Nested");
+    await writeFile(join(testVaultPath, "root.md"), "# Root");
+    const stats = await fileSystem.getVaultStats(10);
+    const recentPaths = stats.recentlyModified.map(file => file.path);
+    expect(stats.totalNotes).toBe(2);
+    expect(stats.totalFolders).toBe(1);
+    expect(recentPaths).toContain("2026.03/nested.md");
+    expect(recentPaths).toContain("root.md");
 });
 test("get vault stats calculates total size correctly", async () => {
     const content1 = "# Note 1 with some content";

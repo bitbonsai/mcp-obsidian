@@ -1,5 +1,5 @@
-import { test, expect } from "vitest";
-import { FrontmatterHandler } from "./frontmatter.js";
+import { test, expect, describe } from "vitest";
+import { FrontmatterHandler, parseFrontmatter } from "./frontmatter.js";
 const handler = new FrontmatterHandler();
 test("parse note with frontmatter", () => {
     const content = `---
@@ -83,4 +83,36 @@ Some content here.`;
     expect(result).toContain("modified: '2023-12-01'");
     expect(result).toContain("tags:");
     expect(result).toContain("# Content");
+});
+describe("parseFrontmatter", () => {
+    test("returns undefined for null and undefined", () => {
+        expect(parseFrontmatter(null)).toBeUndefined();
+        expect(parseFrontmatter(undefined)).toBeUndefined();
+    });
+    test("passes through a plain object", () => {
+        const obj = { tags: ["test"], title: "Hello" };
+        expect(parseFrontmatter(obj)).toBe(obj);
+    });
+    test("parses a JSON string into an object", () => {
+        const input = '{"tags": ["test"], "title": "Hello"}';
+        expect(parseFrontmatter(input)).toEqual({ tags: ["test"], title: "Hello" });
+    });
+    test("parses an empty JSON object string", () => {
+        expect(parseFrontmatter("{}")).toEqual({});
+    });
+    test("throws for a non-JSON string", () => {
+        expect(() => parseFrontmatter("not json")).toThrow("frontmatter must be a JSON object");
+    });
+    test("throws for a JSON array string", () => {
+        expect(() => parseFrontmatter('[1, 2, 3]')).toThrow("frontmatter must be a JSON object");
+    });
+    test("throws for a JSON primitive string", () => {
+        expect(() => parseFrontmatter('"just a string"')).toThrow("frontmatter must be a JSON object");
+    });
+    test("throws for an array value", () => {
+        expect(() => parseFrontmatter([1, 2, 3])).toThrow("frontmatter must be a JSON object");
+    });
+    test("throws for a number value", () => {
+        expect(() => parseFrontmatter(42)).toThrow("frontmatter must be a JSON object");
+    });
 });

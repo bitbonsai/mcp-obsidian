@@ -1,12 +1,12 @@
-import { join } from 'path';
+import { join, resolve } from 'path';
 import { readFile, readdir } from 'node:fs/promises';
 import { generateObsidianUri } from './uri.js';
 export class SearchService {
-    vaultPath;
     pathFilter;
+    vaultPath;
     constructor(vaultPath, pathFilter) {
-        this.vaultPath = vaultPath;
         this.pathFilter = pathFilter;
+        this.vaultPath = resolve(vaultPath);
     }
     async search(params) {
         const { query, limit = 5, searchContent = true, searchFrontmatter = false, caseSensitive = false } = params;

@@ -1,4 +1,30 @@
 import matter from 'gray-matter';
+/**
+ * Parse a frontmatter value that may be a JSON string (LLM clients sometimes
+ * pass frontmatter as a serialized JSON string instead of an object).
+ * Returns undefined if the value is null/undefined, or throws if invalid.
+ */
+export function parseFrontmatter(value) {
+    if (value === undefined || value === null) {
+        return undefined;
+    }
+    if (typeof value === 'object' && !Array.isArray(value)) {
+        return value;
+    }
+    if (typeof value === 'string') {
+        try {
+            const parsed = JSON.parse(value);
+            if (typeof parsed === 'object' && parsed !== null && !Array.isArray(parsed)) {
+                return parsed;
+            }
+        }
+        catch {
+            // not valid JSON
+        }
+        throw new Error('frontmatter must be a JSON object, got a string that is not valid JSON');
+    }
+    throw new Error(`frontmatter must be a JSON object, got ${typeof value}`);
+}
 export class FrontmatterHandler {
     parse(content) {
         try {

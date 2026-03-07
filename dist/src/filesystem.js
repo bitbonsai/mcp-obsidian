@@ -719,19 +719,18 @@ export class FileSystemService {
             const entries = await readdir(dirPath, { withFileTypes: true });
             for (const entry of entries) {
                 const entryRelativePath = relativePath ? `${relativePath}/${entry.name}` : entry.name;
-                if (!this.pathFilter.isAllowed(entryRelativePath)) {
-                    continue;
-                }
                 const fullEntryPath = join(dirPath, entry.name);
                 if (entry.isDirectory()) {
-                    // Also check if directory contents would be filtered (e.g., .obsidian/**)
-                    if (!this.pathFilter.isAllowed(`${entryRelativePath}/test.md`)) {
+                    if (!this.pathFilter.isAllowedForListing(entryRelativePath)) {
                         continue;
                     }
                     totalFolders++;
                     await scanDirectory(fullEntryPath, entryRelativePath);
                 }
                 else if (entry.isFile()) {
+                    if (!this.pathFilter.isAllowed(entryRelativePath)) {
+                        continue;
+                    }
                     totalNotes++;
                     const stats = await stat(fullEntryPath);
                     totalSize += stats.size;

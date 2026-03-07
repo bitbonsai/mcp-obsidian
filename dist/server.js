@@ -3,12 +3,12 @@ import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { CallToolRequestSchema, ListToolsRequestSchema, } from "@modelcontextprotocol/sdk/types.js";
 import { FileSystemService } from "./src/filesystem.js";
-import { FrontmatterHandler } from "./src/frontmatter.js";
+import { FrontmatterHandler, parseFrontmatter } from "./src/frontmatter.js";
 import { PathFilter } from "./src/pathfilter.js";
 import { SearchService } from "./src/search.js";
 import { readFileSync } from "fs";
 import { fileURLToPath } from "url";
-import { dirname, join } from "path";
+import { dirname, join, resolve } from "path";
 // Get package.json version
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -28,29 +28,29 @@ if (firstArg === "--help" || firstArg === "-h") {
 Universal AI bridge for Obsidian vaults - connect any MCP-compatible assistant
 
 Usage:
-  npx @mauricio.wolff/mcp-obsidian <vault-path>
+  npx @mauricio.wolff/mcp-obsidian [vault-path]
 
 Arguments:
-  <vault-path>    Path to your Obsidian vault directory
+  [vault-path]    Optional path to your Obsidian vault directory
+                  Defaults to current working directory when omitted
 
 Options:
   --version, -v   Show version number
   --help, -h      Show this help message
 
 Examples:
+  npx @mauricio.wolff/mcp-obsidian
   npx @mauricio.wolff/mcp-obsidian ~/Documents/MyVault
+  npx @mauricio.wolff/mcp-obsidian ./Vault
   npx @mauricio.wolff/mcp-obsidian /path/to/obsidian/vault
   npx @mauricio.wolff/mcp-obsidian "/path/with spaces/Obsidian Vault"
 `);
     process.exit(0);
 }
-// Join all trailing args to support vault paths with spaces
-const vaultPath = cliArgs.join(' ').trim();
-if (!vaultPath) {
-    console.error("Usage: npx @mauricio.wolff/mcp-obsidian /path/to/vault");
-    console.error("Run 'npx @mauricio.wolff/mcp-obsidian --help' for more information");
-    process.exit(1);
-}
+// Join trailing args to support vault paths with spaces.
+// When omitted, default to current working directory.
+const vaultPathArg = cliArgs.join(' ').trim();
+const vaultPath = resolve(vaultPathArg || process.cwd());
 // Initialize services
 const pathFilter = new PathFilter();
 const frontmatterHandler = new FrontmatterHandler();
@@ -459,10 +459,11 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                 };
             }
             case "write_note": {
+                const fm = parseFrontmatter(trimmedArgs.frontmatter);
                 await fileSystem.writeNote({
                     path: trimmedArgs.path,
                     content: trimmedArgs.content,
-                    frontmatter: trimmedArgs.frontmatter,
+                    ...(fm !== undefined && { frontmatter: fm }),
                     mode: trimmedArgs.mode || 'overwrite'
                 });
                 return {
@@ -593,9 +594,13 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                 };
             }
             case "update_frontmatter": {
+                const fm = parseFrontmatter(trimmedArgs.frontmatter);
+                if (!fm) {
+                    throw new Error('frontmatter is required');
+                }
                 await fileSystem.updateFrontmatter({
                     path: trimmedArgs.path,
-                    frontmatter: trimmedArgs.frontmatter,
+                    frontmatter: fm,
                     merge: trimmedArgs.merge
                 });
                 return {
