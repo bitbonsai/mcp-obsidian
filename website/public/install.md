@@ -87,7 +87,8 @@ command = "npx"
 args = ["-y", "@mauricio.wolff/mcp-obsidian@latest", "/path/to/your/vault"]
 ```
 
-## Config File Locations
+<details>
+<summary>Config File Locations (optional)</summary>
 
 | Platform | Path |
 |----------|------|
@@ -102,13 +103,27 @@ args = ["-y", "@mauricio.wolff/mcp-obsidian@latest", "/path/to/your/vault"]
 | OpenAI Codex (macOS/Linux) | ~/.codex/config.toml |
 | OpenAI Codex (Windows) | %USERPROFILE%\.codex\config.toml |
 
-## Vault Path Helper
+</details>
+
+<details>
+<summary>Need your vault path? (optional)</summary>
 
 - macOS: In Finder, right-click your vault folder while holding `Option`, then choose `Copy "..." as Pathname`.
 - Windows: In File Explorer, hold `Shift`, right-click your vault folder, then choose `Copy as path`.
 - Linux: Open a terminal in your vault folder and run `pwd`.
 
 Replace `/path/to/your/vault` with the full absolute path.
+
+### Optional CWD Mode
+
+You can omit the vault path when your client starts this server from inside your vault directory. In that case, MCP-Obsidian uses the current working directory as vault root.
+
+```bash
+npx @mauricio.wolff/mcp-obsidian@latest
+npm start
+```
+
+</details>
 
 No pre-installation needed! npx automatically downloads and runs the server.
 

@@ -61,7 +61,7 @@ No. MCP-Obsidian works via filesystem access, so Obsidian can be closed.
 Yes. Configure multiple MCP server entries, one per vault path.
 
 ### What file types are supported?
-Read/write tools support `.md`, `.markdown`, and `.txt` notes. `list_directory` may show other filenames (like `.png` or `.pdf`), but non-note files are not read as notes.
+Read/write tools support `.md`, `.markdown`, `.txt`, `.base`, and `.canvas` files. `list_directory` may show other filenames (like `.png` or `.pdf`), but non-note files are not read as notes.
 
 ### Is search semantic?
 No. Search is lexical full-text matching with BM25 ranking, not embedding/vector semantic retrieval.
