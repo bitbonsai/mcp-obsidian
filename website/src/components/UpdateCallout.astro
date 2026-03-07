@@ -17,7 +17,7 @@
             <h3 class="text-lg font-semibold text-foreground flex items-center gap-2">
               Recent Updates
               <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-accent/20 text-accent border border-accent/30">
-                v0.8.1
+                v0.8.2
               </span>
             </h3>
             <button
@@ -37,10 +37,16 @@
           </div>
           <div class="latest-update mb-4">
             <p class="text-muted-foreground leading-relaxed">
-              <span class="font-medium text-foreground">March 2026:</span> Trailing-slash vault paths no longer truncate search results
+              <span class="font-medium text-foreground">v0.8.2 (March 2026):</span> Trailing-slash vault paths no longer truncate search results
               (<a href="https://github.com/bitbonsai/mcp-obsidian/pull/48" target="_blank" rel="noopener noreferrer" class="text-accent hover:text-accent-2 transition-colors">PR #48</a>),
               <code>get_vault_stats</code> now handles dotted folder names correctly
               (<a href="https://github.com/bitbonsai/mcp-obsidian/pull/42" target="_blank" rel="noopener noreferrer" class="text-accent hover:text-accent-2 transition-colors">PR #42</a>),
+              note tools now support <code>.base</code> and <code>.canvas</code>
+              (<a href="https://github.com/bitbonsai/mcp-obsidian/pull/53" target="_blank" rel="noopener noreferrer" class="text-accent hover:text-accent-2 transition-colors">PR #53</a>),
+              string frontmatter inputs are now handled safely
+              (<a href="https://github.com/bitbonsai/mcp-obsidian/pull/47" target="_blank" rel="noopener noreferrer" class="text-accent hover:text-accent-2 transition-colors">PR #47</a>),
+              vault path is now optional for CLI usage (defaults to current working directory)
+              (<a href="https://github.com/bitbonsai/mcp-obsidian/issues/50" target="_blank" rel="noopener noreferrer" class="text-accent hover:text-accent-2 transition-colors">#50</a>),
               and dependency refreshes for the MCP SDK and Node types are merged
               (<a href="https://github.com/bitbonsai/mcp-obsidian/pull/43" target="_blank" rel="noopener noreferrer" class="text-accent hover:text-accent-2 transition-colors">PR #43</a>,
               <a href="https://github.com/bitbonsai/mcp-obsidian/pull/44" target="_blank" rel="noopener noreferrer" class="text-accent hover:text-accent-2 transition-colors">PR #44</a>)

@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { FilePenLine, LibraryBig, PenSquare, Search, Tags } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 
 // Catppuccin Mocha theme
 const catppuccinMocha = {
@@ -71,7 +73,7 @@ const catppuccinMocha = {
 interface DemoExample {
   id: string;
   title: string;
-  icon: string;
+  icon: LucideIcon;
   claude: string;
   response: string;
   details: string[];
@@ -81,9 +83,9 @@ const examples: DemoExample[] = [
   {
     id: 'patch',
     title: 'Efficient Editing',
-    icon: '✏️',
+    icon: PenSquare,
     claude: 'Add the equation for energy-mass equivalence to my physics notes',
-    response: `🔧 MCP-Obsidian: Using patch_note...
+    response: `MCP-Obsidian: Using patch_note...
 
 Request:
 \`\`\`json
@@ -104,7 +106,7 @@ Response:
 }
 \`\`\`
 
-✅ Done! Added Einstein's equation to your notes.
+Done! Added Einstein's equation to your notes.
 Only the specific section was updated - no full file rewrite needed.`,
     details: [
       'MCP server used patch_note for efficient partial update',
@@ -117,9 +119,9 @@ Only the specific section was updated - no full file rewrite needed.`,
   {
     id: 'write',
     title: 'Create Notes',
-    icon: '📝',
+    icon: FilePenLine,
     claude: 'Create a quick note about today\'s meeting',
-    response: `🔧 MCP-Obsidian: Using write_note...
+    response: `MCP-Obsidian: Using write_note...
 
 Request:
 \`\`\`json
@@ -132,7 +134,7 @@ Request:
 Response:
 Successfully wrote note: Meetings/Team Sync.md (mode: overwrite)
 
-✅ Done! I've created your meeting note.`,
+Done! I've created your meeting note.`,
     details: [
       'MCP server wrote the complete note to disk',
       'AI generated the structured content',
@@ -144,9 +146,9 @@ Successfully wrote note: Meetings/Team Sync.md (mode: overwrite)
   {
     id: 'read_multiple',
     title: 'Read Multiple Notes',
-    icon: '📚',
+    icon: LibraryBig,
     claude: 'Read all my book club notes and give me a summary',
-    response: `🔧 MCP-Obsidian: Using read_multiple_notes...
+    response: `MCP-Obsidian: Using read_multiple_notes...
 
 Request:
 \`\`\`json
@@ -174,7 +176,7 @@ Response:
 }
 \`\`\`
 
-✅ I've read all 3 notes. Here's a summary:
+Done. I've read all 3 notes. Here's a summary:
 Common themes across these books: systems thinking, habit formation, and focus. All emphasize the importance of intentional work practices and continuous improvement.`,
     details: [
       'MCP server read multiple files in one request (max 10)',
@@ -187,9 +189,9 @@ Common themes across these books: systems thinking, habit formation, and focus. 
   {
     id: 'frontmatter',
     title: 'Manage Frontmatter',
-    icon: '🏷️',
+    icon: Tags,
     claude: 'Update the status and add tags to my project planning note',
-    response: `🔧 MCP-Obsidian: Using update_frontmatter...
+    response: `MCP-Obsidian: Using update_frontmatter...
 
 Request:
 \`\`\`json
@@ -211,7 +213,7 @@ Request:
 Response:
 Successfully updated frontmatter for: Projects/Website Redesign.md
 
-✅ Done! I've updated the frontmatter with the new status and tags.`,
+Done! I've updated the frontmatter with the new status and tags.`,
     details: [
       'MCP server safely updated YAML frontmatter',
       'Merges with existing frontmatter by default (merge: true)',
@@ -223,9 +225,9 @@ Successfully updated frontmatter for: Projects/Website Redesign.md
   {
     id: 'search',
     title: 'Search Content',
-    icon: '🔍',
+    icon: Search,
     claude: 'Search for "React hooks" in my notes',
-    response: `🔧 MCP-Obsidian: Using search_notes...
+    response: `MCP-Obsidian: Using search_notes...
 
 Request:
 \`\`\`json
@@ -256,7 +258,7 @@ Response:
 ]
 \`\`\`
 
-✅ Found 2 notes with 11 total matches across your vault.`,
+Done. Found 2 notes with 11 total matches across your vault.`,
     details: [
       'MCP server performed full-text search across vault',
       'Token-optimized response: p=path, t=title, ex=excerpt, mc=matchCount, ln=lineNumber',
@@ -310,7 +312,7 @@ export default function InteractiveDemo() {
                 }
               `}
             >
-              <span className="text-lg">{example.icon}</span>
+              <example.icon className="w-4 h-4" aria-hidden="true" />
               <span className="hidden sm:inline">{example.title}</span>
             </button>
           ))}

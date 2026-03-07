@@ -1,4 +1,5 @@
 ---
+import { FolderOpen, Settings, Target, Zap } from 'lucide-react';
 // Code examples for different configuration scenarios
 ---
 
@@ -18,19 +19,19 @@
     <div class="fade-in-on-scroll">
       <div class="flex flex-wrap justify-center gap-2 mb-8">
         <button class="config-tab active" data-tab="basic" aria-label="Basic Setup configuration example">
-          <span class="text-lg">⚡</span>
+          <Zap className="w-4 h-4" aria-hidden="true" />
           <span>Basic Setup</span>
         </button>
         <button class="config-tab" data-tab="advanced" aria-label="Advanced configuration example">
-          <span class="text-lg">🔧</span>
+          <Settings className="w-4 h-4" aria-hidden="true" />
           <span>Advanced</span>
         </button>
         <button class="config-tab" data-tab="multiple" aria-label="Multiple Vaults configuration example">
-          <span class="text-lg">📁</span>
+          <FolderOpen className="w-4 h-4" aria-hidden="true" />
           <span>Multiple Vaults</span>
         </button>
         <button class="config-tab" data-tab="filters" aria-label="Custom Filters configuration example">
-          <span class="text-lg">🎯</span>
+          <Target className="w-4 h-4" aria-hidden="true" />
           <span>Custom Filters</span>
         </button>
       </div>
@@ -42,7 +43,7 @@
           <div class="grid lg:grid-cols-2 gap-8">
             <div>
               <h3 class="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
-                <span class="text-lg">⚡</span>
+                <Zap className="w-5 h-5 text-accent" aria-hidden="true" />
                 Quick Start Configuration
               </h3>
               <p class="text-muted-foreground mb-6">
@@ -95,7 +96,7 @@
           <div class="grid lg:grid-cols-2 gap-8">
             <div>
               <h3 class="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
-                <span class="text-lg">🔧</span>
+                <Settings className="w-5 h-5 text-accent" aria-hidden="true" />
                 Advanced Settings
               </h3>
               <p class="text-muted-foreground mb-6">
@@ -159,7 +160,7 @@
           <div class="grid lg:grid-cols-2 gap-8">
             <div>
               <h3 class="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
-                <span class="text-lg">📁</span>
+                <FolderOpen className="w-5 h-5 text-accent-2" aria-hidden="true" />
                 Multiple Vault Support
               </h3>
               <p class="text-muted-foreground mb-6">
@@ -224,7 +225,7 @@
           <div class="grid lg:grid-cols-2 gap-8">
             <div>
               <h3 class="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
-                <span class="text-lg">🎯</span>
+                <Target className="w-5 h-5 text-warning" aria-hidden="true" />
                 Smart Filtering
               </h3>
               <p class="text-muted-foreground mb-6">

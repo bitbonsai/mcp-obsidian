@@ -1,4 +1,6 @@
 ---
+import { AlertTriangle, CheckCircle2, XCircle } from 'lucide-react';
+
 // Comparison data structure
 const features = [
   {
@@ -59,16 +61,22 @@ const features = [
   }
 ];
 
-const statusIcons: Record<string, string> = {
-  success: '✅',
-  warning: '⚠️',
-  error: '❌'
+const statusIcons: Record<string, any> = {
+  success: CheckCircle2,
+  warning: AlertTriangle,
+  error: XCircle
 };
 
 const statusColors: Record<string, string> = {
   success: 'text-success',
   warning: 'text-warning',
   error: 'text-error'
+};
+
+const statusIconColors: Record<string, string> = {
+  success: 'text-green-500',
+  warning: 'text-orange-400',
+  error: 'text-red-400'
 };
 ---
 
@@ -127,7 +135,10 @@ const statusColors: Record<string, string> = {
                 <!-- MCP-Obsidian (This package) -->
                 <div class="text-center">
                   <div class="flex flex-col items-center gap-1 mb-2">
-                    <div class="text-2xl">{statusIcons[feature.mcpObsidian.status]}</div>
+                    {(() => {
+                      const StatusIcon = statusIcons[feature.mcpObsidian.status];
+                      return <StatusIcon className={`w-6 h-6 ${statusIconColors[feature.mcpObsidian.status]}`} />;
+                    })()}
                     <span class={`font-semibold ${statusColors[feature.mcpObsidian.status]}`}>
                       {feature.mcpObsidian.text}
                     </span>
@@ -140,7 +151,10 @@ const statusColors: Record<string, string> = {
                 <!-- Other MCP-Obsidian (Plugin-based) -->
                 <div class="text-center">
                   <div class="flex flex-col items-center gap-1 mb-2">
-                    <div class="text-2xl">{statusIcons[feature.otherMcpObsidian.status]}</div>
+                    {(() => {
+                      const StatusIcon = statusIcons[feature.otherMcpObsidian.status];
+                      return <StatusIcon className={`w-6 h-6 ${statusIconColors[feature.otherMcpObsidian.status]}`} />;
+                    })()}
                     <span class={`font-semibold ${statusColors[feature.otherMcpObsidian.status]}`}>
                       {feature.otherMcpObsidian.text}
                     </span>
@@ -153,7 +167,10 @@ const statusColors: Record<string, string> = {
                 <!-- Generic FS MCP -->
                 <div class="text-center">
                   <div class="flex flex-col items-center gap-1 mb-2">
-                    <div class="text-2xl">{statusIcons[feature.genericFs.status]}</div>
+                    {(() => {
+                      const StatusIcon = statusIcons[feature.genericFs.status];
+                      return <StatusIcon className={`w-6 h-6 ${statusIconColors[feature.genericFs.status]}`} />;
+                    })()}
                     <span class={`font-semibold ${statusColors[feature.genericFs.status]}`}>
                       {feature.genericFs.text}
                     </span>
@@ -166,7 +183,10 @@ const statusColors: Record<string, string> = {
                 <!-- Direct File Access -->
                 <div class="text-center">
                   <div class="flex flex-col items-center gap-1 mb-2">
-                    <div class="text-2xl">{statusIcons[feature.directAccess.status]}</div>
+                    {(() => {
+                      const StatusIcon = statusIcons[feature.directAccess.status];
+                      return <StatusIcon className={`w-6 h-6 ${statusIconColors[feature.directAccess.status]}`} />;
+                    })()}
                     <span class={`font-semibold ${statusColors[feature.directAccess.status]}`}>
                       {feature.directAccess.text}
                     </span>

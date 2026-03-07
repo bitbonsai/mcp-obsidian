@@ -1,5 +1,19 @@
 ---
 import CodeBlock from './CodeBlock';
+import {
+  BadgeCheck,
+  Coins,
+  FileCode2,
+  FileText,
+  FolderKanban,
+  Globe,
+  Heart,
+  Rocket,
+  Search,
+  Shield,
+  Target,
+  Wrench,
+} from 'lucide-react';
 
 interface Props {
   title: string;
@@ -18,6 +32,23 @@ const {
   accent = false,
   codeExample
 } = Astro.props;
+
+const iconMap: Record<string, any> = {
+  target: Target,
+  search: Search,
+  shield: Shield,
+  file: FileText,
+  rocket: Rocket,
+  node: BadgeCheck,
+  tokens: Coins,
+  typescript: FileCode2,
+  heart: Heart,
+  toolkit: Wrench,
+  platform: Globe,
+  vault: FolderKanban,
+};
+
+const IconComponent = iconMap[icon];
 
 const sizeClasses = {
   small: 'col-span-1 row-span-1',
@@ -59,8 +90,12 @@ const cardClasses = `
   <div class="relative z-10 h-full flex flex-col">
     <!-- Icon and title -->
     <div class="flex items-start gap-4 mb-4">
-      <div class="text-4xl transform transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
-        {icon}
+      <div class="transform transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3 text-accent">
+        {IconComponent ? (
+          <IconComponent className="w-10 h-10" />
+        ) : (
+          <span class="text-4xl">{icon}</span>
+        )}
       </div>
       <div class="flex-1">
         <h3 class="text-xl font-semibold text-foreground mb-2 group-hover:text-accent transition-colors duration-300">

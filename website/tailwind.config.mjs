@@ -17,6 +17,10 @@ export default {
         warning: '#f59e0b',
         error: '#ef4444',
       },
+      fontSize: {
+        xs: ['0.875rem', { lineHeight: '1.25rem' }],
+        sm: ['1rem', { lineHeight: '1.5rem' }],
+      },
       fontFamily: {
         sans: ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
         mono: ['JetBrains Mono', 'SF Mono', 'Consolas', 'Liberation Mono', 'Menlo', 'monospace'],

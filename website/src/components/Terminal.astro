@@ -1,5 +1,19 @@
 ---
 import CodeBlock from "./CodeBlock";
+import {
+  Check,
+  ChevronDown,
+  Compass,
+  Globe,
+  Lightbulb,
+  Lock,
+  Pencil,
+  Search,
+  X,
+  Zap,
+  FolderOpen,
+  Layers,
+} from "lucide-react";
 ---
 
 <section id="install" class="relative py-12 px-4 sm:px-6 lg:px-8">
@@ -117,7 +131,7 @@ import CodeBlock from "./CodeBlock";
                 class="p-3 bg-card/30 rounded-lg border border-border/50 mb-4"
               >
                 <div class="flex items-start gap-2">
-                  <div class="text-accent text-lg mt-0.5">⚡</div>
+                  <Zap className="w-4 h-4 text-accent mt-1 flex-shrink-0" aria-hidden="true" />
                   <div class="flex-1">
                     <p class="text-sm font-semibold text-foreground mb-2">
                       Use the CLI
@@ -136,7 +150,7 @@ import CodeBlock from "./CodeBlock";
                 class="mt-4 p-3 bg-accent/10 rounded-lg border border-accent/30"
               >
                 <div class="flex items-start gap-2">
-                  <div class="text-accent text-lg mt-0.5">💡</div>
+                  <Lightbulb className="w-4 h-4 text-accent mt-1 flex-shrink-0" aria-hidden="true" />
                   <div class="flex-1">
                     <p class="text-sm font-semibold text-foreground mb-2">
                       Configuration Scopes
@@ -166,7 +180,7 @@ import CodeBlock from "./CodeBlock";
                 class="mt-4 p-3 bg-accent/10 rounded-lg border border-accent/30"
               >
                 <div class="flex items-start gap-2">
-                  <div class="text-accent text-lg mt-0.5">💡</div>
+                  <Lightbulb className="w-4 h-4 text-accent mt-1 flex-shrink-0" aria-hidden="true" />
                   <div class="flex-1">
                     <p class="text-sm font-semibold text-foreground mb-2">
                       Usage Examples
@@ -196,7 +210,7 @@ import CodeBlock from "./CodeBlock";
                 class="p-3 bg-card/30 rounded-lg border border-border/50"
               >
                 <div class="flex items-start gap-2">
-                  <div class="text-accent text-lg mt-0.5">⚡</div>
+                  <Zap className="w-4 h-4 text-accent mt-1 flex-shrink-0" aria-hidden="true" />
                   <div class="flex-1">
                     <p class="text-sm font-semibold text-foreground mb-2">
                       Use the CLI
@@ -249,7 +263,7 @@ import CodeBlock from "./CodeBlock";
                 class="mt-4 p-3 bg-accent/10 rounded-lg border border-accent/30"
               >
                 <div class="flex items-start gap-2">
-                  <div class="text-accent text-lg mt-0.5">💡</div>
+                  <Lightbulb className="w-4 h-4 text-accent mt-1 flex-shrink-0" aria-hidden="true" />
                   <div class="flex-1">
                     <p class="text-sm font-semibold text-foreground mb-2">
                       Configuration Scopes
@@ -275,7 +289,7 @@ import CodeBlock from "./CodeBlock";
                 class="mt-4 p-3 bg-accent/10 rounded-lg border border-accent/30"
               >
                 <div class="flex items-start gap-2">
-                  <div class="text-accent text-lg mt-0.5">💡</div>
+                  <Lightbulb className="w-4 h-4 text-accent mt-1 flex-shrink-0" aria-hidden="true" />
                   <div class="flex-1">
                     <p class="text-sm font-semibold text-foreground mb-2">
                       Usage Examples
@@ -305,7 +319,7 @@ import CodeBlock from "./CodeBlock";
                 class="p-3 bg-card/30 rounded-lg border border-border/50 mb-4"
               >
                 <div class="flex items-start gap-2">
-                  <div class="text-accent text-lg mt-0.5">⚡</div>
+                  <Zap className="w-4 h-4 text-accent mt-1 flex-shrink-0" aria-hidden="true" />
                   <div class="flex-1">
                     <p class="text-sm font-semibold text-foreground mb-2">
                       Use the CLI
@@ -354,7 +368,7 @@ import CodeBlock from "./CodeBlock";
                 class="mt-4 p-3 bg-accent/10 rounded-lg border border-accent/30"
               >
                 <div class="flex items-start gap-2">
-                  <div class="text-accent text-lg mt-0.5">💡</div>
+                  <Lightbulb className="w-4 h-4 text-accent mt-1 flex-shrink-0" aria-hidden="true" />
                   <div class="flex-1">
                     <p class="text-sm font-semibold text-foreground mb-2">
                       Usage Examples
@@ -416,7 +430,7 @@ args = ["-y", "@mauricio.wolff/mcp-obsidian@latest", "/path/to/your/vault"]'
                 class="mt-4 p-3 bg-accent/10 rounded-lg border border-accent/30"
               >
                 <div class="flex items-start gap-2">
-                  <div class="text-accent text-lg mt-0.5">💡</div>
+                  <Lightbulb className="w-4 h-4 text-accent mt-1 flex-shrink-0" aria-hidden="true" />
                   <div class="flex-1">
                     <p class="text-sm font-semibold text-foreground mb-2">
                       Usage Examples
@@ -442,157 +456,189 @@ args = ["-y", "@mauricio.wolff/mcp-obsidian@latest", "/path/to/your/vault"]'
           </div>
         </div>
 
-        <!-- Configuration locations -->
-        <div class="mt-4 p-4 bg-card/30 rounded-lg border border-border/50">
-          <p class="text-sm text-muted-foreground mb-3">
-            📍 <strong>Config file locations:</strong>
-          </p>
-          <div class="grid md:grid-cols-2 gap-4 text-xs">
-            <div>
-              <div class="font-semibold text-accent text-sm mb-2">
-                Claude Desktop (JSON)
+        <!-- Optional setup details -->
+        <div class="mt-4 p-4 bg-card/30 rounded-lg border border-border/50 space-y-3">
+          <div class="p-3 bg-accent/10 rounded-lg border border-accent/20">
+            <p class="text-sm text-foreground flex items-start gap-2">
+              <Zap className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" aria-hidden="true" />
+              <span>
+                <strong>No pre-installation needed!</strong> npx automatically downloads
+                and runs the server when needed.
+              </span>
+            </p>
+          </div>
+
+          <details class="collapsible-card">
+            <summary class="collapsible-summary">
+              <ChevronDown className="collapsible-chevron" aria-hidden="true" />
+              <span class="text-sm text-muted-foreground"><strong>Config file locations</strong></span>
+            </summary>
+
+            <div class="collapsible-content grid md:grid-cols-2 gap-4 text-xs">
+              <div>
+                <div class="font-semibold text-accent text-sm mb-2">
+                  Claude Desktop (JSON)
+                </div>
+                <div class="space-y-1 text-muted-foreground">
+                  <div>
+                    macOS: <code class="bg-background/50 px-1 rounded text-foreground">
+                      ~/Library/Application\ Support/Claude/claude_desktop_config.json
+                    </code>
+                  </div>
+                  <div>
+                    Windows: <code
+                      class="bg-background/50 px-1 rounded text-foreground"
+                      >%APPDATA%\Claude\claude_desktop_config.json</code
+                    >
+                  </div>
+                </div>
               </div>
-              <div class="space-y-1 text-muted-foreground">
+              <div>
+                <div class="font-semibold text-accent text-sm mb-2">
+                  Claude Code (CLI)
+                </div>
+                <div class="space-y-1 text-muted-foreground">
+                  <div>
+                    User scope: <code
+                      class="bg-background/50 px-1 rounded text-foreground"
+                      >~/.claude.json</code
+                    >
+                  </div>
+                  <div class="text-xs">
+                    Use <code class="bg-background/50 px-1 rounded text-foreground"
+                      >claude mcp add-json --scope user</code
+                    > for global access
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div class="font-semibold text-accent text-sm mb-2">
+                  ChatGPT+ Desktop (JSON)
+                </div>
+                <div class="space-y-1 text-muted-foreground">
+                  <div>
+                    macOS: <code
+                      class="bg-background/50 px-1 rounded text-foreground"
+                      >~/Library/Application Support/ChatGPT/chatgpt_config.json</code
+                    >
+                  </div>
+                  <div>
+                    Windows: <code
+                      class="bg-background/50 px-1 rounded text-foreground"
+                      >%APPDATA%\ChatGPT\chatgpt_config.json</code
+                    >
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div class="font-semibold text-accent text-sm mb-2">
+                  Gemini CLI (JSON)
+                </div>
+                <div class="space-y-1 text-muted-foreground">
+                  <div>
+                    All platforms: <code
+                      class="bg-background/50 px-1 rounded text-foreground"
+                      >~/.gemini/settings.json</code
+                    >
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div class="font-semibold text-accent text-sm mb-2">
+                  OpenCode (JSON)
+                </div>
+                <div class="space-y-1 text-muted-foreground">
+                  <div>
+                    Per project: <code
+                      class="bg-background/50 px-1 rounded text-foreground"
+                      >opencode.json</code
+                    >
+                  </div>
+                  <div>
+                    Global: <code
+                      class="bg-background/50 px-1 rounded text-foreground"
+                      >~/.config/opencode/opencode.json</code
+                    >
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div class="font-semibold text-accent text-sm mb-2">
+                  OpenAI Codex (TOML)
+                </div>
+                <div class="space-y-1 text-muted-foreground">
+                  <div>
+                    macOS/Linux: <code
+                      class="bg-background/50 px-1 rounded text-foreground"
+                      >~/.codex/config.toml</code
+                    >
+                  </div>
+                  <div>
+                    Windows: <code
+                      class="bg-background/50 px-1 rounded text-foreground"
+                      >%USERPROFILE%\.codex\config.toml</code
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <details class="collapsible-card">
+            <summary class="collapsible-summary">
+              <ChevronDown className="collapsible-chevron" aria-hidden="true" />
+              <span class="text-sm text-muted-foreground"><strong>Need your vault path?</strong></span>
+            </summary>
+
+            <div class="collapsible-content space-y-4 text-xs text-muted-foreground">
+              <div class="grid md:grid-cols-2 gap-4">
                 <div>
-                  macOS: <code class="bg-background/50 px-1 rounded text-foreground">
-                    ~/Library/Application\ Support/Claude/claude_desktop_config.json
+                  <span class="font-semibold text-foreground">macOS:</span>
+                  In Finder, right-click your vault folder while holding
+                  <code class="bg-background/50 px-1 rounded text-foreground">Option</code>
+                  and choose
+                  <span class="text-foreground">Copy "..." as Pathname</span>.
+                </div>
+                <div>
+                  <span class="font-semibold text-foreground">Windows:</span>
+                  In File Explorer, hold
+                  <code class="bg-background/50 px-1 rounded text-foreground">Shift</code>,
+                  right-click your vault folder, and choose
+                  <span class="text-foreground">Copy as path</span>.
+                </div>
+                <div class="md:col-span-2">
+                  <span class="font-semibold text-foreground">Linux:</span>
+                  Open a terminal in your vault folder and run
+                  <code class="bg-background/50 px-1 rounded text-foreground">pwd</code>.
+                </div>
+              </div>
+
+              <p>
+                Replace <code class="bg-background/50 px-1 rounded text-foreground">/path/to/your/vault</code>
+                with that full absolute path.
+              </p>
+
+              <div class="p-3 bg-accent/10 rounded-lg border border-accent/20">
+                <p class="text-sm text-muted-foreground mb-2 flex items-center gap-2">
+                  <Compass className="w-4 h-4 text-accent flex-shrink-0" aria-hidden="true" />
+                  <strong>Optional CWD mode</strong>
+                </p>
+                <p class="leading-relaxed">
+                  You can omit the vault path entirely when your client starts this
+                  server from inside your vault directory. In that case,
+                  MCP-Obsidian uses the current working directory as vault root.
+                </p>
+                <div class="mt-3 space-y-2">
+                  <code class="block bg-background/50 px-2 py-1 rounded text-foreground">
+                    npx @mauricio.wolff/mcp-obsidian@latest
+                  </code>
+                  <code class="block bg-background/50 px-2 py-1 rounded text-foreground">
+                    npm start
                   </code>
                 </div>
-                <div>
-                  Windows: <code
-                    class="bg-background/50 px-1 rounded text-foreground"
-                    >%APPDATA%\Claude\claude_desktop_config.json</code
-                  >
-                </div>
               </div>
             </div>
-            <div>
-              <div class="font-semibold text-accent text-sm mb-2">
-                Claude Code (CLI)
-              </div>
-              <div class="space-y-1 text-muted-foreground">
-                <div>
-                  User scope: <code
-                    class="bg-background/50 px-1 rounded text-foreground"
-                    >~/.claude.json</code
-                  >
-                </div>
-                <div class="text-xs">
-                  Use <code class="bg-background/50 px-1 rounded text-foreground"
-                    >claude mcp add-json --scope user</code
-                  > for global access
-                </div>
-              </div>
-            </div>
-            <div>
-              <div class="font-semibold text-accent text-sm mb-2">
-                ChatGPT+ Desktop (JSON)
-              </div>
-              <div class="space-y-1 text-muted-foreground">
-                <div>
-                  macOS: <code
-                    class="bg-background/50 px-1 rounded text-foreground"
-                    >~/Library/Application Support/ChatGPT/chatgpt_config.json</code
-                  >
-                </div>
-                <div>
-                  Windows: <code
-                    class="bg-background/50 px-1 rounded text-foreground"
-                    >%APPDATA%\ChatGPT\chatgpt_config.json</code
-                  >
-                </div>
-              </div>
-            </div>
-            <div>
-              <div class="font-semibold text-accent text-sm mb-2">
-                Gemini CLI (JSON)
-              </div>
-              <div class="space-y-1 text-muted-foreground">
-                <div>
-                  All platforms: <code
-                    class="bg-background/50 px-1 rounded text-foreground"
-                    >~/.gemini/settings.json</code
-                  >
-                </div>
-              </div>
-            </div>
-            <div>
-              <div class="font-semibold text-accent text-sm mb-2">
-                OpenCode (JSON)
-              </div>
-              <div class="space-y-1 text-muted-foreground">
-                <div>
-                  Per project: <code
-                    class="bg-background/50 px-1 rounded text-foreground"
-                    >opencode.json</code
-                  >
-                </div>
-                <div>
-                  Global: <code
-                    class="bg-background/50 px-1 rounded text-foreground"
-                    >~/.config/opencode/opencode.json</code
-                  >
-                </div>
-              </div>
-            </div>
-            <div>
-              <div class="font-semibold text-accent text-sm mb-2">
-                OpenAI Codex (TOML)
-              </div>
-              <div class="space-y-1 text-muted-foreground">
-                <div>
-                  macOS/Linux: <code
-                    class="bg-background/50 px-1 rounded text-foreground"
-                    >~/.codex/config.toml</code
-                  >
-                </div>
-                <div>
-                  Windows: <code
-                    class="bg-background/50 px-1 rounded text-foreground"
-                    >%USERPROFILE%\.codex\config.toml</code
-                  >
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="mt-3 p-3 bg-accent/10 rounded-lg border border-accent/20">
-            <p class="text-sm text-foreground">
-              ⚡ <strong>No pre-installation needed!</strong> npx automatically downloads
-              and runs the server when needed.
-            </p>
-          </div>
-
-          <div class="mt-4 p-4 bg-card/30 rounded-lg border border-border/50">
-            <p class="text-sm text-muted-foreground mb-3">
-              📂 <strong>Need your vault path?</strong>
-            </p>
-            <div class="grid md:grid-cols-2 gap-4 text-xs text-muted-foreground">
-              <div>
-                <span class="font-semibold text-foreground">macOS:</span>
-                In Finder, right-click your vault folder while holding
-                <code class="bg-background/50 px-1 rounded text-foreground">Option</code>
-                and choose
-                <span class="text-foreground">Copy "..." as Pathname</span>.
-              </div>
-              <div>
-                <span class="font-semibold text-foreground">Windows:</span>
-                In File Explorer, hold
-                <code class="bg-background/50 px-1 rounded text-foreground">Shift</code>,
-                right-click your vault folder, and choose
-                <span class="text-foreground">Copy as path</span>.
-              </div>
-              <div class="md:col-span-2">
-                <span class="font-semibold text-foreground">Linux:</span>
-                Open a terminal in your vault folder and run
-                <code class="bg-background/50 px-1 rounded text-foreground">pwd</code>.
-              </div>
-            </div>
-            <p class="text-xs text-muted-foreground mt-3">
-              Replace <code class="bg-background/50 px-1 rounded text-foreground">/path/to/your/vault</code>
-              with that full absolute path.
-            </p>
-          </div>
+          </details>
         </div>
       </div>
 
@@ -680,16 +726,20 @@ args = ["-y", "@mauricio.wolff/mcp-obsidian@latest", "/path/to/your/vault"]'
               </div>
 
               <div class="text-success pl-4">
-                🌐 Opens interactive web interface at http://localhost:5173
+                <span class="inline-flex items-center gap-2">
+                  <Globe className="w-4 h-4" aria-hidden="true" />
+                  Opens interactive web interface at http://localhost:5173
+                </span>
               </div>
             </div>
           </div>
         </div>
 
         <div class="mt-4 p-4 bg-card/30 rounded-lg border border-border/50">
-          <p class="text-sm text-muted-foreground mb-3">
-            🔍 <strong>MCP Inspector</strong> provides a web UI to test all MCP methods
-            interactively.
+          <p class="text-sm text-muted-foreground mb-3 flex items-start gap-2">
+            <Search className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" aria-hidden="true" />
+            <span><strong>MCP Inspector</strong> provides a web UI to test all MCP methods
+            interactively.</span>
           </p>
           <div class="text-sm space-y-2">
             <div class="text-foreground font-medium">Perfect for:</div>
@@ -731,8 +781,11 @@ args = ["-y", "@mauricio.wolff/mcp-obsidian@latest", "/path/to/your/vault"]'
           class="mb-4 p-4 bg-gradient-to-r from-accent/10 to-accent-2/10 rounded-lg border border-accent/20"
         >
           <p class="text-sm text-foreground text-center">
-            🌐 <strong>Works with all MCP-compatible platforms:</strong> Claude Desktop, ChatGPT+, Claude Code, OpenCode, Gemini CLI, Cursor IDE,
-            Windsurf, and more coming soon!
+            <span class="inline-flex items-center gap-2">
+              <Globe className="w-4 h-4 text-accent" aria-hidden="true" />
+              <span><strong>Works with all MCP-compatible platforms:</strong> Claude Desktop, ChatGPT+, Claude Code, OpenCode, Gemini CLI, Cursor IDE,
+              Windsurf, and more coming soon!</span>
+            </span>
             <br />Use the same configuration with your platform's MCP server
             settings.
           </p>
@@ -740,28 +793,29 @@ args = ["-y", "@mauricio.wolff/mcp-obsidian@latest", "/path/to/your/vault"]'
         <div
           class="p-6 bg-gradient-to-r from-accent/10 to-accent-2/10 rounded-lg border border-accent/20"
         >
-          <p class="text-sm text-foreground mb-4">
-            🔒 <strong class="text-base">What "private" means:</strong>
+          <p class="text-sm text-foreground mb-4 flex items-center gap-2">
+            <Lock className="w-4 h-4 text-accent" aria-hidden="true" />
+            <strong class="text-base">What "private" means:</strong>
           </p>
 
           <div class="space-y-2 text-sm text-foreground/90">
             <div class="flex items-start gap-2">
-              <span class="text-green-500 mt-0.5">✓</span>
+              <Check className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" aria-hidden="true" />
               <span>Your vault files stay on your computer</span>
             </div>
 
             <div class="flex items-start gap-2">
-              <span class="text-green-500 mt-0.5">✓</span>
+              <Check className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" aria-hidden="true" />
               <span>We never see, store, or transmit your data</span>
             </div>
 
             <div class="flex items-start gap-2">
-              <span class="text-green-500 mt-0.5">✓</span>
+              <Check className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" aria-hidden="true" />
               <span>Only you and your AI assistant can access your notes</span>
             </div>
 
             <div class="flex items-start gap-2">
-              <span class="text-red-400 mt-0.5">✗</span>
+              <X className="w-4 h-4 text-red-400 mt-0.5 flex-shrink-0" aria-hidden="true" />
               <span
                 >AI providers (Anthropic, OpenAI) process content you share with
                 them</span
@@ -785,7 +839,7 @@ args = ["-y", "@mauricio.wolff/mcp-obsidian@latest", "/path/to/your/vault"]'
             <div
               class="w-8 h-8 rounded-full bg-success text-background flex items-center justify-center"
             >
-              ✓
+              <Check className="w-4 h-4" aria-hidden="true" />
             </div>
             <h3 class="text-xl font-semibold text-success">You're all set!</h3>
           </div>
@@ -798,22 +852,26 @@ args = ["-y", "@mauricio.wolff/mcp-obsidian@latest", "/path/to/your/vault"]'
             <span
               class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-success/20 text-success text-sm"
             >
-              🔍 Search notes
+              <Search className="w-3.5 h-3.5" aria-hidden="true" />
+              Search notes
             </span>
             <span
               class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-success/20 text-success text-sm"
             >
-              📝 Edit content
+              <Pencil className="w-3.5 h-3.5" aria-hidden="true" />
+              Edit content
             </span>
             <span
               class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-success/20 text-success text-sm"
             >
-              🗂️ Organize files
+              <FolderOpen className="w-3.5 h-3.5" aria-hidden="true" />
+              Organize files
             </span>
             <span
               class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-success/20 text-success text-sm"
             >
-              ⚡ Batch operations
+              <Layers className="w-3.5 h-3.5" aria-hidden="true" />
+              Batch operations
             </span>
           </div>
         </div>
@@ -949,6 +1007,41 @@ args = ["-y", "@mauricio.wolff/mcp-obsidian@latest", "/path/to/your/vault"]'
   .config-tab:focus-visible {
     outline: 2px solid rgba(139, 92, 246, 0.5);
     outline-offset: 2px;
+  }
+
+  .collapsible-card {
+    border: 1px solid rgba(var(--color-border-rgb, 63, 63, 70), 0.55);
+    border-radius: 0.75rem;
+    background: rgba(var(--color-card-rgb, 24, 24, 27), 0.35);
+  }
+
+  .collapsible-summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 0.9rem;
+    user-select: none;
+  }
+
+  .collapsible-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .collapsible-chevron {
+    width: 0.95rem;
+    height: 0.95rem;
+    color: var(--color-accent);
+    transition: transform 0.2s ease;
+  }
+
+  .collapsible-card[open] .collapsible-chevron {
+    transform: rotate(180deg);
+  }
+
+  .collapsible-content {
+    padding: 0 0.9rem 0.9rem;
   }
 
   /* Mobile responsiveness */
