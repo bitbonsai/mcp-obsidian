@@ -13,14 +13,30 @@
           </div>
         </div>
         <div class="flex-1">
-          <h3 class="text-lg font-semibold text-foreground mb-2 flex items-center gap-2">
-            Recent Updates
-            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-accent/20 text-accent border border-accent/30">
-              v0.8.1
-            </span>
-          </h3>
-          <ul class="text-muted-foreground mb-3 space-y-2">
-            <li>
+          <div class="updates-heading mb-4">
+            <h3 class="text-lg font-semibold text-foreground flex items-center gap-2">
+              Recent Updates
+              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-accent/20 text-accent border border-accent/30">
+                v0.8.1
+              </span>
+            </h3>
+            <button
+              type="button"
+              class="updates-toggle updates-toggle-compact"
+              data-updates-toggle
+              aria-expanded="false"
+              aria-controls="older-updates"
+              aria-label="Show full history"
+              title="Show full history"
+            >
+              <span class="sr-only" data-updates-label>Show full history</span>
+              <svg class="updates-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </button>
+          </div>
+          <div class="latest-update mb-4">
+            <p class="text-muted-foreground leading-relaxed">
               <span class="font-medium text-foreground">March 2026:</span> Trailing-slash vault paths no longer truncate search results
               (<a href="https://github.com/bitbonsai/mcp-obsidian/pull/48" target="_blank" rel="noopener noreferrer" class="text-accent hover:text-accent-2 transition-colors">PR #48</a>),
               <code>get_vault_stats</code> now handles dotted folder names correctly
@@ -28,37 +44,74 @@
               and dependency refreshes for the MCP SDK and Node types are merged
               (<a href="https://github.com/bitbonsai/mcp-obsidian/pull/43" target="_blank" rel="noopener noreferrer" class="text-accent hover:text-accent-2 transition-colors">PR #43</a>,
               <a href="https://github.com/bitbonsai/mcp-obsidian/pull/44" target="_blank" rel="noopener noreferrer" class="text-accent hover:text-accent-2 transition-colors">PR #44</a>)
-            </li>
-            <li>
-              <span class="font-medium text-foreground">v0.8.1:</span> Multi-word BM25 search relevance improvements
-              (<a href="https://github.com/bitbonsai/mcp-obsidian/pull/38" target="_blank" rel="noopener noreferrer" class="text-accent hover:text-accent-2 transition-colors">PR #38</a>),
-              patch_note undefined/null validation hardening
-              (<a href="https://github.com/bitbonsai/mcp-obsidian/pull/37" target="_blank" rel="noopener noreferrer" class="text-accent hover:text-accent-2 transition-colors">PR #37</a>),
-              new <code>move_file</code> tool for binary-safe file moves with explicit path confirmation,
-              binary filenames now visible in directory listings
-              (<a href="https://github.com/bitbonsai/mcp-obsidian/issues/21" target="_blank" rel="noopener noreferrer" class="text-accent hover:text-accent-2 transition-colors">#21</a>)
-            </li>
-            <li>
-              <span class="font-medium text-foreground">v0.7.5:</span> Search now matches note filenames,
-              hidden directories filtered from listings, OpenCode install docs
-            </li>
-            <li>
-              <span class="font-medium text-foreground">v0.7.4:</span> New get_vault_stats tool + improved error messages with remediation suggestions
-            </li>
-            <li>
-              <span class="font-medium text-foreground">v0.7.3:</span> Bug fix for folder detection with dots in names + dependency updates
-              <a href="https://github.com/bitbonsai/mcp-obsidian/pull/15" target="_blank" rel="noopener noreferrer" class="text-accent hover:text-accent-2 transition-colors">(PR #15)</a>
-            </li>
-            <li>
-              <span class="font-medium text-foreground">v0.7.2:</span> Security hardening - TOCTOU fixes, regex injection prevention, comprehensive CI/CD
-              <a href="https://github.com/bitbonsai/mcp-obsidian/pull/12" target="_blank" rel="noopener noreferrer" class="text-accent hover:text-accent-2 transition-colors">(PR #12)</a>
-            </li>
-          </ul>
+            </p>
+          </div>
+
+          <div id="older-updates" class="older-updates is-collapsed" data-updates-panel>
+            <ul class="text-muted-foreground space-y-2">
+              <li>
+                <span class="font-medium text-foreground">v0.8.1:</span> Multi-word BM25 search relevance improvements
+                (<a href="https://github.com/bitbonsai/mcp-obsidian/pull/38" target="_blank" rel="noopener noreferrer" class="text-accent hover:text-accent-2 transition-colors">PR #38</a>),
+                patch_note undefined/null validation hardening
+                (<a href="https://github.com/bitbonsai/mcp-obsidian/pull/37" target="_blank" rel="noopener noreferrer" class="text-accent hover:text-accent-2 transition-colors">PR #37</a>),
+                new <code>move_file</code> tool for binary-safe file moves with explicit path confirmation,
+                binary filenames now visible in directory listings
+                (<a href="https://github.com/bitbonsai/mcp-obsidian/issues/21" target="_blank" rel="noopener noreferrer" class="text-accent hover:text-accent-2 transition-colors">#21</a>)
+              </li>
+              <li>
+                <span class="font-medium text-foreground">v0.7.5:</span> Search now matches note filenames,
+                hidden directories filtered from listings, OpenCode install docs
+              </li>
+              <li>
+                <span class="font-medium text-foreground">v0.7.4:</span> New get_vault_stats tool + improved error messages with remediation suggestions
+              </li>
+              <li>
+                <span class="font-medium text-foreground">v0.7.3:</span> Bug fix for folder detection with dots in names + dependency updates
+                <a href="https://github.com/bitbonsai/mcp-obsidian/pull/15" target="_blank" rel="noopener noreferrer" class="text-accent hover:text-accent-2 transition-colors">(PR #15)</a>
+              </li>
+              <li>
+                <span class="font-medium text-foreground">v0.7.2:</span> Security hardening - TOCTOU fixes, regex injection prevention, comprehensive CI/CD
+                <a href="https://github.com/bitbonsai/mcp-obsidian/pull/12" target="_blank" rel="noopener noreferrer" class="text-accent hover:text-accent-2 transition-colors">(PR #12)</a>
+              </li>
+            </ul>
+          </div>
+
         </div>
       </div>
     </div>
   </div>
 </section>
+
+<script>
+  const initUpdatesToggle = () => {
+    const updatesPanel = document.querySelector('[data-updates-panel]');
+    const updatesToggle = document.querySelector('[data-updates-toggle]');
+    const updatesLabel = document.querySelector('[data-updates-label]');
+
+    if (!updatesPanel || !updatesToggle || !updatesLabel || updatesToggle.getAttribute('data-bound') === 'true') {
+      return;
+    }
+
+    updatesToggle.setAttribute('data-bound', 'true');
+    updatesToggle.addEventListener('click', () => {
+      const isExpanded = updatesToggle.getAttribute('aria-expanded') === 'true';
+      const nextExpanded = !isExpanded;
+      const nextLabel = nextExpanded ? 'Show less' : 'Show full history';
+
+      updatesToggle.setAttribute('aria-expanded', String(nextExpanded));
+      updatesToggle.setAttribute('aria-label', nextLabel);
+      updatesToggle.setAttribute('title', nextLabel);
+      updatesLabel.textContent = nextLabel;
+
+      updatesPanel.classList.toggle('is-expanded', nextExpanded);
+      updatesPanel.classList.toggle('is-collapsed', !nextExpanded);
+      updatesToggle.classList.toggle('is-expanded', nextExpanded);
+    });
+  };
+
+  initUpdatesToggle();
+  document.addEventListener('astro:page-load', initUpdatesToggle);
+</script>
 
 <style>
   /* Update callout styling */
@@ -92,5 +145,85 @@
   .update-callout:hover {
     box-shadow: 0 8px 30px rgba(139, 92, 246, 0.2);
     border-color: rgba(139, 92, 246, 0.5);
+  }
+
+  .latest-update {
+    padding: 0.75rem 0.9rem;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    background: rgba(139, 92, 246, 0.08);
+  }
+
+  .updates-heading {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    position: relative;
+    padding-right: 2.4rem;
+  }
+
+  .older-updates {
+    position: relative;
+    overflow: hidden;
+    transition: max-height 0.35s ease;
+  }
+
+  .older-updates.is-collapsed {
+    max-height: 7.25rem;
+    -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 68%, transparent 100%);
+    mask-image: linear-gradient(180deg, #000 0%, #000 68%, transparent 100%);
+  }
+
+  .older-updates.is-expanded {
+    max-height: 48rem;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .updates-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border-radius: 9999px;
+    border: 1px solid rgba(139, 92, 246, 0.4);
+    background: rgba(139, 92, 246, 0.15);
+    color: #ffffff;
+    transition: all 0.2s ease;
+  }
+
+  .updates-toggle-compact {
+    width: 1.65rem;
+    height: 1.65rem;
+    flex-shrink: 0;
+    position: absolute;
+    top: 50%;
+    right: -0.35rem;
+    transform: translateY(-50%);
+  }
+
+  .updates-toggle:hover {
+    background: rgba(139, 92, 246, 0.25);
+    border-color: rgba(139, 92, 246, 0.65);
+  }
+
+  .updates-toggle-compact:hover {
+    transform: translateY(calc(-50% - 1px));
+  }
+
+  .updates-toggle:focus-visible {
+    outline: 2px solid rgba(139, 92, 246, 0.7);
+    outline-offset: 2px;
+  }
+
+  .updates-chevron {
+    width: 0.85rem;
+    height: 0.85rem;
+    opacity: 0.9;
+    transition: transform 0.2s ease;
+  }
+
+  .updates-toggle.is-expanded .updates-chevron {
+    transform: rotate(180deg);
   }
 </style>

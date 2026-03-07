@@ -94,6 +94,27 @@ const fullTitle = title.includes("MCP-Obsidian") ? title : `${title} | MCP-Obsid
       html {
         background-color: #0a0a0a;
       }
+      .skip-link {
+        position: fixed;
+        top: 0.75rem;
+        left: 0.75rem;
+        z-index: 10000;
+        padding: 0.5rem 0.75rem;
+        border-radius: 0.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: rgba(10, 10, 10, 0.95);
+        color: #ffffff;
+        transform: translateY(-150%);
+        transition: transform 0.2s ease;
+      }
+      .skip-link:focus {
+        transform: translateY(0);
+        outline: 2px solid rgba(139, 92, 246, 0.7);
+        outline-offset: 2px;
+      }
+      #main-content {
+        scroll-margin-top: 6rem;
+      }
     </style>
 
     <!-- Terminal Styles -->
@@ -272,6 +293,8 @@ const fullTitle = title.includes("MCP-Obsidian") ? title : `${title} | MCP-Obsid
     })}></script>
   </head>
   <body class="min-h-screen bg-background text-foreground antialiased relative pt-24">
+    <a href="#main-content" class="skip-link">Skip to content</a>
+
     <!-- Animated Obsidian Logo Background -->
     <div class="fixed inset-0 pointer-events-none z-0">
       <div class="absolute inset-0 bg-no-repeat bg-center opacity-15 blur-[20px] flex items-center justify-center" style="background-size: 80vh;">

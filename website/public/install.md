@@ -102,6 +102,14 @@ args = ["-y", "@mauricio.wolff/mcp-obsidian@latest", "/path/to/your/vault"]
 | OpenAI Codex (macOS/Linux) | ~/.codex/config.toml |
 | OpenAI Codex (Windows) | %USERPROFILE%\.codex\config.toml |
 
+## Vault Path Helper
+
+- macOS: In Finder, right-click your vault folder while holding `Option`, then choose `Copy "..." as Pathname`.
+- Windows: In File Explorer, hold `Shift`, right-click your vault folder, then choose `Copy as path`.
+- Linux: Open a terminal in your vault folder and run `pwd`.
+
+Replace `/path/to/your/vault` with the full absolute path.
+
 No pre-installation needed! npx automatically downloads and runs the server.
 
 ## Step 2: Test with MCP Inspector (Developers)

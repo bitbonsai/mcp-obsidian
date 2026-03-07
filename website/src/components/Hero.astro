@@ -96,16 +96,16 @@ import pkg from '../../../package.json';
       <div class="video-container rounded-lg overflow-hidden shadow-2xl">
         <div class="relative video-aspect-ratio">
           <video
+            id="hero-video"
             class="absolute inset-0 w-full h-full object-contain"
             controls
-            autoplay
             loop
             muted
-            preload="auto"
+            playsinline
+            preload="none"
             width="1152"
             height="720"
             poster="/video-poster-small.webp"
-            {...{ fetchpriority: "high" } as any}
           >
             <source src="/mcp-obsidian-1-min.mp4" type="video/mp4" />
             Your browser does not support the video tag.
@@ -201,6 +201,33 @@ import pkg from '../../../package.json';
     </div>
   </div>
 </section>
+
+<script is:inline>
+  const initHeroVideo = () => {
+    const heroVideo = document.getElementById('hero-video');
+    if (!heroVideo || heroVideo.tagName !== 'VIDEO') {
+      return;
+    }
+
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    const effectiveType = connection && connection.effectiveType ? connection.effectiveType : '';
+    const constrainedNetwork = Boolean(connection && connection.saveData) || ['slow-2g', '2g', '3g'].includes(effectiveType);
+
+    if (isMobile || prefersReducedMotion || constrainedNetwork) {
+      heroVideo.preload = 'none';
+      return;
+    }
+
+    heroVideo.preload = 'metadata';
+    heroVideo.autoplay = true;
+    heroVideo.play().catch(() => {});
+  };
+
+  initHeroVideo();
+  document.addEventListener('astro:page-load', initHeroVideo, { once: true });
+</script>
 
 <style>
   /* Hero gradient with subtle noise */
