@@ -262,4 +262,20 @@ describe("SearchService", () => {
     expect(results).toHaveLength(1);
     expect(results[0]!.p).toBe("visible.md");
   });
+
+  // ============================================================================
+  // TRAILING SLASH IN VAULT PATH
+  // ============================================================================
+
+  test("vault path with trailing slash does not truncate result paths", async () => {
+    const trailingSlashService = new SearchService(testVaultPath + "/", new PathFilter());
+
+    await mkdir(join(testVaultPath, "sessions"), { recursive: true });
+    await writeNote("sessions/foo-bar.md", "# Foo Bar\n\nSome content here.");
+
+    const results = await trailingSlashService.search({ query: "foo", limit: 5 });
+
+    expect(results).toHaveLength(1);
+    expect(results[0]!.p).toBe("sessions/foo-bar.md");
+  });
 });
