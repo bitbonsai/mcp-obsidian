@@ -21,6 +21,8 @@ export class PathFilter {
       '.md',
       '.markdown',
       '.txt',
+      '.base',    // Obsidian Bases (YAML)
+      '.canvas',  // Obsidian Canvas (JSON)
       ...config?.allowedExtensions || []
     ];
   }
