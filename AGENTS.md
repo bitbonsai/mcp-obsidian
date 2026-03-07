@@ -43,7 +43,7 @@ src/
   uri.ts               # Obsidian URI generation
   types.ts             # All TypeScript interfaces
   *.test.ts            # Co-located test files
-website/               # Astro 5 website (separate package, see website/agents.md)
+website/               # Astro 5 website (separate package, see website/AGENTS.md)
 ```
 
 ### Core Components
@@ -101,7 +101,7 @@ The `website/` directory is a separate Astro package. It serves content in two f
 | HTML (rich, interactive) | `website/src/components/` | Browsers |
 | Markdown (plain text) | `website/public/*.md` + `llm.txt` | LLMs and AI agents |
 
-When updating content, always update both. See `website/agents.md` for full details and file mapping.
+When updating content, always update both. See `website/AGENTS.md` for full details and file mapping.
 
 ## Testing
 
