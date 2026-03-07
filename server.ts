@@ -7,7 +7,7 @@ import {
   ListToolsRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
 import { FileSystemService } from "./src/filesystem.js";
-import { FrontmatterHandler } from "./src/frontmatter.js";
+import { FrontmatterHandler, parseFrontmatter } from "./src/frontmatter.js";
 import { PathFilter } from "./src/pathfilter.js";
 import { SearchService } from "./src/search.js";
 import { readFileSync } from "fs";
@@ -482,10 +482,11 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       }
 
       case "write_note": {
+        const fm = parseFrontmatter(trimmedArgs.frontmatter);
         await fileSystem.writeNote({
           path: trimmedArgs.path,
           content: trimmedArgs.content,
-          frontmatter: trimmedArgs.frontmatter,
+          ...(fm !== undefined && { frontmatter: fm }),
           mode: trimmedArgs.mode || 'overwrite'
         });
         return {
@@ -624,9 +625,13 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       }
 
       case "update_frontmatter": {
+        const fm = parseFrontmatter(trimmedArgs.frontmatter);
+        if (!fm) {
+          throw new Error('frontmatter is required');
+        }
         await fileSystem.updateFrontmatter({
           path: trimmedArgs.path,
-          frontmatter: trimmedArgs.frontmatter,
+          frontmatter: fm,
           merge: trimmedArgs.merge
         });
         return {
