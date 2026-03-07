@@ -143,7 +143,7 @@ MCP is an open protocol. You're not tied to any specific vendor or platform. You
 ## Prerequisites
 
 - [Node.js](https://nodejs.org) runtime (v18.0.0 or later)
-- An Obsidian vault (local directory with `.md` files)
+- An Obsidian vault (local directory with `.md`, `.markdown`, `.txt`, `.base`, or `.canvas` files)
 - MCP-compatible AI client (Claude Desktop, ChatGPT Desktop, Claude Code, etc.)
 
 ## Installation
@@ -155,6 +155,8 @@ No installation needed! Use `npx` to run directly:
 ```bash
 npx @mauricio.wolff/mcp-obsidian@latest /path/to/your/obsidian/vault
 ```
+
+If you omit the vault path, the server uses your current working directory as the vault root.
 
 ### For Developers
 
@@ -194,13 +196,17 @@ mcp-inspector npx @mauricio.wolff/mcp-obsidian@latest /path/to/your/vault
 **End users:**
 
 ```bash
+npx @mauricio.wolff/mcp-obsidian@latest
 npx @mauricio.wolff/mcp-obsidian@latest /path/to/your/obsidian/vault
+npx @mauricio.wolff/mcp-obsidian@latest ./Vault
 ```
 
 **Developers:**
 
 ```bash
+npm start
 npm start /path/to/your/obsidian/vault
+npm start ./Vault
 ```
 
 ### AI Client Configuration
@@ -366,10 +372,10 @@ Most modern MCP clients use similar JSON configuration patterns. Refer to your s
 - **Solution:** Install Node.js runtime from [nodejs.org](https://nodejs.org)
 - **Alternative:** Use global install: `npm install -g @mauricio.wolff/mcp-obsidian`
 
-#### "Usage: node server.ts /path/to/vault"
+#### "File not found" when paths look correct
 
-- **Cause:** No vault path provided
-- **Solution:** Specify the full path to your Obsidian vault directory
+- **Cause:** The server is using the wrong vault root
+- **Solution:** Either run the command from your vault directory or pass the vault path explicitly
 
 #### "Permission denied" errors
 
@@ -553,7 +559,7 @@ Efficiently replace an exact string inside an existing note without rewriting th
 
 List files and directories in the vault.
 
-Note: this includes non-note filenames (for example `pdf`, `png`, `jpg`) so AI assistants can see vault structure, but note tools like `read_note` and `write_note` still operate on note files only (`.md`, `.markdown`, `.txt`).
+Note: this includes non-note filenames (for example `pdf`, `png`, `jpg`) so AI assistants can see vault structure, but note tools like `read_note` and `write_note` still operate on note files only (`.md`, `.markdown`, `.txt`, `.base`, `.canvas`).
 
 **Request:**
 
@@ -740,7 +746,7 @@ Search for notes in the vault by content or frontmatter with multi-word matching
 
 ### `move_note`
 
-Move or rename a note in the vault (`.md`, `.markdown`, `.txt`).
+Move or rename a note in the vault (`.md`, `.markdown`, `.txt`, `.base`, `.canvas`).
 
 **Request:**
 
@@ -939,7 +945,7 @@ This MCP server implements several security measures to protect your Obsidian va
 ### File Filtering
 
 - **Automatic Exclusions:** `.obsidian`, `.git`, `node_modules`, and system files are filtered
-- **Extension Whitelist:** Only `.md`, `.markdown`, and `.txt` files are accessible by default
+- **Extension Whitelist:** Only `.md`, `.markdown`, `.txt`, `.base`, and `.canvas` files are accessible by default
 - **Hidden File Protection:** Dot files and system directories are automatically excluded
 
 ### Content Validation
