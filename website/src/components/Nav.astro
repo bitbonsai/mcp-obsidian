@@ -8,7 +8,7 @@ const navLinks = [
   { href: '/features', label: 'Features' },
   { href: '/demo', label: 'Demo' },
   { href: '/how-it-works', label: 'How It Works' },
-  { href: '/skill', label: 'Skill' },
+  { href: '/skill', label: 'Skill', isNew: true },
 ];
 
 function isActive(href: string) {
@@ -53,7 +53,12 @@ function isActive(href: string) {
             href={link.href}
             class:list={['nav-link', { 'nav-link-active': isActive(link.href) }]}
           >
-            {link.label}
+            <span class="inline-flex items-center gap-2">
+              {link.label}
+              {link.isNew && (
+                <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-semibold bg-accent text-white border border-accent/50 leading-tight">NEW</span>
+              )}
+            </span>
           </a>
         ))}
         <a href="https://github.com/bitbonsai/mcp-obsidian" target="_blank" rel="noopener noreferrer" class="nav-link inline-flex items-center gap-1.5">
@@ -79,7 +84,12 @@ function isActive(href: string) {
           href={link.href}
           class:list={['block nav-link text-center text-lg', { 'nav-link-active': isActive(link.href) }]}
         >
-          {link.label}
+          <span class="inline-flex items-center gap-2 justify-center">
+            {link.label}
+            {link.isNew && (
+              <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-semibold bg-accent text-white border border-accent/50 leading-tight">NEW</span>
+            )}
+          </span>
         </a>
       ))}
       <a href="https://github.com/bitbonsai/mcp-obsidian" target="_blank" rel="noopener noreferrer" class="nav-link text-center text-lg flex items-center justify-center gap-2">

@@ -9,6 +9,10 @@ This MCP server lets Claude, ChatGPT+, and other assistants access your vault. L
 - [Get Started](/install) - Install and configure in seconds
 - [View on GitHub](https://github.com/bitbonsai/mcp-obsidian)
 
+## Announcement
+
+- **JUST LAUNCHED - Obsidian Skill:** Smart routing across MCP, Obsidian app context, and Git CLI sync is now live, with preflight checks, targeted setup questions, and safe sync defaults. [See skill flows](/skill.md)
+
 ## Recent Updates
 
 - **v0.8.2 (March 2026):** Trailing-slash vault paths no longer truncate search results ([PR #48](https://github.com/bitbonsai/mcp-obsidian/pull/48)), `get_vault_stats` now handles dotted folder names correctly ([PR #42](https://github.com/bitbonsai/mcp-obsidian/pull/42)), note tools now support `.base` and `.canvas` ([PR #53](https://github.com/bitbonsai/mcp-obsidian/pull/53)), string frontmatter inputs are now handled safely ([PR #47](https://github.com/bitbonsai/mcp-obsidian/pull/47)), vault path is now optional in CLI mode (defaults to current working directory, [#50](https://github.com/bitbonsai/mcp-obsidian/issues/50)), and dependency refreshes for the MCP SDK and Node types are merged ([PR #43](https://github.com/bitbonsai/mcp-obsidian/pull/43), [PR #44](https://github.com/bitbonsai/mcp-obsidian/pull/44))

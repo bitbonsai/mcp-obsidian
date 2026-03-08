@@ -36,16 +36,16 @@ Works with Claude Desktop, ChatGPT+ Desktop, OpenCode, Gemini CLI, OpenAI Codex,
 
 ## Comparison with Alternatives
 
-| Feature | MCP-Obsidian | Other MCP-Obsidian (Plugin-based) | Generic FS MCP | Direct File Access |
-|---------|-------------|----------------------------------|----------------|-------------------|
-| Setup Complexity | Simple - just point to vault path | Complex - requires Obsidian plugin + API key | Moderate | Variable |
-| Obsidian Running Required | No | Yes | No | No |
-| Plugin Dependencies | None | Required (Local REST API plugin) | None | None |
-| Frontmatter Safety | Protected (advanced YAML parsing) | API-dependent | Can corrupt | Can corrupt |
-| Built-in Search | Advanced (full-text + BM25 ranking) | Good (via Obsidian API) | None | None |
-| Performance | Fast (optimized with batch I/O) | API overhead | Slow | Variable |
-| Link Handling | Safe (preserves content/frontmatter on move) | Good | Breaks links | Breaks links |
-| Reliability | High (direct file access) | Plugin-dependent | Basic | Variable |
+| Feature | MCP-Obsidian | Other MCP-Obsidian (Plugin-based) | Direct File Access |
+|---------|-------------|----------------------------------|-------------------|
+| Setup Complexity | Simple - just point to vault path | Complex - requires Obsidian plugin + API key | Variable |
+| Obsidian Running Required | No | Yes | No |
+| Plugin Dependencies | None | Required (Local REST API plugin) | None |
+| Frontmatter Safety | Protected (advanced YAML parsing) | API-dependent | Can corrupt |
+| Built-in Search | Advanced (full-text + BM25 ranking) | Good (via Obsidian API) | None |
+| Performance | Fast (optimized with batch I/O) | API overhead | Variable |
+| Link Handling | Safe (preserves content/frontmatter on move) | Good | Breaks links |
+| Reliability | High (direct file access) | Plugin-dependent | Variable |
 
 **Summary:** 8/8 features with clear advantage. Zero plugin dependencies. Instant setup time.
 

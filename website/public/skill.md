@@ -1,6 +1,6 @@
 # Obsidian Skill
 
-Combines MCP server safety with Obsidian app context. One skill that routes each operation to the right backend.
+Combines MCP server safety with Obsidian CLI context. One skill that routes each operation to the right backend.
 
 ## Install
 
@@ -8,11 +8,19 @@ Combines MCP server safety with Obsidian app context. One skill that routes each
 npx skills add bitbonsai/mcp-obsidian
 ```
 
+### What happens when I say: "sync my vault"?
+
+- Run preflight checks first (git installed, repo present, identity set, remote configured).
+- If anything is missing, ask one targeted setup question with a recommended default.
+- Run safe sync sequence: `git add -A` -> `git commit` (if changes) -> `git pull --rebase` -> `git push`.
+
+Prerequisites: `git` required, `gh` optional (used only for GitHub remote setup).
+
 ## Routing Matrix
 
 Each operation maps to exactly one backend. The skill picks the right one automatically.
 
-| Operation | MCP | Obsidian App | Git | Notes |
+| Operation | MCP | Obsidian CLI | Git | Notes |
 |-----------|-----|-------------|-----|-------|
 | Read note | yes | — | — | Safe, sandboxed read via MCP |
 | Write / patch note | yes | — | — | Atomic writes with validation |
@@ -25,11 +33,55 @@ Each operation maps to exactly one backend. The skill picks the right one automa
 | Sync vault across devices | — | — | yes | Plain git — no Obsidian Sync needed |
 | Automated backup | — | — | yes | Cron / launchd, no UI needed |
 
+## Flow Cheat Sheet
+
+The skill routes by intent:
+
+1. Vault read/write/search/tag/frontmatter requests route to **MCP**.
+2. Open-in-editor or app/plugin-context requests route to **Obsidian CLI/App context**.
+3. Sync/backup/store-with-git requests route to **Git CLI**.
+
+### Git sync flow
+
+1. Preflight: verify git, repo, identity, and remote.
+2. If setup is incomplete, ask one targeted question with a recommended default.
+3. Run safe sync sequence: `git add -A` -> `git commit` (if changes) -> `git pull --rebase` -> `git push`.
+4. Stop on conflicts and provide manual next steps.
+
+## Expanded Flow Playbook
+
+### Routing defaults
+
+- **MCP first** for read/write/search/frontmatter/tags/moves.
+- **Obsidian CLI/App context** for app/editor/plugin-specific behavior.
+- **Git CLI** for sync, backup, and versioning actions.
+
+### Preflight checks before sync
+
+```bash
+git --version
+git rev-parse --is-inside-work-tree
+git config user.name
+git config user.email
+git remote -v
+```
+
+If any check fails, ask one targeted setup question with a recommended default.
+
+### Example conversation
+
+```text
+User: Use git to store my vault and keep it synced.
+Skill: I will run a git preflight first (git, repo, identity, remote), then set up anything missing with one targeted question.
+Skill: Preflight OK. Running sync: git add -A -> git commit (if changes) -> git pull --rebase -> git push.
+Skill: Done. Vault synced to origin/main. No force push used.
+```
+
 ## What It Is
 
 **MCP Server** — Handles all file I/O: reading, writing, searching, patching, and organizing notes. Enforces path sandboxing, validates inputs, and performs atomic operations. The safe default for any vault mutation.
 
-**Obsidian App** — Bridges the gap for operations that need the running desktop app: opening notes in the editor, triggering plugin commands, exporting to PDF via Obsidian URI schemes.
+**Obsidian CLI** — Bridges the gap for operations that need the running desktop app: opening notes in the editor, triggering plugin commands, exporting to PDF via Obsidian URI schemes.
 
 **Git Sync** — Plain git for vault syncing across devices. No Obsidian Sync subscription required. Works headlessly via cron, launchd, or CI — no app needs to be running.
 
@@ -47,7 +99,7 @@ git commit -m "backup $(date +%Y-%m-%d)"
 git push
 ```
 
-No Obsidian app required. Works on servers, NAS, or any headless machine.
+No Obsidian CLI required. Works on servers, NAS, or any headless machine.
 
 ### Optional: Obsidian Git plugin
 
@@ -72,12 +124,13 @@ Recommended .gitignore:
 ## When To Use
 
 **Trigger phrases:**
-- "search my vault for..."
-- "update the frontmatter on..."
-- "open this note in Obsidian"
-- "sync my vault"
-- "tag all notes about..."
-- "move this note to..."
+- "search my vault for..." -> MCP
+- "update the frontmatter on..." -> MCP
+- "tag all notes about..." -> MCP
+- "open this note in Obsidian" -> Obsidian CLI/App context
+- "sync my vault" -> Git CLI
+- "use git to store my vault" -> Git CLI
+- "move this note to..." -> MCP
 
 **Not a fit for:**
 - General markdown editing (no vault context)

@@ -7,56 +7,48 @@ const features = [
     name: 'Setup Complexity',
     mcpObsidian: { status: 'success', text: 'Simple', description: 'Just point to vault path - works instantly' },
     otherMcpObsidian: { status: 'error', text: 'Complex', description: 'Requires Obsidian plugin + API key setup' },
-    genericFs: { status: 'warning', text: 'Moderate', description: 'Basic MCP configuration needed' },
     directAccess: { status: 'warning', text: 'Variable', description: 'Depends on chosen approach' }
   },
   {
     name: 'Obsidian Running Required',
     mcpObsidian: { status: 'success', text: 'No', description: 'Works with closed Obsidian - direct file access' },
     otherMcpObsidian: { status: 'error', text: 'Yes', description: 'Obsidian must be running with REST API plugin' },
-    genericFs: { status: 'success', text: 'No', description: 'Direct filesystem access' },
     directAccess: { status: 'success', text: 'No', description: 'Direct file manipulation' }
   },
   {
     name: 'Plugin Dependencies',
     mcpObsidian: { status: 'success', text: 'None', description: 'Zero dependencies - pure file system access' },
     otherMcpObsidian: { status: 'error', text: 'Required', description: 'Needs Local REST API community plugin' },
-    genericFs: { status: 'success', text: 'None', description: 'Standard filesystem MCP' },
     directAccess: { status: 'success', text: 'None', description: 'No additional software needed' }
   },
   {
     name: 'Frontmatter Safety',
     mcpObsidian: { status: 'success', text: 'Protected', description: 'Advanced YAML parsing with validation' },
     otherMcpObsidian: { status: 'warning', text: 'API-dependent', description: 'Safety depends on Obsidian API implementation' },
-    genericFs: { status: 'error', text: 'Can corrupt', description: 'Raw file editing risks corruption' },
     directAccess: { status: 'error', text: 'Can corrupt', description: 'No safety mechanisms' }
   },
   {
     name: 'Built-in Search',
     mcpObsidian: { status: 'success', text: 'Advanced', description: 'Full-text search with BM25 relevance ranking' },
     otherMcpObsidian: { status: 'success', text: 'Good', description: 'Uses Obsidian\'s search via API' },
-    genericFs: { status: 'error', text: 'None', description: 'Must manually search directories' },
     directAccess: { status: 'error', text: 'None', description: 'Basic grep at best' }
   },
   {
     name: 'Performance',
     mcpObsidian: { status: 'success', text: 'Fast', description: 'Optimized for large vaults with batch I/O' },
     otherMcpObsidian: { status: 'warning', text: 'API overhead', description: 'HTTP API calls add latency' },
-    genericFs: { status: 'warning', text: 'Slow', description: 'No vault-specific optimizations' },
     directAccess: { status: 'warning', text: 'Variable', description: 'Depends on system capabilities' }
   },
   {
     name: 'Link Handling',
     mcpObsidian: { status: 'success', text: 'Safe', description: 'Preserves note content and frontmatter during moves' },
     otherMcpObsidian: { status: 'success', text: 'Good', description: 'Leverages Obsidian\'s link management' },
-    genericFs: { status: 'error', text: 'Breaks links', description: 'No understanding of Obsidian format' },
     directAccess: { status: 'error', text: 'Breaks links', description: 'Can corrupt references' }
   },
   {
     name: 'Reliability',
     mcpObsidian: { status: 'success', text: 'High', description: 'Direct file access - no intermediary failures' },
     otherMcpObsidian: { status: 'warning', text: 'Plugin-dependent', description: 'Can fail if Obsidian crashes or plugin issues' },
-    genericFs: { status: 'warning', text: 'Basic', description: 'Standard filesystem reliability' },
     directAccess: { status: 'warning', text: 'Variable', description: 'Depends on implementation quality' }
   }
 ];
@@ -88,7 +80,7 @@ const statusIconColors: Record<string, string> = {
         Why Choose MCP-Obsidian?
       </h2>
       <p class="text-xl text-muted-foreground max-w-3xl mx-auto">
-        See how MCP-Obsidian compares to generic filesystem access and direct file manipulation.
+        See how MCP-Obsidian compares to plugin-based alternatives and direct file manipulation.
         Purpose-built for Obsidian means better safety, performance, and intelligence.
       </p>
     </div>
@@ -99,7 +91,7 @@ const statusIconColors: Record<string, string> = {
         <div class="min-w-full bg-card/30 backdrop-blur-xl rounded-2xl border border-border/50 overflow-hidden">
           <!-- Table header -->
           <div class="bg-card/50 border-b border-border/50">
-            <div class="grid grid-cols-5 gap-4 p-6">
+            <div class="grid grid-cols-4 gap-4 p-6">
               <div class="font-semibold text-foreground">Feature</div>
               <div class="text-center">
                 <div class="font-semibold text-accent mb-1">MCP-Obsidian</div>
@@ -108,10 +100,6 @@ const statusIconColors: Record<string, string> = {
               <div class="text-center">
                 <div class="font-semibold text-muted-foreground mb-1">Other MCP-Obsidian</div>
                 <div class="text-xs text-muted-foreground">Plugin-based</div>
-              </div>
-              <div class="text-center">
-                <div class="font-semibold text-muted-foreground mb-1">Generic FS MCP</div>
-                <div class="text-xs text-muted-foreground">Basic file access</div>
               </div>
               <div class="text-center">
                 <div class="font-semibold text-muted-foreground mb-1">Direct File Access</div>
@@ -124,7 +112,7 @@ const statusIconColors: Record<string, string> = {
           <div class="divide-y divide-border/30">
             {features.map((feature, index) => (
               <div
-                class="grid grid-cols-5 gap-4 p-6 hover:bg-card/20 transition-colors duration-300"
+                class="grid grid-cols-4 gap-4 p-6 hover:bg-card/20 transition-colors duration-300"
                 style={`animation-delay: ${index * 0.1}s`}
               >
                 <!-- Feature name -->
@@ -161,22 +149,6 @@ const statusIconColors: Record<string, string> = {
                   </div>
                   <div class="text-xs text-muted-foreground">
                     {feature.otherMcpObsidian.description}
-                  </div>
-                </div>
-
-                <!-- Generic FS MCP -->
-                <div class="text-center">
-                  <div class="flex flex-col items-center gap-1 mb-2">
-                    {(() => {
-                      const StatusIcon = statusIcons[feature.genericFs.status];
-                      return <StatusIcon className={`w-6 h-6 ${statusIconColors[feature.genericFs.status]}`} />;
-                    })()}
-                    <span class={`font-semibold ${statusColors[feature.genericFs.status]}`}>
-                      {feature.genericFs.text}
-                    </span>
-                  </div>
-                  <div class="text-xs text-muted-foreground">
-                    {feature.genericFs.description}
                   </div>
                 </div>
 

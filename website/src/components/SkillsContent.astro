@@ -117,12 +117,27 @@ const safetyRules = [
 
 // Trigger phrases
 const triggers = [
-  'search my vault for...',
-  'update the frontmatter on...',
-  'open this note in Obsidian',
-  'sync my vault',
-  'tag all notes about...',
-  'move this note to...',
+  { phrase: 'search my vault for...', backend: 'MCP' },
+  { phrase: 'update the frontmatter on...', backend: 'MCP' },
+  { phrase: 'tag all notes about...', backend: 'MCP' },
+  { phrase: 'open this note in Obsidian', backend: 'Obsidian CLI' },
+  { phrase: 'sync my vault', backend: 'Git CLI' },
+  { phrase: 'use git to store my vault', backend: 'Git CLI' },
+  { phrase: 'move this note to...', backend: 'MCP' },
+];
+
+const syncFlow = [
+  'Preflight: verify git, repo, identity, and remote',
+  'Ask one targeted question if setup is incomplete',
+  'Run: git add -A -> git commit (if changes) -> git pull --rebase -> git push',
+  'Stop on conflicts and provide manual next steps',
+];
+
+const exampleConversation = [
+  { role: 'User', text: 'Use git to store my vault and keep it synced.' },
+  { role: 'Skill', text: 'I will run a git preflight first (git, repo, identity, remote), then set up anything missing with one targeted question.' },
+  { role: 'Skill', text: 'Preflight OK. Running sync: git add -A -> git commit (if changes) -> git pull --rebase -> git push.' },
+  { role: 'Skill', text: 'Done. Vault synced to origin/main. No force push used.' },
 ];
 
 const negativeTriggers = [
@@ -143,7 +158,7 @@ const installCmd = 'npx skills add bitbonsai/mcp-obsidian';
         Obsidian Skill
       </h1>
       <p class="text-xl text-muted-foreground max-w-3xl mx-auto">
-        Combines MCP server safety with Obsidian app context.
+        Combines MCP server safety with Obsidian CLI context.
         <br />
         One skill that routes each operation to the right backend.
       </p>
@@ -169,6 +184,27 @@ const installCmd = 'npx skills add bitbonsai/mcp-obsidian';
           </button>
         </div>
       </div>
+
+      <div class="max-w-xl mx-auto mt-4 rounded-2xl border border-green-400/35 bg-green-500/10 px-6 py-5">
+        <h3 class="text-base font-semibold text-foreground mb-3">What happens when I say: "sync my vault"?</h3>
+        <ul class="space-y-2 text-sm text-muted-foreground">
+          <li class="flex items-start gap-2">
+            <span class="text-green-400 mt-0.5">-</span>
+            <span>Run preflight checks first (git installed, repo present, identity set, remote configured).</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-green-400 mt-0.5">-</span>
+            <span>If anything is missing, ask one targeted setup question with a recommended default.</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-green-400 mt-0.5">-</span>
+            <span>Run safe sync sequence: <code class="text-foreground">git add -A</code> -&gt; <code class="text-foreground">git commit</code> (if changes) -&gt; <code class="text-foreground">git pull --rebase</code> -&gt; <code class="text-foreground">git push</code>.</span>
+          </li>
+        </ul>
+        <p class="text-xs text-muted-foreground mt-3">
+          Prerequisites: <code class="text-foreground">git</code> required, <code class="text-foreground">gh</code> optional (used only for GitHub remote setup).
+        </p>
+      </div>
     </div>
 
     <!-- Routing Matrix -->
@@ -187,7 +223,7 @@ const installCmd = 'npx skills add bitbonsai/mcp-obsidian';
               <tr class="border-b border-border/50 bg-card/50">
                 <th class="px-6 py-4 text-sm font-semibold text-foreground">Operation</th>
                 <th class="px-6 py-4 text-sm font-semibold text-center text-foreground">MCP</th>
-                <th class="px-6 py-4 text-sm font-semibold text-center text-foreground">Obsidian App</th>
+                <th class="px-6 py-4 text-sm font-semibold text-center text-foreground">Obsidian CLI</th>
                 <th class="px-6 py-4 text-sm font-semibold text-center text-foreground">Git</th>
                 <th class="px-6 py-4 text-sm font-semibold text-foreground hidden sm:table-cell">Notes</th>
               </tr>
@@ -226,6 +262,93 @@ const installCmd = 'npx skills add bitbonsai/mcp-obsidian';
       </div>
     </div>
 
+    <!-- Flow Cheat Sheet -->
+    <div class="mb-24 fade-in-on-scroll">
+      <h2 class="text-3xl sm:text-4xl font-bold text-foreground mb-4">
+        Flow Cheat Sheet
+      </h2>
+      <p class="text-muted-foreground mb-8 max-w-2xl">
+        The skill routes by intent. MCP is the safe default for vault edits, Obsidian context is used for app-specific actions, and Git CLI handles sync/backup.
+      </p>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="bg-card/30 backdrop-blur-xl rounded-2xl border border-border/50 p-8">
+          <h3 class="text-xl font-semibold text-foreground mb-4">Intent Routing</h3>
+          <div class="space-y-3 text-sm">
+            <div class="flex items-start gap-3">
+              <span class="text-accent/70 mt-0.5">1.</span>
+              <span class="text-muted-foreground">If the user asks to read/write/search notes, route to <strong class="text-foreground">MCP tools</strong>.</span>
+            </div>
+            <div class="flex items-start gap-3">
+              <span class="text-accent/70 mt-0.5">2.</span>
+              <span class="text-muted-foreground">If they ask to open or trigger app-level behavior, route to <strong class="text-foreground">Obsidian context</strong>.</span>
+            </div>
+            <div class="flex items-start gap-3">
+              <span class="text-accent/70 mt-0.5">3.</span>
+              <span class="text-muted-foreground">If they ask to sync/backup/store with git, route to <strong class="text-foreground">Git CLI</strong>.</span>
+            </div>
+          </div>
+        </div>
+        <div class="bg-card/30 backdrop-blur-xl rounded-2xl border border-border/50 p-8">
+          <h3 class="text-xl font-semibold text-foreground mb-4">Git Sync Flow</h3>
+          <div class="space-y-3 text-sm">
+            {syncFlow.map((step, i) => (
+              <div class="flex items-start gap-3">
+                <span class="text-accent/70 mt-0.5">{i + 1}.</span>
+                <span class="text-muted-foreground">{step}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Expandable flow playbook -->
+    <div class="mb-24 fade-in-on-scroll">
+      <details class="bg-card/30 backdrop-blur-xl rounded-2xl border border-border/50 overflow-hidden group">
+        <summary class="px-8 py-6 cursor-pointer flex items-center justify-between hover:bg-card/40 transition-colors">
+          <div>
+            <h3 class="text-xl font-semibold text-foreground">Expanded Flow Playbook</h3>
+            <p class="text-muted-foreground text-sm mt-1">Open for routing rules, preflight logic, and an end-to-end example</p>
+          </div>
+          <svg class="w-5 h-5 text-muted-foreground transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </summary>
+        <div class="px-8 pb-8 border-t border-border/30 pt-6 space-y-8">
+          <div>
+            <h4 class="text-lg font-semibold text-foreground mb-3">Routing defaults</h4>
+            <ul class="space-y-2 text-sm text-muted-foreground">
+              <li class="flex items-start gap-2"><span class="text-accent/60 mt-0.5">-</span><span><strong class="text-foreground">MCP first</strong> for read/write/search/frontmatter/tags/moves.</span></li>
+              <li class="flex items-start gap-2"><span class="text-accent/60 mt-0.5">-</span><span><strong class="text-foreground">Obsidian context</strong> for app/editor/plugin-specific behavior.</span></li>
+              <li class="flex items-start gap-2"><span class="text-accent/60 mt-0.5">-</span><span><strong class="text-foreground">Git CLI</strong> for sync, backup, and versioning actions.</span></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-lg font-semibold text-foreground mb-3">Preflight checks before sync</h4>
+            <div class="bg-card/50 rounded-xl border border-border/30 p-4">
+              <pre class="font-mono text-sm text-foreground leading-relaxed"><code>git --version
+git rev-parse --is-inside-work-tree
+git config user.name
+git config user.email
+git remote -v</code></pre>
+            </div>
+            <p class="text-xs text-muted-foreground mt-3">If any check fails, ask one targeted setup question with a recommended default.</p>
+          </div>
+          <div>
+            <h4 class="text-lg font-semibold text-foreground mb-3">Example conversation</h4>
+            <div class="space-y-3">
+              {exampleConversation.map(turn => (
+                <div class="bg-card/40 rounded-xl border border-border/30 px-4 py-3 text-sm">
+                  <span class="text-accent font-medium">{turn.role}:</span>
+                  <span class="text-muted-foreground ml-2">{turn.text}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </details>
+    </div>
+
     <!-- What It Is -->
     <div class="mb-24 fade-in-on-scroll">
       <h2 class="text-3xl sm:text-4xl font-bold text-foreground mb-4">
@@ -239,7 +362,7 @@ const installCmd = 'npx skills add bitbonsai/mcp-obsidian';
           </p>
         </div>
         <div class="bg-card/30 backdrop-blur-xl rounded-2xl border border-border/50 p-8">
-          <h3 class="text-xl font-semibold text-foreground mb-3">Obsidian App</h3>
+          <h3 class="text-xl font-semibold text-foreground mb-3">Obsidian CLI</h3>
           <p class="text-muted-foreground">
             Bridges the gap for operations that need the running desktop app: opening notes in the editor, triggering plugin commands, exporting to PDF via Obsidian URI schemes.
           </p>
@@ -281,7 +404,7 @@ git commit -m "backup $(date +%Y-%m-%d)"
 git push</code></pre>
               </div>
               <p class="text-muted-foreground text-sm">
-                No Obsidian app required. Works on servers, NAS, or any headless machine.
+                No Obsidian CLI required. Works on servers, NAS, or any headless machine.
               </p>
             </div>
             <div>
@@ -333,7 +456,8 @@ git push</code></pre>
             {triggers.map(t => (
               <div class="flex items-center gap-3 bg-card/30 backdrop-blur-xl rounded-xl border border-border/50 px-4 py-3">
                 <span class="text-accent font-mono text-sm">&gt;</span>
-                <span class="text-foreground text-sm">{t}</span>
+                <span class="text-foreground text-sm">{t.phrase}</span>
+                <span class="ml-auto text-[11px] uppercase tracking-wide px-2 py-1 rounded border border-border/50 text-muted-foreground">{t.backend}</span>
               </div>
             ))}
           </div>
