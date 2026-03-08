@@ -456,6 +456,38 @@ args = ["-y", "@mauricio.wolff/mcp-obsidian@latest", "/path/to/your/vault"]'
           </div>
         </div>
 
+        <div class="mt-4 p-3 bg-card/30 rounded-lg border border-border/50 space-y-3">
+          <p class="text-sm text-muted-foreground flex items-start gap-2">
+            <Compass className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" aria-hidden="true" />
+            <span>
+              <strong class="text-foreground">Optional no-path mode:</strong>
+              if your client starts MCP-Obsidian from inside your vault folder,
+              you can omit the vault path and use current working directory.
+            </span>
+          </p>
+          <div class="grid md:grid-cols-2 gap-2 text-xs">
+            <code class="block bg-background/50 px-2 py-1 rounded text-foreground">
+              npx @mauricio.wolff/mcp-obsidian@latest
+            </code>
+            <code class="block bg-background/50 px-2 py-1 rounded text-foreground">
+              "args": ["@mauricio.wolff/mcp-obsidian@latest"]
+            </code>
+          </div>
+        </div>
+
+        <div class="mt-3 p-3 bg-card/30 rounded-lg border border-border/50">
+          <p class="text-xs text-muted-foreground flex items-start gap-2">
+            <FolderOpen className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" aria-hidden="true" />
+            <span>
+              Supported note file types: <code class="bg-background/50 px-1 rounded text-foreground">.md</code>,
+              <code class="bg-background/50 px-1 rounded text-foreground">.markdown</code>,
+              <code class="bg-background/50 px-1 rounded text-foreground">.txt</code>,
+              <code class="bg-background/50 px-1 rounded text-foreground">.base</code>, and
+              <code class="bg-background/50 px-1 rounded text-foreground">.canvas</code>.
+            </span>
+          </p>
+        </div>
+
         <!-- Optional setup details -->
         <div class="mt-4 p-4 bg-card/30 rounded-lg border border-border/50 space-y-3">
           <div class="p-3 bg-accent/10 rounded-lg border border-accent/20">
@@ -1027,6 +1059,12 @@ args = ["-y", "@mauricio.wolff/mcp-obsidian@latest", "/path/to/your/vault"]'
 
   .collapsible-summary::-webkit-details-marker {
     display: none;
+  }
+
+  .collapsible-summary:focus-visible {
+    outline: 2px solid rgba(139, 92, 246, 0.7);
+    outline-offset: 2px;
+    border-radius: 0.5rem;
   }
 
   .collapsible-chevron {

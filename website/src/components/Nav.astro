@@ -63,7 +63,7 @@ function isActive(href: string) {
       </div>
 
       <!-- Mobile menu button -->
-      <button class="md:hidden nav-link p-2" id="mobile-menu-button" aria-label="Toggle mobile menu">
+      <button class="md:hidden nav-link p-2" id="mobile-menu-button" aria-label="Toggle mobile menu" aria-expanded="false" aria-controls="mobile-menu">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
         </svg>
@@ -105,37 +105,57 @@ function isActive(href: string) {
     });
   }
 
-  document.addEventListener('astro:page-load', function() {
-    updateActiveNav();
-
+  function initMobileMenu() {
+    const navRoot = document.querySelector('nav');
     const mobileMenuButton = document.getElementById('mobile-menu-button');
     const mobileMenu = document.getElementById('mobile-menu');
 
-    if (mobileMenuButton && mobileMenu) {
-      mobileMenuButton.addEventListener('click', function() {
+    if (!navRoot || !mobileMenuButton || !mobileMenu) {
+      return;
+    }
+
+    const closeMenu = () => {
+      mobileMenu.classList.add('hidden');
+      mobileMenuButton.setAttribute('aria-expanded', 'false');
+    };
+
+    if (!navRoot.hasAttribute('data-mobile-menu-bound')) {
+      navRoot.setAttribute('data-mobile-menu-bound', 'true');
+
+      mobileMenuButton.addEventListener('click', () => {
         requestAnimationFrame(() => {
-          mobileMenu.classList.toggle('hidden');
+          const isHidden = mobileMenu.classList.toggle('hidden');
+          mobileMenuButton.setAttribute('aria-expanded', String(!isHidden));
         });
       });
 
       const menuLinks = mobileMenu.querySelectorAll('a');
       menuLinks.forEach(link => {
-        link.addEventListener('click', function() {
-          requestAnimationFrame(() => {
-            mobileMenu.classList.add('hidden');
-          });
+        link.addEventListener('click', () => {
+          requestAnimationFrame(closeMenu);
         });
       });
 
-      document.addEventListener('click', function(event) {
+      document.addEventListener('click', (event) => {
         if (!mobileMenuButton.contains(event.target as Node) && !mobileMenu.contains(event.target as Node)) {
-          requestAnimationFrame(() => {
-            mobileMenu.classList.add('hidden');
-          });
+          requestAnimationFrame(closeMenu);
         }
       });
     }
-  });
+
+    closeMenu();
+  }
+
+  const initNav = () => {
+    updateActiveNav();
+    initMobileMenu();
+  };
+
+  initNav();
+  if (!document.documentElement.hasAttribute('data-nav-pageload-bound')) {
+    document.documentElement.setAttribute('data-nav-pageload-bound', 'true');
+    document.addEventListener('astro:page-load', initNav);
+  }
 </script>
 
 <style>

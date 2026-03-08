@@ -87,6 +87,20 @@ command = "npx"
 args = ["-y", "@mauricio.wolff/mcp-obsidian@latest", "/path/to/your/vault"]
 ```
 
+### Optional no-path mode (uses current directory)
+
+If your client launches MCP-Obsidian from inside your vault folder, you can omit the vault path.
+
+```bash
+npx @mauricio.wolff/mcp-obsidian@latest
+```
+
+```json
+"args": ["@mauricio.wolff/mcp-obsidian@latest"]
+```
+
+Supported note file types: `.md`, `.markdown`, `.txt`, `.base`, `.canvas`.
+
 <details>
 <summary>Config File Locations (optional)</summary>
 
@@ -113,15 +127,6 @@ args = ["-y", "@mauricio.wolff/mcp-obsidian@latest", "/path/to/your/vault"]
 - Linux: Open a terminal in your vault folder and run `pwd`.
 
 Replace `/path/to/your/vault` with the full absolute path.
-
-### Optional CWD Mode
-
-You can omit the vault path when your client starts this server from inside your vault directory. In that case, MCP-Obsidian uses the current working directory as vault root.
-
-```bash
-npx @mauricio.wolff/mcp-obsidian@latest
-npm start
-```
 
 </details>
 
