@@ -16,5 +16,6 @@ MCP-Obsidian is an open-source Model Context Protocol (MCP) server that gives AI
 ## Optional
 
 - [GitHub README](https://github.com/bitbonsai/mcp-obsidian/blob/main/README.md): Full developer documentation
+- [Changelog](https://github.com/bitbonsai/mcp-obsidian/blob/main/CHANGELOG.md): Release-by-release changes and migration notes
 - [npm Package](https://www.npmjs.com/package/@mauricio.wolff/mcp-obsidian): Package info and install instructions
 - [CONTRIBUTING](https://github.com/bitbonsai/mcp-obsidian/blob/main/CONTRIBUTING.md): How to contribute

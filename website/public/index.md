@@ -30,4 +30,5 @@ This MCP server lets Claude, ChatGPT+, and other assistants access your vault. L
 
 - Repository: https://github.com/bitbonsai/mcp-obsidian
 - npm: https://www.npmjs.com/package/@mauricio.wolff/mcp-obsidian
+- Changelog: https://github.com/bitbonsai/mcp-obsidian/blob/main/CHANGELOG.md
 - Website: https://mcp-obsidian.org

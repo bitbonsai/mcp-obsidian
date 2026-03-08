@@ -10,6 +10,8 @@ A universal AI bridge for Obsidian vaults using the Model Context Protocol (MCP)
   
 [https://mcp-obsidian.org](https://mcp-obsidian.org)
 
+[Changelog](./CHANGELOG.md)
+
 </div>
 
 <div align="center">
