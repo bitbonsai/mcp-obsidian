@@ -17,6 +17,7 @@ This MCP server lets Claude, ChatGPT+, and other assistants access your vault. L
 - **v0.7.4:** New get_vault_stats tool + improved error messages with remediation suggestions
 - **v0.7.3:** Bug fix for folder detection with dots in names + dependency updates ([PR #15](https://github.com/bitbonsai/mcp-obsidian/pull/15))
 - **v0.7.2:** Security hardening - TOCTOU fixes, regex injection prevention, comprehensive CI/CD ([PR #12](https://github.com/bitbonsai/mcp-obsidian/pull/12))
+- [See full changelog](https://github.com/bitbonsai/mcp-obsidian/blob/main/CHANGELOG.md)
 
 ## Navigation
 

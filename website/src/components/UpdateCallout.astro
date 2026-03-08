@@ -80,6 +80,18 @@
                 <a href="https://github.com/bitbonsai/mcp-obsidian/pull/12" target="_blank" rel="noopener noreferrer" class="text-accent hover:text-accent-2 transition-colors">(PR #12)</a>
               </li>
             </ul>
+
+            <a
+              href="https://github.com/bitbonsai/mcp-obsidian/blob/main/CHANGELOG.md"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="updates-changelog-link"
+            >
+              <svg class="updates-changelog-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77 5.44 5.44 0 0 0 3.5 8.5c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+              </svg>
+              See full changelog
+            </a>
           </div>
 
         </div>
@@ -177,6 +189,38 @@
     max-height: 48rem;
     -webkit-mask-image: none;
     mask-image: none;
+  }
+
+  .updates-changelog-link {
+    display: none;
+    margin-top: 0.9rem;
+    width: fit-content;
+    align-items: center;
+    gap: 0.42rem;
+    color: rgba(167, 139, 250, 0.95);
+    font-size: 0.9rem;
+    line-height: 1.2;
+    transition: color 0.2s ease;
+  }
+
+  .older-updates.is-expanded .updates-changelog-link {
+    display: inline-flex;
+  }
+
+  .updates-changelog-link:hover {
+    color: rgba(196, 181, 253, 1);
+  }
+
+  .updates-changelog-link:focus-visible {
+    outline: 2px solid rgba(139, 92, 246, 0.7);
+    outline-offset: 2px;
+    border-radius: 0.375rem;
+  }
+
+  .updates-changelog-icon {
+    width: 0.95rem;
+    height: 0.95rem;
+    opacity: 0.95;
   }
 
   .updates-toggle {
