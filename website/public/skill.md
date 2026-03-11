@@ -8,13 +8,12 @@ Combines MCP server safety with Obsidian CLI context. One skill that routes each
 npx skills add bitbonsai/mcp-obsidian
 ```
 
-### What happens when I say: "sync my vault"?
+### What can you do with it?
 
-- Run preflight checks first (git installed, repo present, identity set, remote configured).
-- If anything is missing, ask one targeted setup question with a recommended default.
-- Run safe sync sequence: `git add -A` -> `git commit` (if changes) -> `git pull --rebase` -> `git push`.
-
-Prerequisites: `git` required, `gh` optional (used only for GitHub remote setup).
+- **Find any note instantly** — Full-text search with relevance ranking across your entire vault.
+- **Organize with smart tags** — Add, remove, and bulk-manage tags and frontmatter across hundreds of notes.
+- **Edit notes safely** — Atomic read/write/patch operations with path sandboxing.
+- **Sync across devices** — Optional git-based sync with no paid subscription required.
 
 ## Routing Matrix
 
@@ -176,6 +175,7 @@ Skill folder structure:
       resources/
         tool-patterns.md                # Per-tool response shapes and recipes
         obsidian-conventions.md         # Vault structure, wikilinks, tags
+        git-sync.md                     # Git backup/sync workflows
 ```
 
 SKILL.md frontmatter:
@@ -186,7 +186,9 @@ name: obsidian
 description: >
   Activate when the user mentions their
   Obsidian vault, notes, tags, frontmatter,
-  or daily notes.
+  daily notes, backup, or sync. Route
+  operations across MCP, Obsidian CLI/app
+  actions, and git sync with safe defaults.
 metadata:
   version: "2.0"
   author: bitbonsai

@@ -185,25 +185,43 @@ const installCmd = 'npx skills add bitbonsai/mcp-obsidian';
         </div>
       </div>
 
-      <div class="max-w-xl mx-auto mt-4 rounded-2xl border border-green-400/35 bg-green-500/10 px-6 py-5">
-        <h3 class="text-base font-semibold text-foreground mb-3">What happens when I say: "sync my vault"?</h3>
-        <ul class="space-y-2 text-sm text-muted-foreground">
-          <li class="flex items-start gap-2">
-            <span class="text-green-400 mt-0.5">-</span>
-            <span>Run preflight checks first (git installed, repo present, identity set, remote configured).</span>
-          </li>
-          <li class="flex items-start gap-2">
-            <span class="text-green-400 mt-0.5">-</span>
-            <span>If anything is missing, ask one targeted setup question with a recommended default.</span>
-          </li>
-          <li class="flex items-start gap-2">
-            <span class="text-green-400 mt-0.5">-</span>
-            <span>Run safe sync sequence: <code class="text-foreground">git add -A</code> -&gt; <code class="text-foreground">git commit</code> (if changes) -&gt; <code class="text-foreground">git pull --rebase</code> -&gt; <code class="text-foreground">git push</code>.</span>
-          </li>
-        </ul>
-        <p class="text-xs text-muted-foreground mt-3">
-          Prerequisites: <code class="text-foreground">git</code> required, <code class="text-foreground">gh</code> optional (used only for GitHub remote setup).
-        </p>
+      <div class="max-w-3xl mx-auto mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {[
+          {
+            icon: 'M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z',
+            title: 'Find any note instantly',
+            desc: "Full-text search across your entire vault with relevance ranking. Just describe what you're looking for.",
+          },
+          {
+            icon: 'M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 12V7a4 4 0 014-4z',
+            title: 'Organize with smart tags',
+            desc: 'Add, remove, and bulk-manage tags and frontmatter across hundreds of notes in seconds.',
+          },
+          {
+            icon: 'M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z',
+            title: 'Edit notes safely',
+            desc: 'Read, write, and patch notes with atomic operations. Path sandboxing prevents accidental changes outside your vault.',
+          },
+          {
+            icon: 'M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15',
+            title: 'Sync across devices',
+            desc: 'Optional git-based sync keeps your vault backed up and available everywhere\u2009\u2014\u2009no paid subscription required.',
+          },
+        ].map(card => (
+          <div class="bg-card/30 backdrop-blur-xl rounded-2xl border border-border/50 p-5">
+            <div class="flex items-start gap-3">
+              <div class="w-8 h-8 rounded-lg bg-accent/15 flex items-center justify-center shrink-0">
+                <svg class="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d={card.icon} />
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-sm font-semibold text-foreground mb-1">{card.title}</h3>
+                <p class="text-xs text-muted-foreground leading-relaxed">{card.desc}</p>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
 
@@ -542,7 +560,8 @@ git push</code></pre>
       SKILL.md                  # Gotchas, error recovery, index
       resources/
         tool-patterns.md        # Per-tool response shapes and recipes
-        obsidian-conventions.md # Vault structure, wikilinks, tags</code></pre>
+        obsidian-conventions.md # Vault structure, wikilinks, tags
+        git-sync.md             # Git backup/sync workflows</code></pre>
           </div>
         </div>
 
@@ -557,7 +576,9 @@ name: obsidian
 description: >
   Activate when the user mentions their
   Obsidian vault, notes, tags, frontmatter,
-  or daily notes.
+  daily notes, backup, or sync. Route
+  operations across MCP, Obsidian CLI/app
+  actions, and git sync with safe defaults.
 metadata:
   version: "2.0"
   author: bitbonsai
