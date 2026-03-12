@@ -45,7 +45,7 @@ https://github.com/user-attachments/assets/657ac4c6-1cd2-4cc3-829f-fd095a32f71c
    If using the published package:
 
    ```bash
-   npx @modelcontextprotocol/inspector npx mcpvault@latest /path/to/your/vault
+   npx @modelcontextprotocol/inspector npx @bitbonsai/mcpvault@latest /path/to/your/vault
    ```
 
 3. **Configure your AI client:**
@@ -57,7 +57,7 @@ https://github.com/user-attachments/assets/657ac4c6-1cd2-4cc3-829f-fd095a32f71c
      "mcpServers": {
        "obsidian": {
          "command": "npx",
-         "args": ["mcpvault@latest", "/path/to/your/vault"]
+         "args": ["@bitbonsai/mcpvault@latest", "/path/to/your/vault"]
        }
      }
    }
@@ -70,7 +70,7 @@ https://github.com/user-attachments/assets/657ac4c6-1cd2-4cc3-829f-fd095a32f71c
      "mcpServers": {
        "obsidian": {
          "command": "npx",
-         "args": ["mcpvault@latest", "/path/to/your/vault"],
+         "args": ["@bitbonsai/mcpvault@latest", "/path/to/your/vault"],
          "env": {}
        }
      }
@@ -86,7 +86,7 @@ https://github.com/user-attachments/assets/657ac4c6-1cd2-4cc3-829f-fd095a32f71c
          "type": "local",
          "command": [
            "npx",
-           "mcpvault@latest",
+           "@bitbonsai/mcpvault@latest",
            "/path/to/your/vault/"
          ],
          "enabled": true
@@ -155,7 +155,7 @@ MCP is an open protocol. You're not tied to any specific vendor or platform. You
 No installation needed! Use `npx` to run directly:
 
 ```bash
-npx mcpvault@latest /path/to/your/obsidian/vault
+npx @bitbonsai/mcpvault@latest /path/to/your/obsidian/vault
 ```
 
 If you omit the vault path, the server uses your current working directory as the vault root.
@@ -188,7 +188,7 @@ npx @modelcontextprotocol/inspector npm start /path/to/your/vault
 npm install -g @modelcontextprotocol/inspector
 
 # Test with any vault
-mcp-inspector npx mcpvault@latest /path/to/your/vault
+mcp-inspector npx @bitbonsai/mcpvault@latest /path/to/your/vault
 ```
 
 ## Usage
@@ -198,9 +198,9 @@ mcp-inspector npx mcpvault@latest /path/to/your/vault
 **End users:**
 
 ```bash
-npx mcpvault@latest
-npx mcpvault@latest /path/to/your/obsidian/vault
-npx mcpvault@latest ./Vault
+npx @bitbonsai/mcpvault@latest
+npx @bitbonsai/mcpvault@latest /path/to/your/obsidian/vault
+npx @bitbonsai/mcpvault@latest ./Vault
 ```
 
 **Developers:**
@@ -225,7 +225,7 @@ Add to your Claude Desktop configuration file:
     "obsidian": {
       "command": "npx",
       "args": [
-        "mcpvault@latest",
+        "@bitbonsai/mcpvault@latest",
         "/Users/yourname/Documents/MyVault"
       ]
     }
@@ -241,14 +241,14 @@ Add to your Claude Desktop configuration file:
     "obsidian-personal": {
       "command": "npx",
       "args": [
-        "mcpvault@latest",
+        "@bitbonsai/mcpvault@latest",
         "/Users/yourname/Documents/PersonalVault"
       ]
     },
     "obsidian-work": {
       "command": "npx",
       "args": [
-        "mcpvault@latest",
+        "@bitbonsai/mcpvault@latest",
         "/Users/yourname/Documents/WorkVault"
       ]
     }
@@ -288,7 +288,7 @@ Edit `~/.claude.json`:
   "mcpServers": {
     "obsidian": {
       "command": "npx",
-      "args": ["mcpvault@latest", "/path/to/your/vault"],
+      "args": ["@bitbonsai/mcpvault@latest", "/path/to/your/vault"],
       "env": {}
     }
   }
@@ -305,7 +305,7 @@ Edit `.claude.json` in your project or add to the projects section:
       "mcpServers": {
         "obsidian": {
           "command": "npx",
-          "args": ["mcpvault@latest", "/path/to/your/vault"]
+          "args": ["@bitbonsai/mcpvault@latest", "/path/to/your/vault"]
         }
       }
     }
@@ -316,7 +316,7 @@ Edit `.claude.json` in your project or add to the projects section:
 **Using Claude Code CLI:**
 
 ```bash
-claude mcp add obsidian --scope user npx mcpvault /path/to/your/vault
+claude mcp add obsidian --scope user npx @bitbonsai/mcpvault /path/to/your/vault
 ```
 
 #### Goose Desktop
@@ -324,7 +324,7 @@ claude mcp add obsidian --scope user npx mcpvault /path/to/your/vault
 On Goose Desktop settings, click **Add custom extension**, and on the command field add:
 
 ```bash
-npx mcpvault@latest /path/to/your/vault
+npx @bitbonsai/mcpvault@latest /path/to/your/vault
 ```
 
 #### Other MCP-Compatible Clients (2025)
@@ -372,7 +372,7 @@ Most modern MCP clients use similar JSON configuration patterns. Refer to your s
 #### "command not found: npx"
 
 - **Solution:** Install Node.js runtime from [nodejs.org](https://nodejs.org)
-- **Alternative:** Use global install: `npm install -g mcpvault`
+- **Alternative:** Use global install: `npm install -g @bitbonsai/mcpvault`
 
 #### "File not found" when paths look correct
 
@@ -407,7 +407,7 @@ Most modern MCP clients use similar JSON configuration patterns. Refer to your s
 Run with error logging:
 
 ```bash
-npx mcpvault /path/to/vault 2>debug.log
+npx @bitbonsai/mcpvault /path/to/vault 2>debug.log
 ```
 
 ### Getting Help

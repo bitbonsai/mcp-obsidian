@@ -241,7 +241,7 @@ If you were using the Bun version, update your configuration:
 ```json
 {
   "command": "npx",
-  "args": ["mcpvault@latest", "/path/to/vault"]
+  "args": ["@bitbonsai/mcpvault@latest", "/path/to/vault"]
 }
 ```
 

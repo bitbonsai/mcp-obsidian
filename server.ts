@@ -38,7 +38,7 @@ mcpvault v${VERSION}
 Universal AI bridge for Obsidian vaults - connect any MCP-compatible assistant
 
 Usage:
-  npx mcpvault [vault-path]
+  npx @bitbonsai/mcpvault [vault-path]
 
 Arguments:
   [vault-path]    Optional path to your Obsidian vault directory
@@ -49,11 +49,11 @@ Options:
   --help, -h      Show this help message
 
 Examples:
-  npx mcpvault
-  npx mcpvault ~/Documents/MyVault
-  npx mcpvault ./Vault
-  npx mcpvault /path/to/obsidian/vault
-  npx mcpvault "/path/with spaces/Obsidian Vault"
+  npx @bitbonsai/mcpvault
+  npx @bitbonsai/mcpvault ~/Documents/MyVault
+  npx @bitbonsai/mcpvault ./Vault
+  npx @bitbonsai/mcpvault /path/to/obsidian/vault
+  npx @bitbonsai/mcpvault "/path/with spaces/Obsidian Vault"
 `);
   process.exit(0);
 }
