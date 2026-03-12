@@ -1,4 +1,4 @@
-# MCP-Obsidian Features
+# MCP-Vault Features
 
 Designed for safety, performance, and developer experience. Every feature gives AI intelligent access without compromising your data.
 
@@ -36,7 +36,7 @@ Works with Claude Desktop, ChatGPT+ Desktop, OpenCode, Gemini CLI, OpenAI Codex,
 
 ## Comparison with Alternatives
 
-| Feature | MCP-Obsidian | Other MCP-Obsidian (Plugin-based) | Direct File Access |
+| Feature | MCP-Vault | Other MCP-Vault (Plugin-based) | Direct File Access |
 |---------|-------------|----------------------------------|-------------------|
 | Setup Complexity | Simple - just point to vault path | Complex - requires Obsidian plugin + API key | Variable |
 | Obsidian Running Required | No | Yes | No |
@@ -52,10 +52,10 @@ Works with Claude Desktop, ChatGPT+ Desktop, OpenCode, Gemini CLI, OpenAI Codex,
 ## FAQ
 
 ### Does my data leave my computer?
-Vault files stay local. MCP-Obsidian reads and writes files on your machine. Your AI provider only sees content your client sends.
+Vault files stay local. MCP-Vault reads and writes files on your machine. Your AI provider only sees content your client sends.
 
 ### Does Obsidian need to be running?
-No. MCP-Obsidian works via filesystem access, so Obsidian can be closed.
+No. MCP-Vault works via filesystem access, so Obsidian can be closed.
 
 ### Can I use multiple vaults?
 Yes. Configure multiple MCP server entries, one per vault path.

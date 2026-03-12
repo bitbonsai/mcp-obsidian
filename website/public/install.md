@@ -1,6 +1,6 @@
-# Install MCP-Obsidian
+# Install MCP-Vault
 
-Get MCP-Obsidian running in seconds with any MCP-compatible platform.
+Get MCP-Vault running in seconds with any MCP-compatible platform.
 
 ## Step 1: Configure Your AI Platform
 
@@ -13,7 +13,7 @@ Add to your MCP configuration file:
   "mcpServers": {
     "obsidian": {
       "command": "npx",
-      "args": ["@mauricio.wolff/mcp-obsidian@latest", "/path/to/your/vault"]
+      "args": ["mcpvault@latest", "/path/to/your/vault"]
     }
   }
 }
@@ -22,7 +22,7 @@ Add to your MCP configuration file:
 ### Claude Code
 
 ```bash
-claude mcp add-json obsidian --scope user '{"type":"stdio","command":"npx","args":["@mauricio.wolff/mcp-obsidian@latest","/path/to/your/vault"]}'
+claude mcp add-json obsidian --scope user '{"type":"stdio","command":"npx","args":["mcpvault@latest","/path/to/your/vault"]}'
 ```
 
 **Configuration Scopes:**
@@ -38,7 +38,7 @@ claude mcp add-json obsidian --scope user '{"type":"stdio","command":"npx","args
 opencode mcp add
 ```
 
-Select **local**, then enter the command: `npx -y @mauricio.wolff/mcp-obsidian@latest /path/to/your/vault`
+Select **local**, then enter the command: `npx -y mcpvault@latest /path/to/your/vault`
 
 **Option 2: Config file**
 
@@ -50,7 +50,7 @@ Add to your `opencode.json` (project root) or `~/.config/opencode/opencode.json`
   "mcp": {
     "obsidian": {
       "type": "local",
-      "command": ["npx", "-y", "@mauricio.wolff/mcp-obsidian@latest", "/path/to/your/vault"]
+      "command": ["npx", "-y", "mcpvault@latest", "/path/to/your/vault"]
     }
   }
 }
@@ -61,7 +61,7 @@ Add to your `opencode.json` (project root) or `~/.config/opencode/opencode.json`
 **Option 1: CLI**
 
 ```bash
-gemini mcp add obsidian -- npx @mauricio.wolff/mcp-obsidian@latest /path/to/your/vault
+gemini mcp add obsidian -- npx mcpvault@latest /path/to/your/vault
 ```
 
 **Option 2: Config file**
@@ -73,7 +73,7 @@ Add to `~/.gemini/settings.json`:
   "mcpServers": {
     "obsidian": {
       "command": "npx",
-      "args": ["@mauricio.wolff/mcp-obsidian@latest", "/path/to/your/vault"]
+      "args": ["mcpvault@latest", "/path/to/your/vault"]
     }
   }
 }
@@ -84,19 +84,19 @@ Add to `~/.gemini/settings.json`:
 ```toml
 [mcp_servers.obsidian]
 command = "npx"
-args = ["-y", "@mauricio.wolff/mcp-obsidian@latest", "/path/to/your/vault"]
+args = ["-y", "mcpvault@latest", "/path/to/your/vault"]
 ```
 
 ### Optional no-path mode (uses current directory)
 
-If your client launches MCP-Obsidian from inside your vault folder, you can omit the vault path.
+If your client launches MCP-Vault from inside your vault folder, you can omit the vault path.
 
 ```bash
-npx @mauricio.wolff/mcp-obsidian@latest
+npx mcpvault@latest
 ```
 
 ```json
-"args": ["@mauricio.wolff/mcp-obsidian@latest"]
+"args": ["mcpvault@latest"]
 ```
 
 Supported note file types: `.md`, `.markdown`, `.txt`, `.base`, `.canvas`.
@@ -136,7 +136,7 @@ No pre-installation needed! npx automatically downloads and runs the server.
 
 ```bash
 npm install -g @modelcontextprotocol/inspector
-mcp-inspector npx @mauricio.wolff/mcp-obsidian@latest /path/to/vault
+mcp-inspector npx mcpvault@latest /path/to/vault
 ```
 
 Opens interactive web interface at http://localhost:5173 for testing all MCP methods.
@@ -155,4 +155,4 @@ Works with all MCP-compatible platforms: Claude Desktop, ChatGPT+, Claude Code, 
 
 ## You're All Set!
 
-Restart your AI platform and you'll see MCP-Obsidian connected. Your AI assistant can now safely read, search, and manage your Obsidian vault.
+Restart your AI platform and you'll see MCP-Vault connected. Your AI assistant can now safely read, search, and manage your Obsidian vault.

@@ -2,13 +2,13 @@
   <img width="256" height="256" alt="image" src="https://github.com/user-attachments/assets/1e21d898-811b-42c2-a810-bf921dde0f58" />
 </div>
 
-# MCP-Obsidian
+# MCP-Vault
 
 A universal AI bridge for Obsidian vaults using the Model Context Protocol (MCP) standard. Connect any MCP-compatible AI assistant to your knowledge base - works with Claude, ChatGPT, and future AI tools. This server provides safe read/write access to your notes while preventing YAML frontmatter corruption.
 
 <div align="center">
   
-[https://mcp-obsidian.org](https://mcp-obsidian.org)
+[https://mcpvault.org](https://mcpvault.org)
 
 [Changelog](./CHANGELOG.md)
 
@@ -16,9 +16,9 @@ A universal AI bridge for Obsidian vaults using the Model Context Protocol (MCP)
 
 <div align="center">
 
-[![GitHub Stars](https://img.shields.io/github/stars/bitbonsai/mcp-obsidian?style=flat&logo=github&logoColor=white&color=9065ea&labelColor=262626)](https://github.com/bitbonsai/mcp-obsidian)
-[![npm version](https://img.shields.io/npm/v/@mauricio.wolff/mcp-obsidian?style=flat&logo=npm&logoColor=white&color=9065ea&labelColor=262626)](https://www.npmjs.com/package/@mauricio.wolff/mcp-obsidian)
-[![npm downloads](https://img.shields.io/npm/dt/@mauricio.wolff/mcp-obsidian?style=flat&logo=npm&logoColor=white&color=9065ea&labelColor=262626)](https://www.npmjs.com/package/@mauricio.wolff/mcp-obsidian)
+[![GitHub Stars](https://img.shields.io/github/stars/bitbonsai/mcpvault?style=flat&logo=github&logoColor=white&color=9065ea&labelColor=262626)](https://github.com/bitbonsai/mcpvault)
+[![npm version](https://img.shields.io/npm/v/mcpvault?style=flat&logo=npm&logoColor=white&color=9065ea&labelColor=262626)](https://www.npmjs.com/package/mcpvault)
+[![npm downloads](https://img.shields.io/npm/dt/mcpvault?style=flat&logo=npm&logoColor=white&color=9065ea&labelColor=262626)](https://www.npmjs.com/package/mcpvault)
 [![GitHub Sponsors](https://img.shields.io/github/sponsors/BitBonsai?style=flat&logo=github&logoColor=white&color=9065ea&labelColor=262626)](https://github.com/sponsors/bitbonsai)
 [![Ko-Fi](https://img.shields.io/badge/Ko--fi-Support%20Me-9065ea?style=flat&logo=ko-fi&logoColor=white&labelColor=262626)](https://ko-fi.com/bitbonsai)
 [![Liberapay](https://img.shields.io/badge/Liberapay-Weekly%20Support-9065ea?style=flat&logo=liberapay&logoColor=white&labelColor=262626)](https://liberapay.com/bitbonsai/)
@@ -45,7 +45,7 @@ https://github.com/user-attachments/assets/657ac4c6-1cd2-4cc3-829f-fd095a32f71c
    If using the published package:
 
    ```bash
-   npx @modelcontextprotocol/inspector npx @mauricio.wolff/mcp-obsidian@latest /path/to/your/vault
+   npx @modelcontextprotocol/inspector npx mcpvault@latest /path/to/your/vault
    ```
 
 3. **Configure your AI client:**
@@ -57,7 +57,7 @@ https://github.com/user-attachments/assets/657ac4c6-1cd2-4cc3-829f-fd095a32f71c
      "mcpServers": {
        "obsidian": {
          "command": "npx",
-         "args": ["@mauricio.wolff/mcp-obsidian@latest", "/path/to/your/vault"]
+         "args": ["mcpvault@latest", "/path/to/your/vault"]
        }
      }
    }
@@ -70,7 +70,7 @@ https://github.com/user-attachments/assets/657ac4c6-1cd2-4cc3-829f-fd095a32f71c
      "mcpServers": {
        "obsidian": {
          "command": "npx",
-         "args": ["@mauricio.wolff/mcp-obsidian@latest", "/path/to/your/vault"],
+         "args": ["mcpvault@latest", "/path/to/your/vault"],
          "env": {}
        }
      }
@@ -86,7 +86,7 @@ https://github.com/user-attachments/assets/657ac4c6-1cd2-4cc3-829f-fd095a32f71c
          "type": "local",
          "command": [
            "npx",
-           "@mauricio.wolff/mcp-obsidian@latest",
+           "mcpvault@latest",
            "/path/to/your/vault/"
          ],
          "enabled": true
@@ -106,15 +106,15 @@ https://github.com/user-attachments/assets/657ac4c6-1cd2-4cc3-829f-fd095a32f71c
 
 **Success indicators:** Your AI should be able to list files and read notes from your vault.
 
-## Why MCP-Obsidian?
+## Why MCP-Vault?
 
 ### Universal AI Compatibility
 
-Built on the open Model Context Protocol standard, MCP-Obsidian is not locked to any single AI provider. As more AI assistants adopt MCP, your investment in this tool grows more valuable. Today it works with Claude and ChatGPT - tomorrow it will work with whatever AI tools emerge.
+Built on the open Model Context Protocol standard, MCP-Vault is not locked to any single AI provider. As more AI assistants adopt MCP, your investment in this tool grows more valuable. Today it works with Claude and ChatGPT - tomorrow it will work with whatever AI tools emerge.
 
 ### Future-Proof Your Knowledge Base
 
-Instead of waiting for each AI company to build Obsidian integrations, MCP-Obsidian provides a universal adapter that works with any MCP-compatible assistant. One tool, endless possibilities.
+Instead of waiting for each AI company to build Obsidian integrations, MCP-Vault provides a universal adapter that works with any MCP-compatible assistant. One tool, endless possibilities.
 
 ### Open Standard, No Lock-in
 
@@ -155,7 +155,7 @@ MCP is an open protocol. You're not tied to any specific vendor or platform. You
 No installation needed! Use `npx` to run directly:
 
 ```bash
-npx @mauricio.wolff/mcp-obsidian@latest /path/to/your/obsidian/vault
+npx mcpvault@latest /path/to/your/obsidian/vault
 ```
 
 If you omit the vault path, the server uses your current working directory as the vault root.
@@ -188,7 +188,7 @@ npx @modelcontextprotocol/inspector npm start /path/to/your/vault
 npm install -g @modelcontextprotocol/inspector
 
 # Test with any vault
-mcp-inspector npx @mauricio.wolff/mcp-obsidian@latest /path/to/your/vault
+mcp-inspector npx mcpvault@latest /path/to/your/vault
 ```
 
 ## Usage
@@ -198,9 +198,9 @@ mcp-inspector npx @mauricio.wolff/mcp-obsidian@latest /path/to/your/vault
 **End users:**
 
 ```bash
-npx @mauricio.wolff/mcp-obsidian@latest
-npx @mauricio.wolff/mcp-obsidian@latest /path/to/your/obsidian/vault
-npx @mauricio.wolff/mcp-obsidian@latest ./Vault
+npx mcpvault@latest
+npx mcpvault@latest /path/to/your/obsidian/vault
+npx mcpvault@latest ./Vault
 ```
 
 **Developers:**
@@ -225,7 +225,7 @@ Add to your Claude Desktop configuration file:
     "obsidian": {
       "command": "npx",
       "args": [
-        "@mauricio.wolff/mcp-obsidian@latest",
+        "mcpvault@latest",
         "/Users/yourname/Documents/MyVault"
       ]
     }
@@ -241,14 +241,14 @@ Add to your Claude Desktop configuration file:
     "obsidian-personal": {
       "command": "npx",
       "args": [
-        "@mauricio.wolff/mcp-obsidian@latest",
+        "mcpvault@latest",
         "/Users/yourname/Documents/PersonalVault"
       ]
     },
     "obsidian-work": {
       "command": "npx",
       "args": [
-        "@mauricio.wolff/mcp-obsidian@latest",
+        "mcpvault@latest",
         "/Users/yourname/Documents/WorkVault"
       ]
     }
@@ -288,7 +288,7 @@ Edit `~/.claude.json`:
   "mcpServers": {
     "obsidian": {
       "command": "npx",
-      "args": ["@mauricio.wolff/mcp-obsidian@latest", "/path/to/your/vault"],
+      "args": ["mcpvault@latest", "/path/to/your/vault"],
       "env": {}
     }
   }
@@ -305,7 +305,7 @@ Edit `.claude.json` in your project or add to the projects section:
       "mcpServers": {
         "obsidian": {
           "command": "npx",
-          "args": ["@mauricio.wolff/mcp-obsidian@latest", "/path/to/your/vault"]
+          "args": ["mcpvault@latest", "/path/to/your/vault"]
         }
       }
     }
@@ -316,7 +316,7 @@ Edit `.claude.json` in your project or add to the projects section:
 **Using Claude Code CLI:**
 
 ```bash
-claude mcp add obsidian --scope user npx @mauricio.wolff/mcp-obsidian /path/to/your/vault
+claude mcp add obsidian --scope user npx mcpvault /path/to/your/vault
 ```
 
 #### Goose Desktop
@@ -324,7 +324,7 @@ claude mcp add obsidian --scope user npx @mauricio.wolff/mcp-obsidian /path/to/y
 On Goose Desktop settings, click **Add custom extension**, and on the command field add:
 
 ```bash
-npx @mauricio.wolff/mcp-obsidian@latest /path/to/your/vault
+npx mcpvault@latest /path/to/your/vault
 ```
 
 #### Other MCP-Compatible Clients (2025)
@@ -372,7 +372,7 @@ Most modern MCP clients use similar JSON configuration patterns. Refer to your s
 #### "command not found: npx"
 
 - **Solution:** Install Node.js runtime from [nodejs.org](https://nodejs.org)
-- **Alternative:** Use global install: `npm install -g @mauricio.wolff/mcp-obsidian`
+- **Alternative:** Use global install: `npm install -g mcpvault`
 
 #### "File not found" when paths look correct
 
@@ -407,12 +407,12 @@ Most modern MCP clients use similar JSON configuration patterns. Refer to your s
 Run with error logging:
 
 ```bash
-npx @mauricio.wolff/mcp-obsidian /path/to/vault 2>debug.log
+npx mcpvault /path/to/vault 2>debug.log
 ```
 
 ### Getting Help
 
-- [Open an issue](https://github.com/bitbonsai/mcp-obsidian/issues) on GitHub
+- [Open an issue](https://github.com/bitbonsai/mcpvault/issues) on GitHub
 - Include your OS, Node.js version, and error messages
 - Provide the vault directory structure (without sensitive content)
 

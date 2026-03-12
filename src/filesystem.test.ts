@@ -9,7 +9,7 @@ let testVaultPath: string;
 let fileSystem: FileSystemService;
 
 beforeEach(async () => {
-  testVaultPath = await mkdtemp(join(tmpdir(), "mcp-obsidian-test-"));
+  testVaultPath = await mkdtemp(join(tmpdir(), "mcpvault-test-"));
   fileSystem = new FileSystemService(testVaultPath);
 });
 
@@ -786,7 +786,7 @@ test("read from non-existent vault throws error", async () => {
 });
 
 test("write to non-existent vault creates directories", async () => {
-  const tempVault = await mkdtemp(join(tmpdir(), "mcp-obsidian-new-vault-"));
+  const tempVault = await mkdtemp(join(tmpdir(), "mcpvault-new-vault-"));
   const newFs = new FileSystemService(tempVault);
 
   try {
