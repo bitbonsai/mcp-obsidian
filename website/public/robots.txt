@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemaps
-Sitemap: https://mcp-obsidian.org/sitemap.xml
+Sitemap: https://mcpvault.org/sitemap.xml
 
 # AI crawlers
 User-agent: GPTBot

@@ -33,12 +33,12 @@ if (firstArg === "--version" || firstArg === "-v") {
 
 if (firstArg === "--help" || firstArg === "-h") {
   console.log(`
-@mauricio.wolff/mcp-obsidian v${VERSION}
+mcpvault v${VERSION}
 
 Universal AI bridge for Obsidian vaults - connect any MCP-compatible assistant
 
 Usage:
-  npx @mauricio.wolff/mcp-obsidian [vault-path]
+  npx mcpvault [vault-path]
 
 Arguments:
   [vault-path]    Optional path to your Obsidian vault directory
@@ -49,11 +49,11 @@ Options:
   --help, -h      Show this help message
 
 Examples:
-  npx @mauricio.wolff/mcp-obsidian
-  npx @mauricio.wolff/mcp-obsidian ~/Documents/MyVault
-  npx @mauricio.wolff/mcp-obsidian ./Vault
-  npx @mauricio.wolff/mcp-obsidian /path/to/obsidian/vault
-  npx @mauricio.wolff/mcp-obsidian "/path/with spaces/Obsidian Vault"
+  npx mcpvault
+  npx mcpvault ~/Documents/MyVault
+  npx mcpvault ./Vault
+  npx mcpvault /path/to/obsidian/vault
+  npx mcpvault "/path/with spaces/Obsidian Vault"
 `);
   process.exit(0);
 }
@@ -70,7 +70,7 @@ const fileSystem = new FileSystemService(vaultPath, pathFilter, frontmatterHandl
 const searchService = new SearchService(vaultPath, pathFilter);
 
 const server = new Server({
-  name: "mcp-obsidian",
+  name: "mcpvault",
   version: VERSION
 }, {
   capabilities: {

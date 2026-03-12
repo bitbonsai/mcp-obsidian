@@ -11,7 +11,7 @@ import { FolderOpen, Settings, Target, Zap } from 'lucide-react';
         Configuration Examples
       </h2>
       <p class="text-xl text-muted-foreground max-w-3xl mx-auto">
-        From basic setup to advanced configurations, here's how to customize MCP-Obsidian for your workflow.
+        From basic setup to advanced configurations, here's how to customize MCP-Vault for your workflow.
       </p>
     </div>
 
@@ -82,7 +82,7 @@ import { FolderOpen, Settings, Target, Zap } from 'lucide-react';
   "mcpServers": &#123;
     "obsidian": &#123;
       "command": "npx",
-      "args": ["@mauricio.wolff/mcp-obsidian@latest", "/Users/you/Documents/MyVault"]
+      "args": ["mcpvault@latest", "/Users/you/Documents/MyVault"]
     &#125;
   &#125;
 &#125;</code></pre>
@@ -100,7 +100,7 @@ import { FolderOpen, Settings, Target, Zap } from 'lucide-react';
                 Advanced Settings
               </h3>
               <p class="text-muted-foreground mb-6">
-                Fine-tune MCP-Obsidian's behavior with custom settings, logging, and performance options.
+                Fine-tune MCP-Vault's behavior with custom settings, logging, and performance options.
               </p>
               <div class="space-y-4">
                 <div class="flex items-center gap-2 text-sm text-accent">
@@ -136,7 +136,7 @@ import { FolderOpen, Settings, Target, Zap } from 'lucide-react';
     "obsidian": &#123;
       "command": "npx",
       "args": [
-        "@mauricio.wolff/mcp-obsidian@latest",
+        "mcpvault@latest",
         "/Users/you/Documents/MyVault",
         "--log-level", "debug",
         "--max-search-results", "50",
@@ -199,16 +199,16 @@ import { FolderOpen, Settings, Target, Zap } from 'lucide-react';
   "mcpServers": &#123;
     "obsidian-work": &#123;
       "command": "npx",
-      "args": ["@mauricio.wolff/mcp-obsidian@latest", "/Users/you/Work/Notes"]
+      "args": ["mcpvault@latest", "/Users/you/Work/Notes"]
     &#125;,
     "obsidian-personal": &#123;
       "command": "npx",
-      "args": ["@mauricio.wolff/mcp-obsidian@latest", "/Users/you/Personal/Journal"]
+      "args": ["mcpvault@latest", "/Users/you/Personal/Journal"]
     &#125;,
     "obsidian-research": &#123;
       "command": "npx",
       "args": [
-        "@mauricio.wolff/mcp-obsidian@latest",
+        "mcpvault@latest",
         "/Users/you/Research/Papers",
         "--read-only", "true"
       ]
@@ -265,7 +265,7 @@ import { FolderOpen, Settings, Target, Zap } from 'lucide-react';
     "obsidian": &#123;
       "command": "npx",
       "args": [
-        "@mauricio.wolff/mcp-obsidian@latest",
+        "mcpvault@latest",
         "/Users/you/Documents/MyVault",
         "--include-patterns", "*.md,!private/**",
         "--exclude-tags", "personal,draft",

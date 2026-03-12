@@ -161,7 +161,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - **Node.js compatibility**: Full Node.js runtime support (v18.0.0+)
-- **npm distribution**: Published as npm package `@mauricio.wolff/mcp-obsidian`
+- **npm distribution**: Published as npm package `mcpvault`
 - **TypeScript tooling**: Added tsx for development and tsc for building
 - **Vitest testing**: Replaced Bun test with Vitest test runner
 
@@ -182,7 +182,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Multi-platform support**: Claude Desktop, Claude Code, ChatGPT Desktop, IntelliJ IDEA support
 
 ### Changed
-- **Package scope**: Migrated to scoped npm package `@mauricio.wolff/mcp-obsidian`
+- **Package scope**: Migrated to scoped npm package `mcpvault`
 - **Documentation**: Made README AI-agnostic with comprehensive examples
 - **Version consistency**: Synchronized version across all files
 
@@ -198,7 +198,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Error handling**: Improved error messages and validation
 
 ### Changed
-- **Project name**: Renamed from mcp-fs-obsidian to mcp-obsidian
+- **Project name**: Renamed from mcp-fs-obsidian to mcpvault
 - **Bun optimization**: Pure Bun implementation with native APIs
 - **Documentation**: Significantly improved README with examples
 
@@ -233,7 +233,7 @@ If you were using the Bun version, update your configuration:
 ```json
 {
   "command": "bunx",
-  "args": ["mcp-obsidian", "/path/to/vault"]
+  "args": ["mcpvault", "/path/to/vault"]
 }
 ```
 
@@ -241,7 +241,7 @@ If you were using the Bun version, update your configuration:
 ```json
 {
   "command": "npx",
-  "args": ["@mauricio.wolff/mcp-obsidian@latest", "/path/to/vault"]
+  "args": ["mcpvault@latest", "/path/to/vault"]
 }
 ```
 

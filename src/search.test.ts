@@ -9,7 +9,7 @@ let testVaultPath: string;
 let searchService: SearchService;
 
 beforeEach(async () => {
-  testVaultPath = await mkdtemp(join(tmpdir(), "mcp-obsidian-search-"));
+  testVaultPath = await mkdtemp(join(tmpdir(), "mcpvault-search-"));
   searchService = new SearchService(testVaultPath, new PathFilter());
 });
 

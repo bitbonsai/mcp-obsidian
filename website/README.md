@@ -1,15 +1,15 @@
-# MCP-Obsidian Website
+# MCP-Vault Website
 
-🌐 **Live Site**: [mcp-obsidian.org](https://mcp-obsidian.org)
+🌐 **Live Site**: [mcpvault.org](https://mcpvault.org)
 
-This is the official landing page and documentation website for [MCP-Obsidian](https://github.com/bitbonsai/mcp-obsidian) - a Model Context Protocol (MCP) server that enables AI assistants like Claude to interact securely and intelligently with Obsidian vaults.
+This is the official landing page and documentation website for [MCP-Vault](https://github.com/bitbonsai/mcpvault) - a Model Context Protocol (MCP) server that enables AI assistants like Claude to interact securely and intelligently with Obsidian vaults.
 
 ## 🎯 Project Objective
 
 This website serves to:
 
-- **Showcase MCP-Obsidian**: Demonstrate the capabilities and benefits of connecting AI assistants to Obsidian
-- **Provide Installation Guide**: Clear, step-by-step instructions for setting up MCP-Obsidian
+- **Showcase MCP-Vault**: Demonstrate the capabilities and benefits of connecting AI assistants to Obsidian
+- **Provide Installation Guide**: Clear, step-by-step instructions for setting up MCP-Vault
 - **Interactive Demo**: Live demonstrations of AI-powered note management
 - **Documentation Hub**: Comprehensive guides, examples, and best practices
 - **Community Resource**: Links to support, contributions, and discussions
@@ -19,7 +19,7 @@ This website serves to:
 - **Modern Design**: Beautiful, responsive interface built with Astro and Tailwind CSS
 - **Interactive Demo**: Live terminal simulation showing AI-Obsidian interactions
 - **Code Examples**: Syntax-highlighted configuration examples
-- **Feature Comparison**: Clear comparison tables showing MCP-Obsidian advantages
+- **Feature Comparison**: Clear comparison tables showing MCP-Vault advantages
 - **Dark/Light Theme**: Automatic theme switching with system preferences
 - **Performance Optimized**: Static site generation for fast loading
 
@@ -43,8 +43,8 @@ This website serves to:
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/bitbonsai/mcp-obsidian.org.git
-   cd mcp-obsidian.org
+   git clone https://github.com/bitbonsai/mcpvault.org.git
+   cd mcpvault.org
    ```
 
 2. **Install dependencies**:
@@ -155,21 +155,21 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🔗 Related Projects
 
-- **[MCP-Obsidian](https://github.com/bitbonsai/mcp-obsidian)**: The main MCP server implementation
+- **[MCP-Vault](https://github.com/bitbonsai/mcpvault)**: The main MCP server implementation
 - **[Model Context Protocol](https://modelcontextprotocol.io)**: Protocol specification and tools
 - **[Obsidian](https://obsidian.md/)**: The knowledge management app
 
 ## 💬 Support & Community
 
-- **Issues**: [GitHub Issues](https://github.com/bitbonsai/mcp-obsidian/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/bitbonsai/mcp-obsidian/discussions)
+- **Issues**: [GitHub Issues](https://github.com/bitbonsai/mcpvault/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/bitbonsai/mcpvault/discussions)
 - **Author**: [@bitbonsai](https://github.com/bitbonsai)
 
 ---
 
 <div align="center">
 
-**[Visit Live Site](https://mcp-obsidian.org)** • **[View Source](https://github.com/bitbonsai/mcp-obsidian)**
+**[Visit Live Site](https://mcpvault.org)** • **[View Source](https://github.com/bitbonsai/mcpvault)**
 
 Made with ❤️ for the Obsidian community
 

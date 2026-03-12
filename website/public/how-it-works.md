@@ -1,6 +1,6 @@
-# How MCP-Obsidian Works
+# How MCP-Vault Works
 
-Practical prompts you can try with your AI assistant and MCP-Obsidian.
+Practical prompts you can try with your AI assistant and MCP-Vault.
 
 ## Search & Read Notes
 

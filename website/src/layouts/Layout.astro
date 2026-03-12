@@ -10,13 +10,13 @@ export interface Props {
 }
 
 const {
-  title = "MCP-Obsidian - Universal AI Bridge for Obsidian Vaults",
+  title = "MCP-Vault - Universal AI Bridge for Obsidian Vaults",
   description = "Connect ANY AI assistant to your Obsidian vault with the open MCP standard. Works with Claude, ChatGPT, and future AI tools. Private, secure, and future-proof.",
-  image = "https://mcp-obsidian.org/og-image.jpg",
-  canonical = "https://mcp-obsidian.org"
+  image = "https://mcpvault.org/og-image.jpg",
+  canonical = "https://mcpvault.org"
 } = Astro.props;
 
-const fullTitle = title.includes("MCP-Obsidian") ? title : `${title} | MCP-Obsidian`;
+const fullTitle = title.includes("MCP-Vault") ? title : `${title} | MCP-Vault`;
 ---
 
 <!doctype html>
@@ -40,7 +40,7 @@ const fullTitle = title.includes("MCP-Obsidian") ? title : `${title} | MCP-Obsid
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={image} />
-    <meta property="og:site_name" content="MCP-Obsidian" />
+    <meta property="og:site_name" content="MCP-Vault" />
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
@@ -268,10 +268,10 @@ const fullTitle = title.includes("MCP-Obsidian") ? title : `${title} | MCP-Obsid
     <script is:inline type="application/ld+json" set:html={JSON.stringify({
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",
-      "name": "MCP-Obsidian",
+      "name": "MCP-Vault",
       "description": "Universal AI bridge for Obsidian vaults using the Model Context Protocol. Connect any MCP-compatible AI assistant to your knowledge base.",
-      "url": "https://mcp-obsidian.org",
-      "downloadUrl": "https://www.npmjs.com/package/@mauricio.wolff/mcp-obsidian",
+      "url": "https://mcpvault.org",
+      "downloadUrl": "https://www.npmjs.com/package/mcpvault",
       "softwareVersion": pkg.version,
       "operatingSystem": ["macOS", "Windows", "Linux"],
       "applicationCategory": "DeveloperApplication",
@@ -290,7 +290,7 @@ const fullTitle = title.includes("MCP-Obsidian") ? title : `${title} | MCP-Obsid
         "name": "bitbonsai",
         "url": "https://github.com/bitbonsai"
       },
-      "codeRepository": "https://github.com/bitbonsai/mcp-obsidian"
+      "codeRepository": "https://github.com/bitbonsai/mcpvault"
     })}></script>
   </head>
   <body class="min-h-screen bg-background text-foreground antialiased relative pt-24">

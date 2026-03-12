@@ -13,7 +13,7 @@
 
 Instead, report them via GitHub's private vulnerability reporting:
 
-1. Go to the [Security tab](https://github.com/bitbonsai/mcp-obsidian/security)
+1. Go to the [Security tab](https://github.com/bitbonsai/mcpvault/security)
 2. Click "Report a vulnerability"
 3. Provide a detailed description
 

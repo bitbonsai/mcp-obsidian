@@ -1,21 +1,21 @@
-# MCP-Obsidian
+# MCP-Vault
 
 > Universal AI Bridge for Obsidian Vaults
 
-MCP-Obsidian is an open-source Model Context Protocol (MCP) server that gives AI assistants safe, intelligent access to Obsidian vaults. Works with Claude, ChatGPT, OpenCode, Gemini CLI, and any MCP-compatible platform. No plugins required, no Obsidian running needed.
+MCP-Vault is an open-source Model Context Protocol (MCP) server that gives AI assistants safe, intelligent access to Obsidian vaults. Works with Claude, ChatGPT, OpenCode, Gemini CLI, and any MCP-compatible platform. No plugins required, no Obsidian running needed.
 
 ## Docs
 
-- [Home](https://mcp-obsidian.org/index.md): Project overview, version info, recent updates
-- [Install](https://mcp-obsidian.org/install.md): Configuration for Claude Desktop, ChatGPT+, Claude Code, OpenCode, Gemini CLI, OpenAI Codex, with config file paths per platform and optional CWD mode
-- [Features](https://mcp-obsidian.org/features.md): Core features (BM25-ranked full-text search, frontmatter safety, security, token optimization), comparison table, and FAQ
-- [Demo](https://mcp-obsidian.org/demo.md): Real request/response examples for patch_note, write_note, read_multiple_notes, update_frontmatter, search_notes
-- [How It Works](https://mcp-obsidian.org/how-it-works.md): End-to-end usage flows and full list of 14 MCP tools with descriptions
-- [Skill](https://mcp-obsidian.org/skill.md): Obsidian skill combining MCP, Obsidian CLI/app context, and Git CLI sync. Covers routing rules, preflight checks, targeted questions, and safe sync defaults.
+- [Home](https://mcpvault.org/index.md): Project overview, version info, recent updates
+- [Install](https://mcpvault.org/install.md): Configuration for Claude Desktop, ChatGPT+, Claude Code, OpenCode, Gemini CLI, OpenAI Codex, with config file paths per platform and optional CWD mode
+- [Features](https://mcpvault.org/features.md): Core features (BM25-ranked full-text search, frontmatter safety, security, token optimization), comparison table, and FAQ
+- [Demo](https://mcpvault.org/demo.md): Real request/response examples for patch_note, write_note, read_multiple_notes, update_frontmatter, search_notes
+- [How It Works](https://mcpvault.org/how-it-works.md): End-to-end usage flows and full list of 14 MCP tools with descriptions
+- [Skill](https://mcpvault.org/skill.md): Obsidian skill combining MCP, Obsidian CLI/app context, and Git CLI sync. Covers routing rules, preflight checks, targeted questions, and safe sync defaults.
 
 ## Optional
 
-- [GitHub README](https://github.com/bitbonsai/mcp-obsidian/blob/main/README.md): Full developer documentation
-- [Changelog](https://github.com/bitbonsai/mcp-obsidian/blob/main/CHANGELOG.md): Release-by-release changes and migration notes
-- [npm Package](https://www.npmjs.com/package/@mauricio.wolff/mcp-obsidian): Package info and install instructions
-- [CONTRIBUTING](https://github.com/bitbonsai/mcp-obsidian/blob/main/CONTRIBUTING.md): How to contribute
+- [GitHub README](https://github.com/bitbonsai/mcpvault/blob/main/README.md): Full developer documentation
+- [Changelog](https://github.com/bitbonsai/mcpvault/blob/main/CHANGELOG.md): Release-by-release changes and migration notes
+- [npm Package](https://www.npmjs.com/package/mcpvault): Package info and install instructions
+- [CONTRIBUTING](https://github.com/bitbonsai/mcpvault/blob/main/CONTRIBUTING.md): How to contribute

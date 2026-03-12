@@ -5,7 +5,7 @@ Combines MCP server safety with Obsidian CLI context. One skill that routes each
 ## Install
 
 ```
-npx skills add bitbonsai/mcp-obsidian
+npx skills add bitbonsai/mcpvault
 ```
 
 ### What can you do with it?

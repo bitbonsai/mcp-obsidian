@@ -14,7 +14,7 @@ let fileSystem: FileSystemService;
 let searchService: SearchService;
 
 beforeEach(async () => {
-  testVaultPath = await mkdtemp(join(tmpdir(), "mcp-obsidian-integration-"));
+  testVaultPath = await mkdtemp(join(tmpdir(), "mcpvault-integration-"));
 
   // Initialize services (same as server.ts)
   pathFilter = new PathFilter();
