@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.9.0] - 2026-03-12
 
 ### Changed
-- Package renamed to `@bitbonsai/mcpvault` (scoped) on npm
+- Package renamed to `@bitbonsai/mcpvault` on npm at Obsidian's request — update your config by replacing `mcpvault` with `@bitbonsai/mcpvault`
 
 ## [0.8.2] - 2026-03-08
 
