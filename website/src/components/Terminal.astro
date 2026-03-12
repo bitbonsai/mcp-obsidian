@@ -74,7 +74,7 @@ import {
             <div class="config-content" data-content="standard">
               <button
                 class="absolute top-4 right-4 p-2 hover:bg-card/50 rounded transition-colors copy-btn z-10"
-                data-copy='{"mcpServers": {"obsidian": {"command": "npx", "args": ["mcpvault@latest", "/path/to/your/vault"]}}}'
+                data-copy='{"mcpServers": {"obsidian": {"command": "npx", "args": ["@bitbonsai/mcpvault@latest", "/path/to/your/vault"]}}}'
                 title="Copy configuration"
                 aria-label="Copy configuration to clipboard"
               >
@@ -98,7 +98,7 @@ import {
   "mcpServers": {
     "obsidian": {
       "command": "npx",
-      "args": ["mcpvault@latest", "/path/to/your/vault"]
+      "args": ["@bitbonsai/mcpvault@latest", "/path/to/your/vault"]
     }
   }
 }`}
@@ -109,7 +109,7 @@ import {
             <div class="config-content hidden" data-content="claude-code">
               <button
                 class="absolute top-4 right-4 p-2 hover:bg-card/50 rounded transition-colors copy-btn z-10"
-                data-copy='claude mcp add-json obsidian --scope user &apos;{"type":"stdio","command":"npx","args":["mcpvault@latest","/path/to/your/vault"]}&apos;'
+                data-copy='claude mcp add-json obsidian --scope user &apos;{"type":"stdio","command":"npx","args":["@bitbonsai/mcpvault@latest","/path/to/your/vault"]}&apos;'
                 title="Copy configuration"
                 aria-label="Copy configuration to clipboard"
               >
@@ -140,7 +140,7 @@ import {
                       class="font-mono text-sm code-scroll bg-background/50 rounded px-3 py-2"
                     >
                       <pre
-                        style="margin: 0; color: #cdd6f4; line-height: 1.5; white-space: nowrap;"><span style="color: #cba6f7;">claude</span> <span style="color: #89b4fa;">mcp add-json</span> <span style="color: #a6e3a1;">obsidian</span> <span style="color: #fab387;">--scope user</span> <span style="color: #f38ba8;">'&#123;"type":"stdio","command":"npx","args":["mcpvault@latest","/path/to/your/vault"]&#125;'</span></pre>
+                        style="margin: 0; color: #cdd6f4; line-height: 1.5; white-space: nowrap;"><span style="color: #cba6f7;">claude</span> <span style="color: #89b4fa;">mcp add-json</span> <span style="color: #a6e3a1;">obsidian</span> <span style="color: #fab387;">--scope user</span> <span style="color: #f38ba8;">'&#123;"type":"stdio","command":"npx","args":["@bitbonsai/mcpvault@latest","/path/to/your/vault"]&#125;'</span></pre>
                     </div>
                   </div>
                 </div>
@@ -219,7 +219,7 @@ import {
                       opencode mcp add
                     </code>
                     <p class="text-xs text-muted-foreground mt-2">
-                      Interactive wizard — select <strong class="text-foreground">local</strong>, then enter the command: <code class="text-foreground">npx -y mcpvault@latest /path/to/your/vault</code>
+                      Interactive wizard — select <strong class="text-foreground">local</strong>, then enter the command: <code class="text-foreground">npx -y @bitbonsai/mcpvault@latest /path/to/your/vault</code>
                     </p>
                   </div>
                 </div>
@@ -228,7 +228,7 @@ import {
               <p class="text-xs text-muted-foreground mt-4 mb-3">Or configure manually:</p>
               <button
                 class="absolute top-4 right-4 p-2 hover:bg-card/50 rounded transition-colors copy-btn z-10"
-                data-copy='{"$schema": "https://opencode.ai/config.json", "mcp": {"obsidian": {"type": "local", "command": ["npx", "-y", "mcpvault@latest", "/path/to/your/vault"]}}}'
+                data-copy='{"$schema": "https://opencode.ai/config.json", "mcp": {"obsidian": {"type": "local", "command": ["npx", "-y", "@bitbonsai/mcpvault@latest", "/path/to/your/vault"]}}}'
                 title="Copy configuration"
                 aria-label="Copy configuration to clipboard"
               >
@@ -253,7 +253,7 @@ import {
   "mcp": {
     "obsidian": {
       "type": "local",
-      "command": ["npx", "-y", "mcpvault@latest", "/path/to/your/vault"]
+      "command": ["npx", "-y", "@bitbonsai/mcpvault@latest", "/path/to/your/vault"]
     }
   }
 }`}
@@ -325,7 +325,7 @@ import {
                       Use the CLI
                     </p>
                     <code class="block bg-background/50 px-3 py-2 rounded text-foreground text-sm font-mono">
-                      gemini mcp add obsidian -- npx mcpvault@latest /path/to/your/vault
+                      gemini mcp add obsidian -- npx @bitbonsai/mcpvault@latest /path/to/your/vault
                     </code>
                   </div>
                 </div>
@@ -334,7 +334,7 @@ import {
               <p class="text-xs text-muted-foreground mb-3">Or configure manually in <code class="text-foreground">~/.gemini/settings.json</code>:</p>
               <button
                 class="absolute top-4 right-4 p-2 hover:bg-card/50 rounded transition-colors copy-btn z-10"
-                data-copy='{"mcpServers": {"obsidian": {"command": "npx", "args": ["mcpvault@latest", "/path/to/your/vault"]}}}'
+                data-copy='{"mcpServers": {"obsidian": {"command": "npx", "args": ["@bitbonsai/mcpvault@latest", "/path/to/your/vault"]}}}'
                 title="Copy configuration"
                 aria-label="Copy configuration to clipboard"
               >
@@ -358,7 +358,7 @@ import {
   "mcpServers": {
     "obsidian": {
       "command": "npx",
-      "args": ["mcpvault@latest", "/path/to/your/vault"]
+      "args": ["@bitbonsai/mcpvault@latest", "/path/to/your/vault"]
     }
   }
 }`}
@@ -398,7 +398,7 @@ import {
                 class="absolute top-4 right-4 p-2 hover:bg-card/50 rounded transition-colors copy-btn z-10"
                 data-copy='[mcp_servers.obsidian]
 command = "npx"
-args = ["-y", "mcpvault@latest", "/path/to/your/vault"]'
+args = ["-y", "@bitbonsai/mcpvault@latest", "/path/to/your/vault"]'
                 title="Copy configuration"
                 aria-label="Copy configuration to clipboard"
               >
@@ -423,7 +423,7 @@ args = ["-y", "mcpvault@latest", "/path/to/your/vault"]'
                 <pre
                   style="margin: 0; color: #cdd6f4; line-height: 1.5;"><span style="color: #cba6f7;">[mcp_servers.obsidian]</span>
 <span style="color: #89b4fa;">command</span> <span style="color: #94e2d5;">=</span> <span style="color: #a6e3a1;">"npx"</span>
-<span style="color: #89b4fa;">args</span> <span style="color: #94e2d5;">=</span> <span style="color: #cdd6f4;">[</span><span style="color: #a6e3a1;">"-y"</span><span style="color: #cdd6f4;">,</span> <span style="color: #a6e3a1;">"mcpvault@latest"</span><span style="color: #cdd6f4;">,</span> <span style="color: #a6e3a1;">"/path/to/your/vault"</span><span style="color: #cdd6f4;">]</span></pre>
+<span style="color: #89b4fa;">args</span> <span style="color: #94e2d5;">=</span> <span style="color: #cdd6f4;">[</span><span style="color: #a6e3a1;">"-y"</span><span style="color: #cdd6f4;">,</span> <span style="color: #a6e3a1;">"@bitbonsai/mcpvault@latest"</span><span style="color: #cdd6f4;">,</span> <span style="color: #a6e3a1;">"/path/to/your/vault"</span><span style="color: #cdd6f4;">]</span></pre>
               </div>
 
               <div
@@ -467,10 +467,10 @@ args = ["-y", "mcpvault@latest", "/path/to/your/vault"]'
           </p>
           <div class="grid md:grid-cols-2 gap-2 text-xs">
             <code class="block bg-background/50 px-2 py-1 rounded text-foreground">
-              npx mcpvault@latest
+              npx @bitbonsai/mcpvault@latest
             </code>
             <code class="block bg-background/50 px-2 py-1 rounded text-foreground">
-              "args": ["mcpvault@latest"]
+              "args": ["@bitbonsai/mcpvault@latest"]
             </code>
           </div>
         </div>
@@ -662,7 +662,7 @@ args = ["-y", "mcpvault@latest", "/path/to/your/vault"]'
                 </p>
                 <div class="mt-3 space-y-2">
                   <code class="block bg-background/50 px-2 py-1 rounded text-foreground">
-                    npx mcpvault@latest
+                    npx @bitbonsai/mcpvault@latest
                   </code>
                   <code class="block bg-background/50 px-2 py-1 rounded text-foreground">
                     npm start
@@ -732,12 +732,12 @@ args = ["-y", "mcpvault@latest", "/path/to/your/vault"]'
               <div class="flex items-center gap-2">
                 <span class="text-accent">$</span>
                 <span class="text-foreground"
-                  >mcp-inspector npx mcpvault@latest
+                  >mcp-inspector npx @bitbonsai/mcpvault@latest
                   /path/to/vault</span
                 >
                 <button
                   class="ml-auto p-1 hover:bg-card/50 rounded transition-colors copy-btn"
-                  data-copy="mcp-inspector npx mcpvault@latest /path/to/vault"
+                  data-copy="mcp-inspector npx @bitbonsai/mcpvault@latest /path/to/vault"
                   title="Copy to clipboard"
                   aria-label="Copy test command to clipboard"
                 >

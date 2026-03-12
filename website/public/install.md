@@ -13,7 +13,7 @@ Add to your MCP configuration file:
   "mcpServers": {
     "obsidian": {
       "command": "npx",
-      "args": ["mcpvault@latest", "/path/to/your/vault"]
+      "args": ["@bitbonsai/mcpvault@latest", "/path/to/your/vault"]
     }
   }
 }
@@ -22,7 +22,7 @@ Add to your MCP configuration file:
 ### Claude Code
 
 ```bash
-claude mcp add-json obsidian --scope user '{"type":"stdio","command":"npx","args":["mcpvault@latest","/path/to/your/vault"]}'
+claude mcp add-json obsidian --scope user '{"type":"stdio","command":"npx","args":["@bitbonsai/mcpvault@latest","/path/to/your/vault"]}'
 ```
 
 **Configuration Scopes:**
@@ -38,7 +38,7 @@ claude mcp add-json obsidian --scope user '{"type":"stdio","command":"npx","args
 opencode mcp add
 ```
 
-Select **local**, then enter the command: `npx -y mcpvault@latest /path/to/your/vault`
+Select **local**, then enter the command: `npx -y @bitbonsai/mcpvault@latest /path/to/your/vault`
 
 **Option 2: Config file**
 
@@ -50,7 +50,7 @@ Add to your `opencode.json` (project root) or `~/.config/opencode/opencode.json`
   "mcp": {
     "obsidian": {
       "type": "local",
-      "command": ["npx", "-y", "mcpvault@latest", "/path/to/your/vault"]
+      "command": ["npx", "-y", "@bitbonsai/mcpvault@latest", "/path/to/your/vault"]
     }
   }
 }
@@ -61,7 +61,7 @@ Add to your `opencode.json` (project root) or `~/.config/opencode/opencode.json`
 **Option 1: CLI**
 
 ```bash
-gemini mcp add obsidian -- npx mcpvault@latest /path/to/your/vault
+gemini mcp add obsidian -- npx @bitbonsai/mcpvault@latest /path/to/your/vault
 ```
 
 **Option 2: Config file**
@@ -73,7 +73,7 @@ Add to `~/.gemini/settings.json`:
   "mcpServers": {
     "obsidian": {
       "command": "npx",
-      "args": ["mcpvault@latest", "/path/to/your/vault"]
+      "args": ["@bitbonsai/mcpvault@latest", "/path/to/your/vault"]
     }
   }
 }
@@ -84,7 +84,7 @@ Add to `~/.gemini/settings.json`:
 ```toml
 [mcp_servers.obsidian]
 command = "npx"
-args = ["-y", "mcpvault@latest", "/path/to/your/vault"]
+args = ["-y", "@bitbonsai/mcpvault@latest", "/path/to/your/vault"]
 ```
 
 ### Optional no-path mode (uses current directory)
@@ -92,11 +92,11 @@ args = ["-y", "mcpvault@latest", "/path/to/your/vault"]
 If your client launches MCP-Vault from inside your vault folder, you can omit the vault path.
 
 ```bash
-npx mcpvault@latest
+npx @bitbonsai/mcpvault@latest
 ```
 
 ```json
-"args": ["mcpvault@latest"]
+"args": ["@bitbonsai/mcpvault@latest"]
 ```
 
 Supported note file types: `.md`, `.markdown`, `.txt`, `.base`, `.canvas`.
@@ -136,7 +136,7 @@ No pre-installation needed! npx automatically downloads and runs the server.
 
 ```bash
 npm install -g @modelcontextprotocol/inspector
-mcp-inspector npx mcpvault@latest /path/to/vault
+mcp-inspector npx @bitbonsai/mcpvault@latest /path/to/vault
 ```
 
 Opens interactive web interface at http://localhost:5173 for testing all MCP methods.

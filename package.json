@@ -1,5 +1,5 @@
 {
-  "name": "mcpvault",
+  "name": "@bitbonsai/mcpvault",
   "version": "0.8.2",
   "description": "Universal AI bridge for Obsidian vaults - connect any MCP-compatible assistant",
   "homepage": "https://mcpvault.org",
