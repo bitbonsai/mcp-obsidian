@@ -12,7 +12,7 @@ export async function GET() {
   const range = `2010-01-01:${today}`;
 
   const [oldRes, newRes] = await Promise.all([
-    fetch(`https://api.npmjs.org/downloads/point/${range}/mcpvault`),
+    fetch(`https://api.npmjs.org/downloads/point/${range}/%40mauricio.wolff%2Fmcp-obsidian`),
     fetch(`https://api.npmjs.org/downloads/point/${range}/%40bitbonsai%2Fmcpvault`),
   ]);
 
