@@ -36,7 +36,7 @@ export class GgufAdapter implements EmbeddingAdapter {
         const llama = await getLlama();
 
         const modelPath = await resolveModelFile(
-            `hf:${this.modelId.split(':')[0]}/${this.ggufFile}`,
+            `hf:${this.modelId.split(':')[0]}:${this.ggufFile}`,
         );
 
         const model = await llama.loadModel({ modelPath });
