@@ -9,7 +9,8 @@ import {
 import { FileSystemService } from "./src/filesystem.js";
 import { FrontmatterHandler, parseFrontmatter } from "./src/frontmatter.js";
 import { PathFilter } from "./src/pathfilter.js";
-import { SearchService } from "./src/search.js";
+import { SemanticSearchService, VectorStore } from "./src/search/index.js";
+import { OnnxAdapter } from "./src/embedding/onnx-adapter.js";
 import { readFileSync } from "fs";
 import { fileURLToPath } from "url";
 import { dirname, join, resolve } from "path";
@@ -67,7 +68,11 @@ const vaultPath = resolve(vaultPathArg || process.cwd());
 const pathFilter = new PathFilter();
 const frontmatterHandler = new FrontmatterHandler();
 const fileSystem = new FileSystemService(vaultPath, pathFilter, frontmatterHandler);
-const searchService = new SearchService(vaultPath, pathFilter);
+
+// Semantic search: embedding backend + vector store
+const embeddingBackend = new OnnxAdapter('Xenova/all-MiniLM-L6-v2');
+const vectorStore = new VectorStore(vaultPath, embeddingBackend);
+const searchService = new SemanticSearchService(vaultPath, pathFilter, vectorStore);
 
 const server = new Server({
   name: "mcpvault",

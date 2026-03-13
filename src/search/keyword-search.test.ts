@@ -1,16 +1,16 @@
 import { describe, test, expect, beforeEach, afterEach } from "vitest";
-import { SearchService } from "./search.js";
-import { PathFilter } from "./pathfilter.js";
+import { KeywordSearchService } from "./index.js";
+import { PathFilter } from "../pathfilter.js";
 import { writeFile, mkdir, mkdtemp, rm } from "fs/promises";
 import { join } from "path";
 import { tmpdir } from "os";
 
 let testVaultPath: string;
-let searchService: SearchService;
+let searchService: KeywordSearchService;
 
 beforeEach(async () => {
   testVaultPath = await mkdtemp(join(tmpdir(), "mcpvault-search-"));
-  searchService = new SearchService(testVaultPath, new PathFilter());
+  searchService = new KeywordSearchService(testVaultPath, new PathFilter());
 });
 
 afterEach(async () => {
@@ -268,7 +268,7 @@ describe("SearchService", () => {
   // ============================================================================
 
   test("vault path with trailing slash does not truncate result paths", async () => {
-    const trailingSlashService = new SearchService(testVaultPath + "/", new PathFilter());
+    const trailingSlashService = new KeywordSearchService(testVaultPath + "/", new PathFilter());
 
     await mkdir(join(testVaultPath, "sessions"), { recursive: true });
     await writeNote("sessions/foo-bar.md", "# Foo Bar\n\nSome content here.");

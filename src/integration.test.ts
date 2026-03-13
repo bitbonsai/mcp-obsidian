@@ -2,7 +2,7 @@ import { test, expect, beforeEach, afterEach, describe } from "vitest";
 import { FileSystemService } from "./filesystem.js";
 import { FrontmatterHandler } from "./frontmatter.js";
 import { PathFilter } from "./pathfilter.js";
-import { SearchService } from "./search.js";
+import { KeywordSearchService } from "./search/index.js";
 import { writeFile, mkdir, mkdtemp, rm } from "fs/promises";
 import { join } from "path";
 import { tmpdir } from "os";
@@ -11,7 +11,7 @@ let testVaultPath: string;
 let pathFilter: PathFilter;
 let frontmatterHandler: FrontmatterHandler;
 let fileSystem: FileSystemService;
-let searchService: SearchService;
+let searchService: KeywordSearchService;
 
 beforeEach(async () => {
   testVaultPath = await mkdtemp(join(tmpdir(), "mcpvault-integration-"));
@@ -20,7 +20,7 @@ beforeEach(async () => {
   pathFilter = new PathFilter();
   frontmatterHandler = new FrontmatterHandler();
   fileSystem = new FileSystemService(testVaultPath, pathFilter, frontmatterHandler);
-  searchService = new SearchService(testVaultPath, pathFilter);
+  searchService = new KeywordSearchService(testVaultPath, pathFilter);
 });
 
 afterEach(async () => {
