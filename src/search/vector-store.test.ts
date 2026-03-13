@@ -1,5 +1,5 @@
 import { describe, test, expect, beforeEach, afterEach } from "vitest";
-import type { EmbeddingAdapter } from "../embedding/types.js";
+import type { EmbeddingAdapter, EmbeddingInputKind } from "../embedding/types.js";
 import { VectorStore, cosineSimilarity } from "./vector-store.js";
 import { writeFile, mkdir, mkdtemp, readFile, rm, utimes } from "fs/promises";
 import { join } from "path";
@@ -8,14 +8,15 @@ import { tmpdir } from "os";
 class FakeEmbeddingAdapter implements EmbeddingAdapter {
   readonly dimensions = 2;
   readonly modelId: string;
-  calls: string[] = [];
+  readonly options = {};
+  calls: Array<{ text: string; kind: EmbeddingInputKind }> = [];
 
   constructor(modelId = "fake-model") {
     this.modelId = modelId;
   }
 
-  async embed(text: string): Promise<Float32Array> {
-    this.calls.push(text);
+  async embed(text: string, { kind }: { kind: EmbeddingInputKind }): Promise<Float32Array> {
+    this.calls.push({ text, kind });
 
     switch (text) {
       case "alpha body":
@@ -104,7 +105,7 @@ describe("VectorStore", () => {
     await vectorStore.index("note.md");
 
     expect(vectorStore.size).toBe(1);
-    expect(embedder.calls).toEqual(["alpha body"]);
+    expect(embedder.calls).toEqual([{ text: "alpha body", kind: "document" }]);
   });
 
   test("skips re-embedding when a note has not changed", async () => {
@@ -114,7 +115,7 @@ describe("VectorStore", () => {
     await vectorStore.index("note.md");
 
     expect(vectorStore.size).toBe(1);
-    expect(embedder.calls).toEqual(["alpha body"]);
+    expect(embedder.calls).toEqual([{ text: "alpha body", kind: "document" }]);
   });
 
   test("re-embeds a note after its modified time changes", async () => {
@@ -129,7 +130,10 @@ describe("VectorStore", () => {
 
     await vectorStore.index("note.md");
 
-    expect(embedder.calls).toEqual(["alpha body", "updated body"]);
+    expect(embedder.calls).toEqual([
+      { text: "alpha body", kind: "document" },
+      { text: "updated body", kind: "document" },
+    ]);
   });
 
   test("throws when indexing a missing file", async () => {
@@ -156,6 +160,7 @@ describe("VectorStore", () => {
     expect(results[0]!.path).toBe("alpha.md");
     expect(results[1]!.path).toBe("mixed.md");
     expect(results[0]!.score).toBeGreaterThan(results[1]!.score);
+    expect(embedder.calls.at(-1)).toEqual({ text: "alpha query", kind: "query" });
   });
 
   test("returns empty array when nothing has been indexed", async () => {

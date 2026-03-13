@@ -58,14 +58,14 @@ export class VectorStore {
         const frontmatterMatch = raw.match(/^---\n[\s\S]*?\n---\n/);
         const body = frontmatterMatch ? raw.slice(frontmatterMatch[0].length) : raw;
 
-        const vector = await this.embedder.embed(body);
+        const vector = await this.embedder.embed(body, { kind: 'document' });
         this.vectors.set(relativePath, { mtime: modifiedTime, vector });
         this.dirty = true;
     }
 
     /** Search for top-K most similar documents. */
     async search(query: string, limit: number): Promise<VectorSearchResult[]> {
-        const queryVec = await this.embedder.embed(query);
+        const queryVec = await this.embedder.embed(query, { kind: 'query' });
 
         const scored: VectorSearchResult[] = [];
         for (const [path, entry] of this.vectors) {
