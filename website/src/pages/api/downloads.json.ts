@@ -33,7 +33,7 @@ export async function GET() {
       headers: {
         'Content-Type': 'application/json',
         // shields.io respects s-maxage; 1 hour is a reasonable refresh interval
-        'Cache-Control': 'public, s-maxage=3600, max-age=3600',
+        'Cache-Control': 'public, s-maxage=900, max-age=900',
       },
     },
   );
