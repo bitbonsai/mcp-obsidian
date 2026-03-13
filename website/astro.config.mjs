@@ -1,9 +1,11 @@
 import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import tailwind from '@astrojs/tailwind';
+import cloudflare from '@astrojs/cloudflare';
 
 // https://astro.build/config
 export default defineConfig({
+  adapter: cloudflare(),
   integrations: [react(), tailwind()],
   build: {
     inlineStylesheets: 'always' // Inline all CSS to prevent render blocking
