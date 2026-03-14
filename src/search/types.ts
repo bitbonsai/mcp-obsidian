@@ -1,4 +1,6 @@
 export interface SearchService {
+    initialize(): Promise<void>; // Prepares the search service (e.g. builds index, loads resources).
+    isReady(): boolean;
     search(params: SearchParams): Promise<SearchResult[]>;
 }
 

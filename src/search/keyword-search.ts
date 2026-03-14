@@ -20,6 +20,15 @@ export class KeywordSearchService implements SearchService {
         this.vaultPath = resolve(vaultPath);
     }
 
+    async initialize(): Promise<void> {
+        // No pre-initialization needed
+    }
+
+    isReady(): boolean {
+        // Always ready since no index build is required
+        return true;
+    }
+
     async search(params: SearchParams): Promise<SearchResult[]> {
         const {
             query,

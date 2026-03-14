@@ -31,7 +31,24 @@ async function writeNote(path: string, content: string) {
   await writeFile(fullPath, content);
 }
 
-describe("SearchService", () => {
+describe("KeywordSearchService", () => {
+  // ============================================================================
+  // Lifecycle Methods
+  // ============================================================================
+
+  test("isReady returns true after initialize", async () => {
+    await searchService.initialize();
+    expect(searchService.isReady()).toBe(true);
+  });
+
+  test("search works after calling initialize", async () => {
+    await writeNote("note.md", "# Note\n\nkeyword here.");
+    await searchService.initialize();
+
+    const results = await searchService.search({ query: "keyword" });
+    expect(results).toHaveLength(1);
+  });
+
   // ============================================================================
   // BASIC SEARCH
   // ============================================================================
@@ -39,6 +56,7 @@ describe("SearchService", () => {
   test("finds notes matching a query", async () => {
     await writeNote("alpha.md", "# Alpha\n\nThis note has bananas.");
     await writeNote("beta.md", "# Beta\n\nThis note has oranges.");
+    await searchService.initialize();
 
     const results = await searchService.search({ query: "bananas" });
 
@@ -48,6 +66,7 @@ describe("SearchService", () => {
 
   test("returns empty array when no matches", async () => {
     await writeNote("note.md", "# Note\n\nNothing relevant here.");
+    await searchService.initialize();
 
     const results = await searchService.search({ query: "zzzznotfound" });
 
@@ -55,17 +74,20 @@ describe("SearchService", () => {
   });
 
   test("returns empty array for empty vault", async () => {
+    await searchService.initialize();
     const results = await searchService.search({ query: "anything" });
 
     expect(results).toHaveLength(0);
   });
 
   test("throws on empty query", async () => {
+    await searchService.initialize();
     await expect(searchService.search({ query: "" }))
       .rejects.toThrow(/empty/);
   });
 
   test("throws on whitespace-only query", async () => {
+    await searchService.initialize();
     await expect(searchService.search({ query: "   " }))
       .rejects.toThrow(/empty/);
   });
@@ -78,6 +100,7 @@ describe("SearchService", () => {
     for (let i = 0; i < 5; i++) {
       await writeNote(`note-${i}.md`, `# Note ${i}\n\nkeyword here.`);
     }
+    await searchService.initialize();
 
     const results = await searchService.search({ query: "keyword", limit: 2 });
 
@@ -88,6 +111,7 @@ describe("SearchService", () => {
     for (let i = 0; i < 25; i++) {
       await writeNote(`note-${i}.md`, `# Note ${i}\n\nkeyword here.`);
     }
+    await searchService.initialize();
 
     const results = await searchService.search({ query: "keyword", limit: 100 });
 
@@ -98,6 +122,7 @@ describe("SearchService", () => {
     for (let i = 0; i < 10; i++) {
       await writeNote(`note-${i}.md`, `# Note ${i}\n\nkeyword here.`);
     }
+    await searchService.initialize();
 
     const results = await searchService.search({ query: "keyword" });
 
@@ -112,6 +137,7 @@ describe("SearchService", () => {
     await writeNote("upper.md", "# Upper\n\nBANANA is great.");
     await writeNote("lower.md", "# Lower\n\nbanana is great.");
     await writeNote("mixed.md", "# Mixed\n\nBanana is great.");
+    await searchService.initialize();
 
     const results = await searchService.search({ query: "banana", limit: 10 });
 
@@ -121,6 +147,7 @@ describe("SearchService", () => {
   test("case-sensitive search when enabled", async () => {
     await writeNote("upper.md", "# Upper\n\nBANANA is great.");
     await writeNote("lower.md", "# Lower\n\nbanana is great.");
+    await searchService.initialize();
 
     const results = await searchService.search({
       query: "BANANA",
@@ -138,6 +165,7 @@ describe("SearchService", () => {
 
   test("excludes frontmatter from content-only search", async () => {
     await writeNote("note.md", "---\ntags: [uniquetag]\n---\n\n# Note\n\nNo tag here.");
+    await searchService.initialize();
 
     const results = await searchService.search({
       query: "uniquetag",
@@ -151,6 +179,7 @@ describe("SearchService", () => {
 
   test("searches frontmatter when enabled", async () => {
     await writeNote("note.md", "---\ntags: [uniquetag]\n---\n\n# Note\n\nNo tag here.");
+    await searchService.initialize();
 
     const results = await searchService.search({
       query: "uniquetag",
@@ -165,6 +194,7 @@ describe("SearchService", () => {
   test("searches both content and frontmatter together", async () => {
     await writeNote("fm-only.md", "---\nstatus: special\n---\n\n# Note\n\nPlain body.");
     await writeNote("content-only.md", "# Note\n\nThis is special content.");
+    await searchService.initialize();
 
     const results = await searchService.search({
       query: "special",
@@ -182,6 +212,7 @@ describe("SearchService", () => {
 
   test("matches by filename when content has no match", async () => {
     await writeNote("Recipes.md", "Some unrelated content about cooking.");
+    await searchService.initialize();
 
     const results = await searchService.search({ query: "recipes", limit: 10 });
 
@@ -198,6 +229,7 @@ describe("SearchService", () => {
     await writeNote("cats.md", "# Cats\n\nI love cats.");
     await writeNote("dogs.md", "# Dogs\n\nI love dogs.");
     await writeNote("fish.md", "# Fish\n\nI love fish.");
+    await searchService.initialize();
 
     const results = await searchService.search({ query: "cats dogs", limit: 10 });
 
@@ -214,6 +246,7 @@ describe("SearchService", () => {
   test("ranks notes with more matches higher", async () => {
     await writeNote("few.md", "# Few\n\napple once.");
     await writeNote("many.md", "# Many\n\napple apple apple apple apple.");
+    await searchService.initialize();
 
     const results = await searchService.search({ query: "apple", limit: 10 });
 
@@ -227,6 +260,7 @@ describe("SearchService", () => {
 
   test("results include expected fields", async () => {
     await writeNote("folder/note.md", "# My Note\n\nSome content with target word.");
+    await searchService.initialize();
 
     const results = await searchService.search({ query: "target", limit: 10 });
 
@@ -242,6 +276,7 @@ describe("SearchService", () => {
 
   test("excerpt contains context around match", async () => {
     await writeNote("note.md", "# Note\n\nSome words before target some words after.");
+    await searchService.initialize();
 
     const results = await searchService.search({ query: "target", limit: 10 });
 
@@ -256,6 +291,7 @@ describe("SearchService", () => {
     await writeNote("visible.md", "# Visible\n\nkeyword here.");
     await mkdir(join(testVaultPath, ".obsidian"), { recursive: true });
     await writeFile(join(testVaultPath, ".obsidian/config.md"), "keyword here.");
+    await searchService.initialize();
 
     const results = await searchService.search({ query: "keyword", limit: 10 });
 
@@ -272,6 +308,7 @@ describe("SearchService", () => {
 
     await mkdir(join(testVaultPath, "sessions"), { recursive: true });
     await writeNote("sessions/foo-bar.md", "# Foo Bar\n\nSome content here.");
+    await trailingSlashService.initialize();
 
     const results = await trailingSlashService.search({ query: "foo", limit: 5 });
 

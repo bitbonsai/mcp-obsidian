@@ -7,7 +7,7 @@ import { join } from "path";
 import { tmpdir } from "os";
 
 class FakeVectorStore {
-  constructor(private readonly vaultPath: string) {}
+  constructor(private readonly vaultPath: string) { }
 
   private documents = new Map<string, string>();
 
@@ -67,12 +67,42 @@ async function writeNote(path: string, content: string) {
 
 describe("SemanticSearchService", () => {
   // ============================================================================
+  // Lifecycle Methods
+  // ============================================================================
+
+  test("isReady returns false before initialize", () => {
+    expect(searchService.isReady()).toBe(false);
+  });
+
+  test("isReady returns true after initialize", async () => {
+    await writeNote("note.md", "# Note\n\nSome content.");
+    await searchService.initialize();
+
+    expect(searchService.isReady()).toBe(true);
+  });
+
+  test("search throws if not initialized", async () => {
+    await writeNote("note.md", "# Note\n\nkeyword here.");
+    await expect(searchService.search({ query: "keyword" }))
+      .rejects.toThrow();
+  });
+
+  test("search works after initialize", async () => {
+    await writeNote("note.md", "# Note\n\nkeyword here.");
+    await searchService.initialize();
+
+    const results = await searchService.search({ query: "keyword" });
+    expect(results).toHaveLength(1);
+  });
+
+  // ============================================================================
   // BASIC SEARCH
   // ============================================================================
 
   test("finds notes matching a query", async () => {
     await writeNote("alpha.md", "# Alpha\n\nThis note has bananas.");
     await writeNote("beta.md", "# Beta\n\nThis note has oranges.");
+    await searchService.initialize();
 
     const results = await searchService.search({ query: "bananas" });
 
@@ -82,6 +112,7 @@ describe("SemanticSearchService", () => {
 
   test("returns empty array when no matches", async () => {
     await writeNote("note.md", "# Note\n\nNothing relevant here.");
+    await searchService.initialize();
 
     const results = await searchService.search({ query: "zzzznotfound" });
 
@@ -89,17 +120,20 @@ describe("SemanticSearchService", () => {
   });
 
   test("returns empty array for empty vault", async () => {
+    await searchService.initialize();
     const results = await searchService.search({ query: "anything" });
 
     expect(results).toHaveLength(0);
   });
 
   test("throws on empty query", async () => {
+    await searchService.initialize();
     await expect(searchService.search({ query: "" }))
       .rejects.toThrow(/empty/);
   });
 
   test("throws on whitespace-only query", async () => {
+    await searchService.initialize();
     await expect(searchService.search({ query: "   " }))
       .rejects.toThrow(/empty/);
   });
@@ -112,6 +146,7 @@ describe("SemanticSearchService", () => {
     for (let i = 0; i < 5; i++) {
       await writeNote(`note-${i}.md`, `# Note ${i}\n\nkeyword here.`);
     }
+    await searchService.initialize();
 
     const results = await searchService.search({ query: "keyword", limit: 2 });
 
@@ -122,6 +157,7 @@ describe("SemanticSearchService", () => {
     for (let i = 0; i < 25; i++) {
       await writeNote(`note-${i}.md`, `# Note ${i}\n\nkeyword here.`);
     }
+    await searchService.initialize();
 
     const results = await searchService.search({ query: "keyword", limit: 100 });
 
@@ -132,6 +168,7 @@ describe("SemanticSearchService", () => {
     for (let i = 0; i < 10; i++) {
       await writeNote(`note-${i}.md`, `# Note ${i}\n\nkeyword here.`);
     }
+    await searchService.initialize();
 
     const results = await searchService.search({ query: "keyword" });
 
@@ -144,6 +181,7 @@ describe("SemanticSearchService", () => {
 
   test("results include expected fields", async () => {
     await writeNote("folder/note.md", "# My Note\n\nSome content with target word.");
+    await searchService.initialize();
 
     const results = await searchService.search({ query: "target", limit: 10 });
 
@@ -164,6 +202,7 @@ describe("SemanticSearchService", () => {
   test("excludes notes in filtered directories", async () => {
     await writeNote("visible.md", "# Visible\n\nvisible keyword here.");
     await writeNote(".obsidian/config.md", "# Hidden\n\nhidden keyword here.");
+    await searchService.initialize();
 
     const hiddenResults = await searchService.search({ query: "hidden", limit: 10 });
     const visibleResults = await searchService.search({ query: "visible", limit: 10 });
@@ -180,6 +219,7 @@ describe("SemanticSearchService", () => {
   test("searches only markdown files", async () => {
     await writeNote("note.txt", "text file keyword here.");
     await writeNote("note.md", "# Note\n\nNo matching content here.");
+    await searchService.initialize();
 
     const results = await searchService.search({ query: "keyword", limit: 10 });
 

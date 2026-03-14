@@ -73,6 +73,7 @@ const fileSystem = new FileSystemService(vaultPath, pathFilter, frontmatterHandl
 const embeddingBackend = new OnnxAdapter('Xenova/all-MiniLM-L6-v2');
 const vectorStore = new VectorStore(vaultPath, embeddingBackend);
 const searchService = new SemanticSearchService(vaultPath, pathFilter, vectorStore);
+await searchService.initialize();
 
 const server = new Server({
   name: "mcpvault",

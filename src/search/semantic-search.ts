@@ -18,6 +18,17 @@ export class SemanticSearchService implements SearchService {
         this.vaultPath = resolve(vaultPath);
     }
 
+    async initialize(): Promise<void> {
+        if (!this.indexReady) {
+            await this.buildIndex();
+            this.indexReady = true;
+        }
+    }
+
+    isReady(): boolean {
+        return this.indexReady;
+    }
+
     async search(params: SearchParams): Promise<SearchResult[]> {
         const { query, limit = 5 } = params;
 
@@ -25,13 +36,11 @@ export class SemanticSearchService implements SearchService {
             throw new Error('Search query cannot be empty');
         }
 
-        const maxLimit = Math.min(limit, 20);
-
-        // Ensure all documents are indexed
         if (!this.indexReady) {
-            await this.buildIndex();
-            this.indexReady = true;
+            throw new Error('SearchService is not initialized. Call initialize() first.');
         }
+
+        const maxLimit = Math.min(limit, 20);
 
         const results = await this.vectorStore.search(query, maxLimit);
 
