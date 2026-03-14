@@ -111,15 +111,16 @@ import pkg from '../../../package.json';
             id="hero-video"
             class="absolute inset-0 w-full h-full object-contain"
             controls
+            autoplay
             loop
             muted
             playsinline
-            preload="none"
+            preload="metadata"
             width="1152"
             height="720"
             poster="/video-poster-small.webp"
           >
-            <source src="/mcpvault-1-min.mp4" type="video/mp4" />
+            <source src="/mcp-obsidian-1-min.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
         </div>
@@ -164,7 +165,7 @@ import pkg from '../../../package.json';
           class="transform hover:scale-105 transition-all duration-200 rounded hover:shadow-lg hover:shadow-accent/25"
         >
           <img
-            src="https://img.shields.io/npm/dt/%40bitbonsai%2Fmcpvault?style=flat&logo=npm&logoColor=white&color=9065ea&labelColor=262626"
+            src="https://img.shields.io/endpoint?url=https%3A%2F%2Fmcpvault.org%2Fapi%2Fdownloads.json&style=flat&logo=npm&logoColor=white&color=9065ea&labelColor=262626"
             alt="npm downloads"
             class="h-6 rounded"
             loading="lazy"
@@ -217,28 +218,13 @@ import pkg from '../../../package.json';
 <script is:inline>
   const initHeroVideo = () => {
     const heroVideo = document.getElementById('hero-video');
-    if (!heroVideo || heroVideo.tagName !== 'VIDEO') {
-      return;
-    }
-
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-    const effectiveType = connection && connection.effectiveType ? connection.effectiveType : '';
-    const constrainedNetwork = Boolean(connection && connection.saveData) || ['slow-2g', '2g', '3g'].includes(effectiveType);
-
-    if (isMobile || prefersReducedMotion || constrainedNetwork) {
-      heroVideo.preload = 'none';
-      return;
-    }
-
-    heroVideo.preload = 'metadata';
-    heroVideo.autoplay = true;
+    if (!heroVideo || heroVideo.tagName !== 'VIDEO') return;
+    // Ensure play() is called after Astro view transitions re-mount the element
     heroVideo.play().catch(() => {});
   };
 
   initHeroVideo();
-  document.addEventListener('astro:page-load', initHeroVideo, { once: true });
+  document.addEventListener('astro:page-load', initHeroVideo);
 </script>
 
 <style>
