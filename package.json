@@ -32,6 +32,10 @@
     "@modelcontextprotocol/sdk": "^1.20.0",
     "gray-matter": "^4.0.3"
   },
+  "optionalDependencies": {
+    "@huggingface/transformers": "^3.8.1",
+    "node-llama-cpp": "^3.17.1"
+  },
   "devDependencies": {
     "@types/node": "^25.3.3",
     "tsx": "^4.20.6",
