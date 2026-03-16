@@ -74,17 +74,20 @@ interface CodeBlockProps {
 
 export default function CodeBlock({ code, language = 'json' }: CodeBlockProps) {
   return (
-    <SyntaxHighlighter
-      language={language}
-      style={catppuccinMocha as any}
-      customStyle={{
-        margin: 0,
-        borderRadius: '0',
-        fontSize: '0.875rem',
-        background: 'transparent',
-      }}
-    >
-      {code}
-    </SyntaxHighlighter>
+    <div className="code-scroll">
+      <SyntaxHighlighter
+        language={language}
+        style={catppuccinMocha as any}
+        customStyle={{
+          margin: 0,
+          borderRadius: '0',
+          fontSize: '0.875rem',
+          background: 'transparent',
+          overflow: 'visible',
+        }}
+      >
+        {code}
+      </SyntaxHighlighter>
+    </div>
   );
 }

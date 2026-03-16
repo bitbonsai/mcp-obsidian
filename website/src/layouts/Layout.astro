@@ -179,6 +179,37 @@ const fullTitle = title.includes("MCP-Vault") ? title : `${title} | MCP-Vault`;
         max-width: 100%;
       }
 
+      /* macOS-style scrollbars for all terminal pre elements */
+      .terminal-window pre {
+        scrollbar-width: thin;
+        scrollbar-color: transparent transparent;
+      }
+
+      .terminal-window pre:hover {
+        scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+      }
+
+      .terminal-window pre::-webkit-scrollbar {
+        height: 6px;
+      }
+
+      .terminal-window pre::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      .terminal-window pre::-webkit-scrollbar-thumb {
+        background: transparent;
+        border-radius: 3px;
+      }
+
+      .terminal-window pre:hover::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.3);
+      }
+
+      .terminal-window pre:hover::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.5);
+      }
+
       /* Mobile terminal responsiveness */
       @media (max-width: 768px) {
         .terminal-window .font-mono,
