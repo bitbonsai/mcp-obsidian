@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.7",
-    "@astrojs/cloudflare": "^12.6.13",
+    "@astrojs/cloudflare": "12",
     "@types/react": "^18.3.27",
     "@types/react-dom": "^18.3.7",
     "astro": "^5.18.1",

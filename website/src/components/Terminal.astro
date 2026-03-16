@@ -132,7 +132,7 @@ import {
               >
                 <div class="flex items-start gap-2">
                   <Zap className="w-4 h-4 text-accent mt-1 flex-shrink-0" aria-hidden="true" />
-                  <div class="flex-1">
+                  <div class="flex-1 min-w-0">
                     <p class="text-sm font-semibold text-foreground mb-2">
                       Use the CLI
                     </p>
@@ -990,15 +990,37 @@ args = ["-y", "@bitbonsai/mcpvault@latest", "/path/to/your/vault"]'
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
   }
 
-  /* Hide scrollbar while maintaining scroll functionality */
+  /* macOS-style thin scrollbar: hidden by default, visible on hover */
   .code-scroll {
     overflow-x: auto;
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: transparent transparent; /* Firefox: hidden by default */
+  }
+
+  .code-scroll:hover {
+    scrollbar-color: rgba(255, 255, 255, 0.3) transparent; /* Firefox: show on hover */
   }
 
   .code-scroll::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera */
+    height: 6px;
+  }
+
+  .code-scroll::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .code-scroll::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 3px;
+    transition: background 0.2s ease;
+  }
+
+  .code-scroll:hover::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  .code-scroll:hover::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
   }
 
   /* Config tab styles - matching InteractiveDemo */
