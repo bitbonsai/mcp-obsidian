@@ -72,27 +72,28 @@ import {
 
             <!-- Standard config (Claude Desktop / ChatGPT+) -->
             <div class="config-content" data-content="standard">
-              <button
-                class="absolute top-4 right-4 p-2 hover:bg-card/50 rounded transition-colors copy-btn z-10"
-                data-copy='{"mcpServers": {"obsidian": {"command": "npx", "args": ["@bitbonsai/mcpvault@latest", "/path/to/your/vault"]}}}'
-                title="Copy configuration"
-                aria-label="Copy configuration to clipboard"
-              >
-                <svg
-                  class="w-4 h-4 text-muted-foreground hover:text-foreground"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+              <div class="relative">
+                <button
+                  class="absolute top-2 right-2 p-1.5 hover:bg-card/50 rounded transition-colors copy-btn z-10"
+                  data-copy='{"mcpServers": {"obsidian": {"command": "npx", "args": ["@bitbonsai/mcpvault@latest", "/path/to/your/vault"]}}}'
+                  title="Copy configuration"
+                  aria-label="Copy configuration to clipboard"
                 >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
-                  ></path>
-                </svg>
-              </button>
-              <CodeBlock
+                  <svg
+                    class="w-4 h-4 text-muted-foreground hover:text-foreground"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                    ></path>
+                  </svg>
+                </button>
+                <CodeBlock
                 client:only="react"
                 code={`{
   "mcpServers": {
@@ -103,30 +104,11 @@ import {
   }
 }`}
               />
+              </div>
             </div>
 
             <!-- Claude Code config -->
             <div class="config-content hidden" data-content="claude-code">
-              <button
-                class="absolute top-4 right-4 p-2 hover:bg-card/50 rounded transition-colors copy-btn z-10"
-                data-copy='claude mcp add-json obsidian --scope user &apos;{"type":"stdio","command":"npx","args":["@bitbonsai/mcpvault@latest","/path/to/your/vault"]}&apos;'
-                title="Copy configuration"
-                aria-label="Copy configuration to clipboard"
-              >
-                <svg
-                  class="w-4 h-4 text-muted-foreground hover:text-foreground"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
-                  ></path>
-                </svg>
-              </button>
               <div
                 class="p-3 bg-card/30 rounded-lg border border-border/50 mb-4"
               >
@@ -137,8 +119,28 @@ import {
                       Use the CLI
                     </p>
                     <div
-                      class="font-mono text-sm code-scroll bg-background/50 rounded px-3 py-2"
+                      class="relative font-mono text-sm code-scroll bg-background/50 rounded px-3 py-2"
                     >
+                      <button
+                        class="absolute top-1.5 right-1.5 p-1.5 hover:bg-card/50 rounded transition-colors copy-btn z-10"
+                        data-copy='claude mcp add-json obsidian --scope user &apos;{"type":"stdio","command":"npx","args":["@bitbonsai/mcpvault@latest","/path/to/your/vault"]}&apos;'
+                        title="Copy configuration"
+                        aria-label="Copy configuration to clipboard"
+                      >
+                        <svg
+                          class="w-4 h-4 text-muted-foreground hover:text-foreground"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                          ></path>
+                        </svg>
+                      </button>
                       <pre
                         style="margin: 0; color: #cdd6f4; line-height: 1.5; white-space: nowrap;"><span style="color: #cba6f7;">claude</span> <span style="color: #89b4fa;">mcp add-json</span> <span style="color: #a6e3a1;">obsidian</span> <span style="color: #fab387;">--scope user</span> <span style="color: #f38ba8;">'&#123;"type":"stdio","command":"npx","args":["@bitbonsai/mcpvault@latest","/path/to/your/vault"]&#125;'</span></pre>
                     </div>
@@ -226,29 +228,30 @@ import {
               </div>
 
               <p class="text-xs text-muted-foreground mt-4 mb-3">Or configure manually:</p>
-              <button
-                class="absolute top-4 right-4 p-2 hover:bg-card/50 rounded transition-colors copy-btn z-10"
-                data-copy='{"$schema": "https://opencode.ai/config.json", "mcp": {"obsidian": {"type": "local", "command": ["npx", "-y", "@bitbonsai/mcpvault@latest", "/path/to/your/vault"]}}}'
-                title="Copy configuration"
-                aria-label="Copy configuration to clipboard"
-              >
-                <svg
-                  class="w-4 h-4 text-muted-foreground hover:text-foreground"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+              <div class="relative">
+                <button
+                  class="absolute top-2 right-2 p-1.5 hover:bg-card/50 rounded transition-colors copy-btn z-10"
+                  data-copy='{"$schema": "https://opencode.ai/config.json", "mcp": {"obsidian": {"type": "local", "command": ["npx", "-y", "@bitbonsai/mcpvault@latest", "/path/to/your/vault"]}}}'
+                  title="Copy configuration"
+                  aria-label="Copy configuration to clipboard"
                 >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
-                  ></path>
-                </svg>
-              </button>
-              <CodeBlock
-                client:only="react"
-                code={`{
+                  <svg
+                    class="w-4 h-4 text-muted-foreground hover:text-foreground"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                    ></path>
+                  </svg>
+                </button>
+                <CodeBlock
+                  client:only="react"
+                  code={`{
   "$schema": "https://opencode.ai/config.json",
   "mcp": {
     "obsidian": {
@@ -257,7 +260,8 @@ import {
     }
   }
 }`}
-              />
+                />
+              </div>
 
               <div
                 class="mt-4 p-3 bg-accent/10 rounded-lg border border-accent/30"
@@ -332,29 +336,30 @@ import {
               </div>
 
               <p class="text-xs text-muted-foreground mb-3">Or configure manually in <code class="text-foreground">~/.gemini/settings.json</code>:</p>
-              <button
-                class="absolute top-4 right-4 p-2 hover:bg-card/50 rounded transition-colors copy-btn z-10"
-                data-copy='{"mcpServers": {"obsidian": {"command": "npx", "args": ["@bitbonsai/mcpvault@latest", "/path/to/your/vault"]}}}'
-                title="Copy configuration"
-                aria-label="Copy configuration to clipboard"
-              >
-                <svg
-                  class="w-4 h-4 text-muted-foreground hover:text-foreground"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+              <div class="relative">
+                <button
+                  class="absolute top-2 right-2 p-1.5 hover:bg-card/50 rounded transition-colors copy-btn z-10"
+                  data-copy='{"mcpServers": {"obsidian": {"command": "npx", "args": ["@bitbonsai/mcpvault@latest", "/path/to/your/vault"]}}}'
+                  title="Copy configuration"
+                  aria-label="Copy configuration to clipboard"
                 >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
-                  ></path>
-                </svg>
-              </button>
-              <CodeBlock
-                client:only="react"
-                code={`{
+                  <svg
+                    class="w-4 h-4 text-muted-foreground hover:text-foreground"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                    ></path>
+                  </svg>
+                </button>
+                <CodeBlock
+                  client:only="react"
+                  code={`{
   "mcpServers": {
     "obsidian": {
       "command": "npx",
@@ -362,7 +367,8 @@ import {
     }
   }
 }`}
-              />
+                />
+              </div>
 
               <div
                 class="mt-4 p-3 bg-accent/10 rounded-lg border border-accent/30"
@@ -394,32 +400,32 @@ import {
 
             <!-- OpenAI Codex config (TOML) -->
             <div class="config-content hidden" data-content="codex">
-              <button
-                class="absolute top-4 right-4 p-2 hover:bg-card/50 rounded transition-colors copy-btn z-10"
-                data-copy='[mcp_servers.obsidian]
-command = "npx"
-args = ["-y", "@bitbonsai/mcpvault@latest", "/path/to/your/vault"]'
-                title="Copy configuration"
-                aria-label="Copy configuration to clipboard"
-              >
-                <svg
-                  class="w-4 h-4 text-muted-foreground hover:text-foreground"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
-                  ></path>
-                </svg>
-              </button>
               <div
-                class="font-mono text-sm"
+                class="relative font-mono text-sm"
                 style="background: #1e1e2e77; padding: 1em; border-radius: 0.3em;"
               >
+                <button
+                  class="absolute top-2 right-2 p-1.5 hover:bg-card/50 rounded transition-colors copy-btn z-10"
+                  data-copy='[mcp_servers.obsidian]
+command = "npx"
+args = ["-y", "@bitbonsai/mcpvault@latest", "/path/to/your/vault"]'
+                  title="Copy configuration"
+                  aria-label="Copy configuration to clipboard"
+                >
+                  <svg
+                    class="w-4 h-4 text-muted-foreground hover:text-foreground"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                    ></path>
+                  </svg>
+                </button>
                 <pre
                   style="margin: 0; color: #cdd6f4; line-height: 1.5;"><span style="color: #cba6f7;">[mcp_servers.obsidian]</span>
 <span style="color: #89b4fa;">command</span> <span style="color: #94e2d5;">=</span> <span style="color: #a6e3a1;">"npx"</span>
