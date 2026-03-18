@@ -1,24 +1,44 @@
-import type { APIRoute } from 'astro';
+import type { APIRoute, APIContext } from 'astro';
 
 export const prerender = false;
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-const { CLOUDFLARE_ACCOUNT_ID, CLOUDFLARE_KV_NAMESPACE_ID, CLOUDFLARE_API_TOKEN } = import.meta.env;
+type CloudflareConfig = {
+  accountId: string;
+  namespaceId: string;
+  apiToken: string;
+};
 
-async function storeEmail(email: string) {
-  if (!CLOUDFLARE_ACCOUNT_ID || !CLOUDFLARE_KV_NAMESPACE_ID || !CLOUDFLARE_API_TOKEN) {
+function resolveCloudflareConfig(locals?: APIContext['locals']): CloudflareConfig {
+  const runtimeEnv = ((locals as any)?.runtime?.env ?? {}) as Record<string, string | undefined>;
+
+  const accountId = runtimeEnv.CLOUDFLARE_ACCOUNT_ID ?? import.meta.env.CLOUDFLARE_ACCOUNT_ID;
+  const namespaceId = runtimeEnv.CLOUDFLARE_KV_NAMESPACE_ID ?? import.meta.env.CLOUDFLARE_KV_NAMESPACE_ID;
+  const apiToken = runtimeEnv.CLOUDFLARE_API_TOKEN ?? import.meta.env.CLOUDFLARE_API_TOKEN;
+
+  if (!accountId || !namespaceId || !apiToken) {
     throw new Error('Missing Cloudflare email storage configuration.');
   }
 
+  return {
+    accountId,
+    namespaceId,
+    apiToken,
+  };
+}
+
+async function storeEmail(email: string, config: CloudflareConfig) {
+  const { accountId, namespaceId, apiToken } = config;
+
   const normalized = email.trim().toLowerCase();
   const key = `subscriber:${encodeURIComponent(normalized)}`;
-  const endpoint = `https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/storage/kv/namespaces/${CLOUDFLARE_KV_NAMESPACE_ID}/values/${key}`;
+  const endpoint = `https://api.cloudflare.com/client/v4/accounts/${accountId}/storage/kv/namespaces/${namespaceId}/values/${key}`;
 
   const res = await fetch(endpoint, {
     method: 'PUT',
     headers: {
-      'Authorization': `Bearer ${CLOUDFLARE_API_TOKEN}`,
+      'Authorization': `Bearer ${apiToken}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ email: normalized, subscribedAt: new Date().toISOString() }),
@@ -30,7 +50,7 @@ async function storeEmail(email: string) {
   }
 }
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, locals }) => {
   try {
     const contentType = request.headers.get('content-type') ?? '';
     let email: string | null = null;
@@ -51,7 +71,8 @@ export const POST: APIRoute = async ({ request }) => {
       });
     }
 
-    await storeEmail(email);
+    const config = resolveCloudflareConfig(locals);
+    await storeEmail(email, config);
 
     return new Response(JSON.stringify({ success: true }), {
       status: 200,
