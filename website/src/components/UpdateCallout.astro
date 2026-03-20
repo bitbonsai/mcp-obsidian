@@ -16,7 +16,7 @@ import { Rocket } from 'lucide-react';
             <h3 class="text-lg font-semibold text-foreground flex items-center gap-2">
               Recent Updates
               <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-accent/20 text-accent border border-accent/30">
-                v0.9.1
+                v0.10.0
               </span>
             </h3>
             <button
@@ -44,13 +44,17 @@ import { Rocket } from 'lucide-react';
           </div>
           <div class="mb-4">
             <p class="text-muted-foreground leading-relaxed">
-              <span class="font-medium text-foreground">v0.9.1 (March 2026):</span> Security fix: symlinks inside the vault that point outside the vault boundary are now blocked. Symlinks resolving within the vault work normally. Also lists symlinked files and directories in <code>list_directory</code> when the target is in-bounds.
-              (<a href="https://github.com/bitbonsai/mcpvault/issues/78" target="_blank" rel="noopener noreferrer" class="text-accent hover:text-accent-2 transition-colors">#78</a>)
+              <span class="font-medium text-foreground">v0.10.0 (March 2026):</span> New <code>createServer()</code> factory for library consumers. MCPVault can now be imported as a dependency and connected to any MCP transport (Streamable HTTP, SSE, custom). Also exports TypeScript declarations and all public types.
+              (<a href="https://github.com/bitbonsai/mcpvault/issues/84" target="_blank" rel="noopener noreferrer" class="text-accent hover:text-accent-2 transition-colors">#84</a>)
             </p>
           </div>
 
           <div id="older-updates" class="older-updates is-collapsed" data-updates-panel>
             <ul class="text-muted-foreground space-y-2">
+              <li>
+                <span class="font-medium text-foreground">v0.9.1 (March 2026):</span> Security fix: symlinks inside the vault that point outside the vault boundary are now blocked.
+                (<a href="https://github.com/bitbonsai/mcpvault/issues/78" target="_blank" rel="noopener noreferrer" class="text-accent hover:text-accent-2 transition-colors">#78</a>)
+              </li>
               <li>
                 <span class="font-medium text-foreground">v0.9.0 (March 2026):</span> Package renamed to <code>@bitbonsai/mcpvault</code> on npm at Obsidian's request. Update your config: replace <code>mcpvault</code> with <code>@bitbonsai/mcpvault</code>.
               </li>
