@@ -1,54 +1,24 @@
 import type { APIRoute, APIContext } from 'astro';
+import { Resend } from 'resend';
 
 export const prerender = false;
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-type CloudflareConfig = {
-  accountId: string;
-  namespaceId: string;
-  apiToken: string;
-};
-
-function resolveCloudflareConfig(locals?: APIContext['locals']): CloudflareConfig {
+function resolveConfig(locals?: APIContext['locals']) {
   const runtimeEnv = ((locals as any)?.runtime?.env ?? {}) as Record<string, string | undefined>;
 
-  const accountId = runtimeEnv.CLOUDFLARE_ACCOUNT_ID ?? import.meta.env.CLOUDFLARE_ACCOUNT_ID;
-  const namespaceId = runtimeEnv.CLOUDFLARE_KV_NAMESPACE_ID ?? import.meta.env.CLOUDFLARE_KV_NAMESPACE_ID;
-  const apiToken = runtimeEnv.CLOUDFLARE_API_TOKEN ?? import.meta.env.CLOUDFLARE_API_TOKEN;
+  const apiKey = runtimeEnv.RESEND_API_KEY ?? import.meta.env.RESEND_API_KEY;
+  const audienceId = runtimeEnv.RESEND_AUDIENCE_ID ?? import.meta.env.RESEND_AUDIENCE_ID;
 
-  if (!accountId || !namespaceId || !apiToken) {
-    throw new Error('Missing Cloudflare email storage configuration.');
+  if (!apiKey || !audienceId) {
+    throw new Error('Missing Resend configuration (RESEND_API_KEY or RESEND_AUDIENCE_ID).');
   }
 
-  return {
-    accountId,
-    namespaceId,
-    apiToken,
-  };
+  return { apiKey, audienceId };
 }
 
-async function storeEmail(email: string, config: CloudflareConfig) {
-  const { accountId, namespaceId, apiToken } = config;
-
-  const normalized = email.trim().toLowerCase();
-  const key = `subscriber:${encodeURIComponent(normalized)}`;
-  const endpoint = `https://api.cloudflare.com/client/v4/accounts/${accountId}/storage/kv/namespaces/${namespaceId}/values/${key}`;
-
-  const res = await fetch(endpoint, {
-    method: 'PUT',
-    headers: {
-      'Authorization': `Bearer ${apiToken}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ email: normalized, subscribedAt: new Date().toISOString() }),
-  });
-
-  if (!res.ok) {
-    const payload = await res.text();
-    throw new Error(`Cloudflare KV error: ${payload}`);
-  }
-}
+import welcomeHtml from '../../emails/welcome.html?raw';
 
 export const POST: APIRoute = async ({ request, locals }) => {
   try {
@@ -71,15 +41,40 @@ export const POST: APIRoute = async ({ request, locals }) => {
       });
     }
 
-    const config = resolveCloudflareConfig(locals);
-    await storeEmail(email, config);
+    const { apiKey, audienceId } = resolveConfig(locals);
+    const resend = new Resend(apiKey);
+
+    const normalized = email.trim().toLowerCase();
+
+    const { data, error } = await resend.contacts.create({
+      audienceId,
+      email: normalized,
+    });
+
+    if (error) {
+      console.error('[newsletter] Resend error:', error.message);
+      return new Response(JSON.stringify({ success: false, message: 'Unable to save subscription.' }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' },
+      });
+    }
+
+    // Send welcome email (fire-and-forget, don't block signup on delivery)
+    resend.emails.send({
+      from: 'MCP-Vault <info@mcpvault.org>',
+      to: [normalized],
+      subject: "You're on the list",
+      html: welcomeHtml.replace('{{unsubscribeUrl}}', `https://mcpvault.org/api/unsubscribe?email=${encodeURIComponent(normalized)}`),
+    }).catch((err) => {
+      console.error('[newsletter] welcome email failed:', err);
+    });
 
     return new Response(JSON.stringify({ success: true }), {
       status: 200,
       headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' },
     });
-  } catch (error) {
-    console.error('[newsletter] subscription failed', error);
+  } catch (err) {
+    console.error('[newsletter] subscription failed', err);
 
     return new Response(JSON.stringify({ success: false, message: 'Unable to save subscription.' }), {
       status: 500,
