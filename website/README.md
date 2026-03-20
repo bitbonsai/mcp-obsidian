@@ -1,15 +1,15 @@
-# MCP-Vault Website
+# MCPVault Website
 
 🌐 **Live Site**: [mcpvault.org](https://mcpvault.org)
 
-This is the official landing page and documentation website for [MCP-Vault](https://github.com/bitbonsai/mcpvault) - a Model Context Protocol (MCP) server that enables AI assistants like Claude to interact securely and intelligently with Obsidian vaults.
+This is the official landing page and documentation website for [MCPVault](https://github.com/bitbonsai/mcpvault) - a Model Context Protocol (MCP) server that enables AI assistants like Claude to interact securely and intelligently with Obsidian vaults.
 
 ## 🎯 Project Objective
 
 This website serves to:
 
-- **Showcase MCP-Vault**: Demonstrate the capabilities and benefits of connecting AI assistants to Obsidian
-- **Provide Installation Guide**: Clear, step-by-step instructions for setting up MCP-Vault
+- **Showcase MCPVault**: Demonstrate the capabilities and benefits of connecting AI assistants to Obsidian
+- **Provide Installation Guide**: Clear, step-by-step instructions for setting up MCPVault
 - **Interactive Demo**: Live demonstrations of AI-powered note management
 - **Documentation Hub**: Comprehensive guides, examples, and best practices
 - **Community Resource**: Links to support, contributions, and discussions
@@ -19,7 +19,7 @@ This website serves to:
 - **Modern Design**: Beautiful, responsive interface built with Astro and Tailwind CSS
 - **Interactive Demo**: Live terminal simulation showing AI-Obsidian interactions
 - **Code Examples**: Syntax-highlighted configuration examples
-- **Feature Comparison**: Clear comparison tables showing MCP-Vault advantages
+- **Feature Comparison**: Clear comparison tables showing MCPVault advantages
 - **Dark/Light Theme**: Automatic theme switching with system preferences
 - **Performance Optimized**: Static site generation for fast loading
 
@@ -155,7 +155,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🔗 Related Projects
 
-- **[MCP-Vault](https://github.com/bitbonsai/mcpvault)**: The main MCP server implementation
+- **[MCPVault](https://github.com/bitbonsai/mcpvault)**: The main MCP server implementation
 - **[Model Context Protocol](https://modelcontextprotocol.io)**: Protocol specification and tools
 - **[Obsidian](https://obsidian.md/)**: The knowledge management app
 

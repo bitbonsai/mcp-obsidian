@@ -1,6 +1,6 @@
-# How MCP-Vault Works
+# How MCPVault Works
 
-Practical prompts you can try with your AI assistant and MCP-Vault.
+Practical prompts you can try with your AI assistant and MCPVault.
 
 ## Search & Read Notes
 

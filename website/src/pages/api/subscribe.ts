@@ -61,7 +61,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
     // Send welcome email (fire-and-forget, don't block signup on delivery)
     resend.emails.send({
-      from: 'MCP-Vault <info@mcpvault.org>',
+      from: 'MCPVault <info@mcpvault.org>',
       to: [normalized],
       subject: "You're on the list",
       html: welcomeHtml.replace('{{unsubscribeUrl}}', `https://mcpvault.org/api/unsubscribe?email=${encodeURIComponent(normalized)}`),

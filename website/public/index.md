@@ -1,4 +1,4 @@
-# MCP-Vault - Universal AI Bridge for Obsidian Vaults
+# MCPVault - Universal AI Bridge for Obsidian Vaults
 
 **License:** MIT | **Free**
 

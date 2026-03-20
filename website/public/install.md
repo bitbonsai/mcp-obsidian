@@ -1,6 +1,6 @@
-# Install MCP-Vault
+# Install MCPVault
 
-Get MCP-Vault running in seconds with any MCP-compatible platform.
+Get MCPVault running in seconds with any MCP-compatible platform.
 
 ## Step 1: Configure Your AI Platform
 
@@ -89,7 +89,7 @@ args = ["-y", "@bitbonsai/mcpvault@latest", "/path/to/your/vault"]
 
 ### Optional no-path mode (uses current directory)
 
-If your client launches MCP-Vault from inside your vault folder, you can omit the vault path.
+If your client launches MCPVault from inside your vault folder, you can omit the vault path.
 
 ```bash
 npx @bitbonsai/mcpvault@latest
@@ -155,4 +155,4 @@ Works with all MCP-compatible platforms: Claude Desktop, ChatGPT+, Claude Code, 
 
 ## You're All Set!
 
-Restart your AI platform and you'll see MCP-Vault connected. Your AI assistant can now safely read, search, and manage your Obsidian vault.
+Restart your AI platform and you'll see MCPVault connected. Your AI assistant can now safely read, search, and manage your Obsidian vault.

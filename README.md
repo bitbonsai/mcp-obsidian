@@ -2,7 +2,7 @@
   <img width="256" height="256" alt="image" src="https://github.com/user-attachments/assets/1e21d898-811b-42c2-a810-bf921dde0f58" />
 </div>
 
-# MCP-Vault
+# MCPVault
 
 A universal AI bridge for Obsidian vaults using the Model Context Protocol (MCP) standard. Connect any MCP-compatible AI assistant to your knowledge base - works with Claude, ChatGPT, and future AI tools. This server provides safe read/write access to your notes while preventing YAML frontmatter corruption.
 
@@ -106,15 +106,15 @@ https://github.com/user-attachments/assets/657ac4c6-1cd2-4cc3-829f-fd095a32f71c
 
 **Success indicators:** Your AI should be able to list files and read notes from your vault.
 
-## Why MCP-Vault?
+## Why MCPVault?
 
 ### Universal AI Compatibility
 
-Built on the open Model Context Protocol standard, MCP-Vault is not locked to any single AI provider. As more AI assistants adopt MCP, your investment in this tool grows more valuable. Today it works with Claude and ChatGPT - tomorrow it will work with whatever AI tools emerge.
+Built on the open Model Context Protocol standard, MCPVault is not locked to any single AI provider. As more AI assistants adopt MCP, your investment in this tool grows more valuable. Today it works with Claude and ChatGPT - tomorrow it will work with whatever AI tools emerge.
 
 ### Future-Proof Your Knowledge Base
 
-Instead of waiting for each AI company to build Obsidian integrations, MCP-Vault provides a universal adapter that works with any MCP-compatible assistant. One tool, endless possibilities.
+Instead of waiting for each AI company to build Obsidian integrations, MCPVault provides a universal adapter that works with any MCP-compatible assistant. One tool, endless possibilities.
 
 ### Open Standard, No Lock-in
 

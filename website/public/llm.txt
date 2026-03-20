@@ -1,4 +1,4 @@
-# MCP-Vault LLM Map
+# MCPVault LLM Map
 
 Serve `.md` versions of every public page for agents. Use the markdown endpoints below for low-token summaries and fall back to HTML if you need richer UI context.
 

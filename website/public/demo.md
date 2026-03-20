@@ -1,4 +1,4 @@
-# MCP-Vault Interactive Demo
+# MCPVault Interactive Demo
 
 See how AI assistants intelligently interact with your Obsidian vault. These examples show real conversations and outcomes.
 

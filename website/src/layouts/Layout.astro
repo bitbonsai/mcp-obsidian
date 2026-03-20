@@ -10,13 +10,13 @@ export interface Props {
 }
 
 const {
-  title = "MCP-Vault - Universal AI Bridge for Obsidian Vaults",
+  title = "MCPVault - Universal AI Bridge for Obsidian Vaults",
   description = "Connect ANY AI assistant to your Obsidian vault with the open MCP standard. Works with Claude, ChatGPT, and future AI tools. Private, secure, and future-proof.",
   image = "https://mcpvault.org/og-image.jpg",
   canonical = "https://mcpvault.org"
 } = Astro.props;
 
-const fullTitle = title.includes("MCP-Vault") ? title : `${title} | MCP-Vault`;
+const fullTitle = title.includes("MCPVault") ? title : `${title} | MCPVault`;
 ---
 
 <!doctype html>
@@ -40,7 +40,7 @@ const fullTitle = title.includes("MCP-Vault") ? title : `${title} | MCP-Vault`;
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={image} />
-    <meta property="og:site_name" content="MCP-Vault" />
+    <meta property="og:site_name" content="MCPVault" />
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
@@ -299,7 +299,7 @@ const fullTitle = title.includes("MCP-Vault") ? title : `${title} | MCP-Vault`;
     <script is:inline type="application/ld+json" set:html={JSON.stringify({
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",
-      "name": "MCP-Vault",
+      "name": "MCPVault",
       "description": "Universal AI bridge for Obsidian vaults using the Model Context Protocol. Connect any MCP-compatible AI assistant to your knowledge base.",
       "url": "https://mcpvault.org",
       "downloadUrl": "https://www.npmjs.com/package/mcpvault",

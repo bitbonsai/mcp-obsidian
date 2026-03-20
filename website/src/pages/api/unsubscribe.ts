@@ -57,7 +57,7 @@ function unsubscribePageHtml(): string {
   return `<!DOCTYPE html>
 <html lang="en">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Unsubscribed - MCP-Vault</title></head>
+<title>Unsubscribed - MCPVault</title></head>
 <body style="margin:0;padding:0;background-color:#0a0a0a;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
   <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#0a0a0a;padding:80px 20px;">
     <tr><td align="center">
@@ -65,7 +65,7 @@ function unsubscribePageHtml(): string {
         <tr><td style="background-color:#141414;border:1px solid #252525;border-radius:12px;padding:36px;text-align:center;">
           <h1 style="margin:0 0 16px;font-size:22px;font-weight:600;color:#ffffff;">You've been unsubscribed</h1>
           <p style="margin:0 0 24px;font-size:15px;line-height:1.6;color:#a0a0a0;">
-            You won't receive any more emails from MCP-Vault. If this was a mistake, you can re-subscribe on the homepage.
+            You won't receive any more emails from MCPVault. If this was a mistake, you can re-subscribe on the homepage.
           </p>
           <a href="https://mcpvault.org" style="display:inline-block;padding:10px 24px;font-size:14px;font-weight:600;color:#ffffff;background-color:#7c3aed;border-radius:8px;text-decoration:none;">Back to mcpvault.org</a>
         </td></tr>
