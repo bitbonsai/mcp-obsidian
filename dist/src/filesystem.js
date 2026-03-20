@@ -1,6 +1,6 @@
 import { join, resolve, relative, dirname } from 'path';
 import { readdir, stat, readFile, writeFile, unlink, mkdir, access, rename, copyFile } from 'node:fs/promises';
-import { constants } from 'node:fs';
+import { constants, realpathSync } from 'node:fs';
 import { FrontmatterHandler } from './frontmatter.js';
 import { PathFilter } from './pathfilter.js';
 import { generateObsidianUri } from './uri.js';
@@ -10,7 +10,14 @@ export class FileSystemService {
     pathFilter;
     constructor(vaultPath, pathFilter, frontmatterHandler) {
         this.vaultPath = vaultPath;
-        this.vaultPath = resolve(vaultPath);
+        const resolved = resolve(vaultPath);
+        try {
+            this.vaultPath = realpathSync(resolved);
+        }
+        catch {
+            // Vault path doesn't exist yet or is inaccessible; fall back to lexical resolution
+            this.vaultPath = resolved;
+        }
         this.pathFilter = pathFilter || new PathFilter();
         this.frontmatterHandler = frontmatterHandler || new FrontmatterHandler();
     }
@@ -26,10 +33,51 @@ export class FileSystemService {
             ? relativePath.slice(1)
             : relativePath;
         const fullPath = resolve(join(this.vaultPath, normalizedPath));
-        // Security check: ensure path is within vault
+        // Security check: ensure path is within vault (lexical)
         const relativeToVault = relative(this.vaultPath, fullPath);
         if (relativeToVault.startsWith('..')) {
             throw new Error(`Path traversal not allowed: ${relativePath}. Paths must be within the vault directory.`);
+        }
+        // Security check: ensure symlinks don't escape vault boundary
+        try {
+            const realPath = realpathSync(fullPath);
+            const realRelative = relative(this.vaultPath, realPath);
+            if (realRelative.startsWith('..')) {
+                throw new Error(`Symlink target is outside vault: ${relativePath}. Symbolic links must resolve to a path within the vault directory.`);
+            }
+        }
+        catch (err) {
+            if (err instanceof Error && 'code' in err) {
+                const code = err.code;
+                if (code === 'ENOENT') {
+                    // File doesn't exist yet (e.g. writing a new note). Verify the parent directory resolves inside vault.
+                    try {
+                        const parentReal = realpathSync(dirname(fullPath));
+                        const parentRelative = relative(this.vaultPath, parentReal);
+                        if (parentRelative.startsWith('..')) {
+                            throw new Error(`Symlink target is outside vault: ${relativePath}. Symbolic links must resolve to a path within the vault directory.`);
+                        }
+                    }
+                    catch (parentErr) {
+                        // Parent doesn't exist either (will be created by mkdir). Lexical check above is sufficient.
+                        if (parentErr instanceof Error && parentErr.message.includes('outside vault')) {
+                            throw parentErr;
+                        }
+                    }
+                }
+                else if (code === 'ELOOP') {
+                    throw new Error(`Circular symlink detected: ${relativePath}. The symbolic link chain forms a loop.`);
+                }
+                else if (code === 'EACCES') {
+                    throw new Error(`Permission denied resolving symlink: ${relativePath}. Cannot verify the symbolic link target is within the vault.`);
+                }
+                else {
+                    throw err;
+                }
+            }
+            else {
+                throw err;
+            }
         }
         return fullPath;
     }
@@ -219,13 +267,33 @@ export class FileSystemService {
                 if (!this.pathFilter.isAllowedForListing(entryPath)) {
                     continue;
                 }
-                if (entry.isDirectory()) {
+                if (entry.isSymbolicLink()) {
+                    // Follow symlinks that resolve inside the vault
+                    try {
+                        const entryFullPath = join(fullPath, entry.name);
+                        const realPath = realpathSync(entryFullPath);
+                        const realRelative = relative(this.vaultPath, realPath);
+                        if (realRelative.startsWith('..')) {
+                            continue; // Symlink target outside vault, skip silently
+                        }
+                        const targetStat = await stat(entryFullPath);
+                        if (targetStat.isDirectory()) {
+                            directories.push(entry.name);
+                        }
+                        else if (targetStat.isFile()) {
+                            files.push(entry.name);
+                        }
+                    }
+                    catch {
+                        continue; // Broken/circular/inaccessible symlink, skip silently
+                    }
+                }
+                else if (entry.isDirectory()) {
                     directories.push(entry.name);
                 }
                 else if (entry.isFile()) {
                     files.push(entry.name);
                 }
-                // Skip other types (symlinks, etc.)
             }
             return {
                 files: files.sort(),
