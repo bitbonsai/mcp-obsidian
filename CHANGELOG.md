@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.1] - 2026-03-20
+
+### Fixed
+- Symlinks inside the vault that resolve outside the vault boundary are now blocked, closing a path traversal bypass ([#78](https://github.com/bitbonsai/mcpvault/issues/78))
+- Circular symlinks (ELOOP) and permission-denied symlink targets (EACCES) return clear error messages
+- `list_directory` now includes symlinked files and directories when the target resolves within the vault (previously all symlinks were silently skipped)
+
+### Changed
+- Vault root path is now resolved through symlinks at startup for consistent boundary checks
+- Dropped Node 18 from CI test matrix (EOL since April 2025, vitest 4.1 requires Node 20+)
+
 ## [0.9.0] - 2026-03-12
 
 ### Changed

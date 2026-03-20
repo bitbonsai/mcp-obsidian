@@ -1,7 +1,7 @@
 import { test, expect, beforeEach, afterEach } from "vitest";
 import { FileSystemService } from "./filesystem.js";
 import { PathFilter } from "./pathfilter.js";
-import { writeFile, readFile, mkdir, mkdtemp, rm } from "fs/promises";
+import { writeFile, readFile, mkdir, mkdtemp, rm, symlink } from "fs/promises";
 import { join } from "path";
 import { tmpdir } from "os";
 
@@ -827,6 +827,84 @@ test("path traversal with .. is blocked", async () => {
 test("path traversal with nested .. is blocked", async () => {
   await expect(fileSystem.readNote("folder/../../outside.md"))
     .rejects.toThrow(/Path traversal not allowed/);
+});
+
+// ============================================================================
+// SYMLINK SECURITY
+// ============================================================================
+
+test("symlink to file outside vault is blocked", async () => {
+  const outsideDir = await mkdtemp(join(tmpdir(), "mcpvault-outside-"));
+  const outsideFile = join(outsideDir, "secret.txt");
+  await writeFile(outsideFile, "SECRET DATA");
+
+  try {
+    await symlink(outsideFile, join(testVaultPath, "evil-link.md"));
+    await expect(fileSystem.readNote("evil-link.md"))
+      .rejects.toThrow(/Symlink target is outside vault/);
+  } finally {
+    await rm(outsideDir, { recursive: true });
+  }
+});
+
+test("symlink to file inside vault works", async () => {
+  const content = "# Real Note\n\nThis is inside the vault.";
+  await mkdir(join(testVaultPath, "deep"), { recursive: true });
+  await writeFile(join(testVaultPath, "deep/real-note.md"), content);
+  await symlink(join(testVaultPath, "deep/real-note.md"), join(testVaultPath, "shortcut.md"));
+
+  const note = await fileSystem.readNote("shortcut.md");
+  expect(note.content).toContain("This is inside the vault.");
+});
+
+test("symlink to directory outside vault is skipped in listDirectory", async () => {
+  const outsideDir = await mkdtemp(join(tmpdir(), "mcpvault-outside-"));
+  await writeFile(join(outsideDir, "secret.txt"), "SECRET");
+
+  try {
+    await symlink(outsideDir, join(testVaultPath, "evil-dir"));
+    const listing = await fileSystem.listDirectory("");
+    expect(listing.directories).not.toContain("evil-dir");
+    expect(listing.files).not.toContain("evil-dir");
+  } finally {
+    await rm(outsideDir, { recursive: true });
+  }
+});
+
+test("symlink to directory inside vault is listed", async () => {
+  await mkdir(join(testVaultPath, "real-folder"), { recursive: true });
+  await writeFile(join(testVaultPath, "real-folder/note.md"), "# Note");
+  await symlink(join(testVaultPath, "real-folder"), join(testVaultPath, "linked-folder"));
+
+  const listing = await fileSystem.listDirectory("");
+  expect(listing.directories).toContain("linked-folder");
+});
+
+test("broken symlink is handled gracefully", async () => {
+  await symlink("/nonexistent/path/file.md", join(testVaultPath, "broken-link.md"));
+
+  await expect(fileSystem.readNote("broken-link.md"))
+    .rejects.toThrow(/File not found/);
+});
+
+test("symlinked file outside vault is skipped in listDirectory", async () => {
+  const outsideDir = await mkdtemp(join(tmpdir(), "mcpvault-outside-"));
+  const outsideFile = join(outsideDir, "secret.txt");
+  await writeFile(outsideFile, "SECRET");
+
+  try {
+    await symlink(outsideFile, join(testVaultPath, "evil-file-link.md"));
+    const listing = await fileSystem.listDirectory("");
+    expect(listing.files).not.toContain("evil-file-link.md");
+  } finally {
+    await rm(outsideDir, { recursive: true });
+  }
+});
+
+test("write to new file in vault works (no symlink, ENOENT path)", async () => {
+  await fileSystem.writeNote({ path: "brand-new.md", content: "# New Note" });
+  const note = await fileSystem.readNote("brand-new.md");
+  expect(note.content).toContain("New Note");
 });
 
 test("path with regex special chars is treated literally", async () => {
