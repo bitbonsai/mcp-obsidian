@@ -4,4 +4,8 @@ export { FileSystemService } from './filesystem.js';
 export { FrontmatterHandler, parseFrontmatter } from './frontmatter.js';
 export { PathFilter } from './pathfilter.js';
 export { SearchService } from './search.js';
+export { ObsidianCliVaultAppProvider } from './obsidian-cli-vault-app-provider.js';
+export { createPlatformStrategy } from './platform.js';
+export type { VaultAppProvider } from './vault-app-provider.js';
+export type { PlatformStrategy } from './platform.js';
 export * from './types.js';

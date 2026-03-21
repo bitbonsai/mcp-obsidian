@@ -7,6 +7,10 @@ import { FileSystemService } from "./filesystem.js";
 import { FrontmatterHandler, parseFrontmatter } from "./frontmatter.js";
 import { PathFilter } from "./pathfilter.js";
 import { SearchService } from "./search.js";
+import { handleActiveFile, handleActiveFolder, handleOpen } from "./active.js";
+import { ObsidianCliVaultAppProvider } from "./obsidian-cli-vault-app-provider.js";
+import { createPlatformStrategy } from "./platform.js";
+import type { VaultAppProvider } from "./vault-app-provider.js";
 import { resolve } from "path";
 
 export interface CreateServerOptions {
@@ -14,6 +18,7 @@ export interface CreateServerOptions {
   version?: string;
   pathFilter?: PathFilter;
   frontmatterHandler?: FrontmatterHandler;
+  vaultAppProvider?: VaultAppProvider;
 }
 
 export function createServer(vaultPath: string, options: CreateServerOptions = {}): Server {
@@ -22,6 +27,7 @@ export function createServer(vaultPath: string, options: CreateServerOptions = {
     version = "0.0.0",
     pathFilter = new PathFilter(),
     frontmatterHandler = new FrontmatterHandler(),
+    vaultAppProvider = new ObsidianCliVaultAppProvider(resolve(vaultPath), createPlatformStrategy()),
   } = options;
 
   const resolvedVaultPath = resolve(vaultPath);
@@ -216,6 +222,43 @@ export function createServer(vaultPath: string, options: CreateServerOptions = {
               prettyPrint: { type: "boolean", description: "Format JSON response with indentation (default: false)", default: false }
             }
           }
+        },
+        {
+          name: "active_file",
+          description: "Return metadata and optionally content of the currently active file in Obsidian. Works with any file type. Requires Obsidian v1.12+ with CLI enabled and a file open.",
+          inputSchema: {
+            type: "object",
+            properties: {
+              include_content: { type: "boolean", description: "Include file content in response (default: true)", default: true },
+              parse_frontmatter: { type: "boolean", description: "Return parsed frontmatter and content separately instead of raw text", default: false },
+              frontmatter_only: { type: "boolean", description: "Return only parsed frontmatter, no content. Mutually exclusive with parse_frontmatter.", default: false },
+              prettyPrint: { type: "boolean", description: "Format JSON response with indentation (default: false)", default: false }
+            }
+          }
+        },
+        {
+          name: "active_folder",
+          description: "Return the folder path of the currently active file in Obsidian, optionally with sibling file listing. Requires Obsidian v1.12+ with CLI enabled.",
+          inputSchema: {
+            type: "object",
+            properties: {
+              include_files: { type: "boolean", description: "Include list of files in the folder (default: true)", default: true },
+              prettyPrint: { type: "boolean", description: "Format JSON response with indentation (default: false)", default: false }
+            }
+          }
+        },
+        {
+          name: "open",
+          description: "Open a file in Obsidian by vault-relative path. Defaults to a new tab. Requires Obsidian v1.12+ with CLI enabled.",
+          inputSchema: {
+            type: "object",
+            properties: {
+              path: { type: "string", description: "Vault-relative path to the file to open (e.g., 'Notes/example.md')" },
+              newtab: { type: "boolean", description: "Open in a new tab (default: true). Set to false to reuse the current tab.", default: true },
+              prettyPrint: { type: "boolean", description: "Format JSON response with indentation (default: false)", default: false }
+            },
+            required: ["path"]
+          }
         }
       ]
     };
@@ -383,6 +426,15 @@ export function createServer(vaultPath: string, options: CreateServerOptions = {
             content: [{ type: "text", text: JSON.stringify({ notes: stats.totalNotes, folders: stats.totalFolders, size: stats.totalSize, recent: stats.recentlyModified }, null, indent) }]
           };
         }
+
+        case "active_file":
+          return await handleActiveFile(vaultAppProvider, frontmatterHandler, trimmedArgs);
+
+        case "active_folder":
+          return await handleActiveFolder(vaultAppProvider, fileSystem, trimmedArgs);
+
+        case "open":
+          return await handleOpen(vaultAppProvider, trimmedArgs);
 
         default:
           throw new Error(`Unknown tool: ${toolName}`);
