@@ -225,7 +225,7 @@ export function createServer(vaultPath: string, options: CreateServerOptions = {
         },
         {
           name: "active_file",
-          description: "Return metadata and optionally content of the currently active file in Obsidian. Works with any file type. Requires Obsidian v1.12+ with CLI enabled and a file open.",
+          description: "Return metadata and optionally content of the currently active (focused) file. Works with any file type. Requires a running vault application with a file open.",
           inputSchema: {
             type: "object",
             properties: {
@@ -238,7 +238,7 @@ export function createServer(vaultPath: string, options: CreateServerOptions = {
         },
         {
           name: "active_folder",
-          description: "Return the folder path of the currently active file in Obsidian, optionally with sibling file listing. Requires Obsidian v1.12+ with CLI enabled.",
+          description: "Return the folder path of the currently active file, optionally with sibling file listing. Requires a running vault application with a file open.",
           inputSchema: {
             type: "object",
             properties: {
@@ -249,7 +249,7 @@ export function createServer(vaultPath: string, options: CreateServerOptions = {
         },
         {
           name: "open",
-          description: "Open a file in Obsidian by vault-relative path. Defaults to a new tab. Requires Obsidian v1.12+ with CLI enabled.",
+          description: "Open a file in the vault application by vault-relative path. Defaults to a new tab. Requires a running vault application.",
           inputSchema: {
             type: "object",
             properties: {
