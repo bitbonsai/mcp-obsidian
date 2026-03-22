@@ -15,6 +15,7 @@ This MCP server lets Claude, ChatGPT+, and other assistants access your vault. L
 
 ## Recent Updates
 
+- **v0.11.0 (March 2026):** New `list_all_tags` tool: scan all vault notes for tags with occurrence counts. Obsidian skill now routes to CLI for active file, daily notes, backlinks, and open-in-editor. ([#80](https://github.com/bitbonsai/mcpvault/issues/80))
 - **v0.10.0 (March 2026):** New `createServer()` factory for library consumers. MCPVault can now be imported and connected to any MCP transport. TypeScript declarations and all public types exported. ([#84](https://github.com/bitbonsai/mcpvault/issues/84))
 - **v0.9.1 (March 2026):** Security fix: symlinks inside the vault that point outside the vault boundary are now blocked. ([#78](https://github.com/bitbonsai/mcpvault/issues/78))
 - **v0.9.0 (March 2026):** Package renamed to `@bitbonsai/mcpvault` on npm at Obsidian's request. Update your config: replace `mcpvault` with `@bitbonsai/mcpvault`

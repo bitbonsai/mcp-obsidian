@@ -197,6 +197,16 @@ export function createServer(vaultPath, options = {}) {
                             prettyPrint: { type: "boolean", description: "Format JSON response with indentation (default: false)", default: false }
                         }
                     }
+                },
+                {
+                    name: "list_all_tags",
+                    description: "List all tags across the vault with occurrence counts. Returns both frontmatter tags and inline #hashtags, deduplicated and sorted by frequency. Useful for discovering existing tags before creating or organizing notes.",
+                    inputSchema: {
+                        type: "object",
+                        properties: {
+                            prettyPrint: { type: "boolean", description: "Format JSON response with indentation (default: false)", default: false }
+                        }
+                    }
                 }
             ]
         };
@@ -347,6 +357,13 @@ export function createServer(vaultPath, options = {}) {
                     const indent = trimmedArgs.prettyPrint ? 2 : undefined;
                     return {
                         content: [{ type: "text", text: JSON.stringify({ notes: stats.totalNotes, folders: stats.totalFolders, size: stats.totalSize, recent: stats.recentlyModified }, null, indent) }]
+                    };
+                }
+                case "list_all_tags": {
+                    const tags = await fileSystem.listAllTags();
+                    const indent = trimmedArgs.prettyPrint ? 2 : undefined;
+                    return {
+                        content: [{ type: "text", text: JSON.stringify(tags, null, indent) }]
                     };
                 }
                 default:

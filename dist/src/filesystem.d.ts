@@ -22,5 +22,9 @@ export declare class FileSystemService {
     manageTags(params: TagManagementParams): Promise<TagManagementResult>;
     getVaultPath(): string;
     getVaultStats(recentCount?: number): Promise<VaultStats>;
+    listAllTags(): Promise<Array<{
+        tag: string;
+        count: number;
+    }>>;
 }
 //# sourceMappingURL=filesystem.d.ts.map

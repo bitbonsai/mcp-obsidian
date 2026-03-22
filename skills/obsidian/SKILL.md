@@ -92,6 +92,54 @@ When the user asks to "sync", "backup", or "store my vault with git", use CLI gi
    - Do not auto-resolve merge conflicts silently.
    - Explain what failed and what user should run next.
 
+## Obsidian CLI Mode
+
+When the user asks for app-context operations (active file, open in editor, daily notes with templates, backlinks), use the Obsidian CLI directly via shell commands.
+
+1. Run a **preflight** before first CLI use:
+   - Check binary exists: `/Applications/Obsidian.app/Contents/MacOS/obsidian` (macOS), `obsidian` (Linux), `obsidian.exe` (Windows)
+   - Check Obsidian is running: `pgrep -xiq obsidian` (macOS/Linux) or `tasklist /FI "IMAGENAME eq Obsidian.exe" /NH` (Windows)
+   - If either fails, tell the user and fall back to MCP tools + `obsidian://` URIs
+
+2. Vault targeting: `obsidian vault="VaultName" <command>`. The vault name is the folder basename unless `OBSIDIAN_VAULT_NAME` is set.
+
+3. Key commands:
+   ```bash
+   # Read the currently active file
+   obsidian read
+
+   # Read a specific file
+   obsidian read file="My Note"
+
+   # Open a file in Obsidian
+   obsidian open path="Notes/example.md"
+
+   # Open today's daily note
+   obsidian daily
+
+   # Append to daily note
+   obsidian daily:append content="- [ ] New task"
+
+   # Search (Obsidian's own search, different from MCP's BM25)
+   obsidian search query="meeting notes" limit=10
+
+   # List all tags with frequency
+   obsidian tags sort=count counts
+
+   # Get backlinks for a note
+   obsidian backlinks file="My Note"
+
+   # Find unresolved links
+   obsidian unresolved
+   ```
+
+4. Run `obsidian help` for the full command reference. The CLI evolves with Obsidian releases.
+
+5. **When to use CLI vs MCP:**
+   - MCP for reads/writes/search/tags/frontmatter (sandboxed, validated, works headless)
+   - CLI for active file, daily notes with template expansion, backlinks, open in editor, plugin commands
+   - If unsure, prefer MCP
+
 ## Resources
 
 Load these only when needed, not on every invocation.

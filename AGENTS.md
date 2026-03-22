@@ -48,7 +48,7 @@ website/               # Astro 5 website (separate package, see website/AGENTS.m
 
 ### Core Components
 
-**server.ts** — Entry point. Registers 14 MCP tools, handles CLI args (--help, --version, vault path), initializes services, routes tool calls. Auto-trims whitespace from all path arguments.
+**server.ts** — Entry point. Registers 15 MCP tools, handles CLI args (--help, --version, vault path), initializes services, routes tool calls. Auto-trims whitespace from all path arguments.
 
 **FileSystemService** (`src/filesystem.ts`) — Orchestrates file ops with security. Path resolution and traversal prevention. Implements: read, write, patch, delete, move, list, batch read, frontmatter update, tag management, vault stats. Uses native `fs/promises`.
 
@@ -58,7 +58,7 @@ website/               # Astro 5 website (separate package, see website/AGENTS.m
 
 **SearchService** (`src/search.ts`) — Content and frontmatter search with multi-word matching and BM25 relevance reranking. Returns token-optimized results with minified field names: `{p, t, ex, mc, ln, uri}`. Max 20 results.
 
-### 14 MCP Tools
+### 15 MCP Tools
 
 | Tool | Description |
 |------|-------------|
@@ -76,6 +76,7 @@ website/               # Astro 5 website (separate package, see website/AGENTS.m
 | get_frontmatter | Extract frontmatter only |
 | manage_tags | Add, remove, or list tags |
 | get_vault_stats | Vault statistics: total notes, folders, size, recent files |
+| list_all_tags | List all tags across the vault with occurrence counts |
 
 ### Design Patterns
 
