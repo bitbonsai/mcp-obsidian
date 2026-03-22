@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.11.0] - 2026-03-22
+
+### Added
+- New `list_all_tags` tool: scans all vault notes for frontmatter tags and inline `#hashtags`, returns deduplicated list sorted by frequency ([#80](https://github.com/bitbonsai/mcpvault/issues/80))
+- Obsidian CLI integration in the skill: preflight checks, command patterns for active file, daily notes, backlinks, and open-in-editor
+
 ## [0.10.0] - 2026-03-20
 
 ### Added

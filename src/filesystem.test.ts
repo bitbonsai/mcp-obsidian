@@ -1278,3 +1278,91 @@ test("error messages include remediation suggestions for path traversal", async 
   await expect(fileSystem.readNote("../outside.md"))
     .rejects.toThrow(/within the vault/);
 });
+
+// ============================================================================
+// LIST ALL TAGS
+// ============================================================================
+
+test("listAllTags returns frontmatter tags with counts", async () => {
+  await writeFile(join(testVaultPath, "note1.md"), "---\ntags:\n  - project\n  - active\n---\n# Note 1");
+  await writeFile(join(testVaultPath, "note2.md"), "---\ntags:\n  - project\n  - done\n---\n# Note 2");
+
+  const tags = await fileSystem.listAllTags();
+  const projectTag = tags.find(t => t.tag === "project");
+  const activeTag = tags.find(t => t.tag === "active");
+  const doneTag = tags.find(t => t.tag === "done");
+
+  expect(projectTag?.count).toBe(2);
+  expect(activeTag?.count).toBe(1);
+  expect(doneTag?.count).toBe(1);
+});
+
+test("listAllTags returns inline hashtags with counts", async () => {
+  await writeFile(join(testVaultPath, "note1.md"), "# Note\nSome text #idea and #project here");
+  await writeFile(join(testVaultPath, "note2.md"), "# Note\nAnother #idea");
+
+  const tags = await fileSystem.listAllTags();
+  const ideaTag = tags.find(t => t.tag === "idea");
+  const projectTag = tags.find(t => t.tag === "project");
+
+  expect(ideaTag?.count).toBe(2);
+  expect(projectTag?.count).toBe(1);
+});
+
+test("listAllTags merges frontmatter and inline tags", async () => {
+  await writeFile(join(testVaultPath, "note1.md"), "---\ntags:\n  - project\n---\n# Note\nAlso #project inline");
+
+  const tags = await fileSystem.listAllTags();
+  const projectTag = tags.find(t => t.tag === "project");
+
+  expect(projectTag?.count).toBe(2);
+});
+
+test("listAllTags normalizes case", async () => {
+  await writeFile(join(testVaultPath, "note1.md"), "---\ntags:\n  - Project\n---\n# Note");
+  await writeFile(join(testVaultPath, "note2.md"), "# Note\n#project here");
+
+  const tags = await fileSystem.listAllTags();
+  const projectTag = tags.find(t => t.tag === "project");
+
+  expect(projectTag?.count).toBe(2);
+});
+
+test("listAllTags handles nested tags", async () => {
+  await writeFile(join(testVaultPath, "note1.md"), "---\ntags:\n  - status/active\n---\n# Note\n#status/done");
+
+  const tags = await fileSystem.listAllTags();
+  const activeTag = tags.find(t => t.tag === "status/active");
+  const doneTag = tags.find(t => t.tag === "status/done");
+
+  expect(activeTag?.count).toBe(1);
+  expect(doneTag?.count).toBe(1);
+});
+
+test("listAllTags returns sorted by count descending", async () => {
+  await writeFile(join(testVaultPath, "note1.md"), "---\ntags:\n  - rare\n  - common\n---\n# Note");
+  await writeFile(join(testVaultPath, "note2.md"), "---\ntags:\n  - common\n---\n# Note\n#common again");
+
+  const tags = await fileSystem.listAllTags();
+
+  expect(tags[0]?.tag).toBe("common");
+  expect(tags[0]?.count).toBe(3);
+});
+
+test("listAllTags returns empty array for vault with no tags", async () => {
+  await writeFile(join(testVaultPath, "note1.md"), "# Just a heading\nNo tags here");
+
+  const tags = await fileSystem.listAllTags();
+  expect(tags).toEqual([]);
+});
+
+test("listAllTags skips system directories", async () => {
+  await mkdir(join(testVaultPath, ".obsidian"), { recursive: true });
+  await writeFile(join(testVaultPath, ".obsidian/config.json"), '{"tags": ["hidden"]}');
+  await writeFile(join(testVaultPath, "note.md"), "---\ntags:\n  - visible\n---\n# Note");
+
+  const tags = await fileSystem.listAllTags();
+
+  expect(tags).toHaveLength(1);
+  expect(tags[0]?.tag).toBe("visible");
+});

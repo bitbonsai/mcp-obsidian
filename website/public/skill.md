@@ -25,11 +25,14 @@ Each operation maps to exactly one backend. The skill picks the right one automa
 | Write / patch note | yes | — | — | Atomic writes with validation |
 | Search vault | yes | — | — | BM25-ranked full-text search |
 | Manage tags / frontmatter | yes | — | — | Safe YAML merge |
+| List all tags with counts | yes | — | — | Filesystem scan, works headless |
 | Move / rename files | yes | — | — | Path-confirmed moves |
-| Open note in Obsidian | — | yes | — | Requires the desktop app running |
+| Get active file | — | yes | — | Currently focused file in Obsidian |
+| Open note in Obsidian | — | yes | — | Open by path in editor |
+| Daily notes | — | yes | — | Create/read/append with template expansion |
+| Backlinks | — | yes | — | Incoming links to a note |
 | Trigger plugin commands | — | yes | — | Workspace actions, plugin APIs |
-| Export to PDF | — | yes | — | App-level rendering pipeline |
-| Sync vault across devices | — | — | yes | Plain git — no Obsidian Sync needed |
+| Sync vault across devices | — | — | yes | Plain git, no Obsidian Sync needed |
 | Automated backup | — | — | yes | Cron / launchd, no UI needed |
 
 ## Flow Cheat Sheet
@@ -126,7 +129,12 @@ Recommended .gitignore:
 - "search my vault for..." -> MCP
 - "update the frontmatter on..." -> MCP
 - "tag all notes about..." -> MCP
-- "open this note in Obsidian" -> Obsidian CLI/App context
+- "what tags exist in my vault?" -> MCP (list_all_tags)
+- "what file am I looking at?" -> Obsidian CLI
+- "what's the active note?" -> Obsidian CLI
+- "open this note in Obsidian" -> Obsidian CLI
+- "add a task to my daily note" -> Obsidian CLI
+- "what links to this note?" -> Obsidian CLI
 - "sync my vault" -> Git CLI
 - "use git to store my vault" -> Git CLI
 - "move this note to..." -> MCP

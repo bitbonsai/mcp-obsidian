@@ -828,4 +828,49 @@ export class FileSystemService {
             recentlyModified: recentFiles
         };
     }
+    async listAllTags() {
+        const tagCounts = new Map();
+        const inlineTagRegex = /(?:^|\s)#([a-zA-Z][a-zA-Z0-9_/\-]*)/g;
+        const scanDirectory = async (dirPath, relativePath = '') => {
+            const entries = await readdir(dirPath, { withFileTypes: true });
+            for (const entry of entries) {
+                const entryRelativePath = relativePath ? `${relativePath}/${entry.name}` : entry.name;
+                const fullEntryPath = join(dirPath, entry.name);
+                if (entry.isDirectory()) {
+                    if (!this.pathFilter.isAllowedForListing(entryRelativePath))
+                        continue;
+                    await scanDirectory(fullEntryPath, entryRelativePath);
+                }
+                else if (entry.isFile() && this.pathFilter.isAllowed(entryRelativePath)) {
+                    try {
+                        const content = await readFile(fullEntryPath, 'utf-8');
+                        const parsed = this.frontmatterHandler.parse(content);
+                        // Frontmatter tags
+                        const fmTags = parsed.frontmatter?.tags;
+                        if (Array.isArray(fmTags)) {
+                            for (const tag of fmTags) {
+                                if (typeof tag === 'string' && tag.trim()) {
+                                    const normalized = tag.trim().toLowerCase();
+                                    tagCounts.set(normalized, (tagCounts.get(normalized) || 0) + 1);
+                                }
+                            }
+                        }
+                        // Inline #tags from body content
+                        let match;
+                        while ((match = inlineTagRegex.exec(parsed.content)) !== null) {
+                            const normalized = match[1].toLowerCase();
+                            tagCounts.set(normalized, (tagCounts.get(normalized) || 0) + 1);
+                        }
+                    }
+                    catch {
+                        // Skip files that can't be read
+                    }
+                }
+            }
+        };
+        await scanDirectory(this.vaultPath);
+        return Array.from(tagCounts.entries())
+            .map(([tag, count]) => ({ tag, count }))
+            .sort((a, b) => b.count - a.count || a.tag.localeCompare(b.tag));
+    }
 }

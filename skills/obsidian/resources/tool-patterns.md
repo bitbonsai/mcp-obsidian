@@ -106,3 +106,14 @@ Returns files and directories. Non-note filenames (images, PDFs) are included. H
 ## get_frontmatter
 
 Extracts parsed frontmatter without reading body content. Lighter than `read_note` when you only need YAML fields.
+
+## list_all_tags
+
+Scans all notes in the vault for frontmatter `tags` arrays and inline `#hashtags`. Returns deduplicated list sorted by frequency descending.
+
+**Response shape:**
+```json
+[{"tag": "project", "count": 12}, {"tag": "status/active", "count": 5}]
+```
+
+Tags are case-normalized (lowercase). Nested tags like `status/active` are preserved. No parameters required (scans the whole vault). Use this before creating or organizing notes to see what tags already exist.
