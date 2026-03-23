@@ -8,6 +8,8 @@
       "@lib/*": ["src/lib/*"],
       "@db/*": ["src/db/*"],
       "@content/*": ["src/content/*"]
-    }
-  }
+    },
+    "types": ["astro/client"]
+  },
+  "exclude": ["src/emails/**"]
 }
