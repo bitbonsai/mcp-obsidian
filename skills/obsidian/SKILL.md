@@ -97,7 +97,44 @@ When the user asks to "sync", "backup", or "store my vault with git", use CLI gi
 When the user asks for app-context operations (active file, open in editor, daily notes with templates, backlinks), use the Obsidian CLI directly via shell commands.
 
 1. Run a **preflight** before first CLI use:
-   - Check binary exists: `/Applications/Obsidian.app/Contents/MacOS/obsidian` (macOS), `obsidian` (Linux), `obsidian.exe` (Windows)
+   - Resolve the CLI binary using the first match from these candidates:
+
+     | Priority | macOS | Linux | Windows |
+     |----------|-------|-------|---------|
+     | 1 | `obsidian` (PATH) | `obsidian` (PATH) | `obsidian.exe` or `Obsidian.com` (PATH) |
+     | 2 | `/Applications/Obsidian.app/Contents/MacOS/obsidian-cli` | — | — |
+     | 3 | `/Applications/Obsidian.app/Contents/MacOS/Obsidian` | — | — |
+
+     > **Obsidian 1.12.7+ installer** bundles a dedicated `obsidian-cli` binary (~10x
+     > faster than the legacy Electron-based CLI: ~25ms vs ~250ms per call). On macOS,
+     > after installing the 1.12.7+ installer, disable then re-enable the CLI in
+     > Settings > General > Advanced to update PATH registration. This replaces the old
+     > `~/.zprofile` PATH entry with a `/usr/local/bin/obsidian` symlink pointing to
+     > `obsidian-cli`.
+     >
+     > On Linux, PATH registration creates a symlink at `/usr/local/bin/obsidian`
+     > (or `~/.local/bin/obsidian` as fallback). On Windows, the installer places an
+     > `Obsidian.com` terminal redirector alongside `Obsidian.exe`.
+     >
+     > **Note:** The priority table and stale PATH check are verified on macOS only.
+     > Linux and Windows may also bundle `obsidian-cli` with the 1.12.7+ installer,
+     > but this has not been confirmed. Contributions welcome via issue or PR.
+
+   - **Stale PATH check (macOS):** If priority 1 resolved `obsidian` on PATH, check
+     whether it points to the fast binary or the slow Electron launcher:
+
+     | Resolved path | Meaning | Action |
+     |---------------|---------|--------|
+     | `/usr/local/bin/obsidian` → `obsidian-cli` | 1.12.7 symlink registration | None — fast binary |
+     | `/Applications/.../MacOS/obsidian` | Old `~/.zprofile` entry (pre-1.12.7 registration or 1.12.7 installer without re-registering) | Check if `obsidian-cli` exists in the bundle |
+
+     If `obsidian` resolves to the MacOS directory (not `/usr/local/bin`) AND
+     `/Applications/Obsidian.app/Contents/MacOS/obsidian-cli` exists, tell the user:
+     _"Obsidian 1.12.7+ is installed but PATH still points to the slower Electron
+     binary. In Obsidian, go to Settings > General > Advanced and disable then
+     re-enable the CLI to update PATH registration."_
+     Continue with whichever priority matched — this is advisory, not blocking.
+
    - Check Obsidian is running: `pgrep -xiq obsidian` (macOS/Linux) or `tasklist /FI "IMAGENAME eq Obsidian.exe" /NH` (Windows)
    - If either fails, tell the user and fall back to MCP tools + `obsidian://` URIs
 
